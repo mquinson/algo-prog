@@ -1,0 +1,251 @@
+Faut prévoir une séance de TD d'une heure pour les dossiers et IUT
+pour les introduire à la PLM et au scala.
+
+Syllabus:
+ Semaine 1:
+   CM: intro, complexité, algorithmes de tri
+   TD: Complexité, borne des tris comparatifs et tri par dénombrement
+   TP: Les algorithmes de tri dans la PLM
+ Semaine 2:
+   CM: récursivité: principe, recette de cuisine, fonctions classiques
+   TD: Chaines récursives
+   TP: Dessins récursifs en PLM
+ Semaine 3:
+   CM: tri récursifs, preuve d'algorithmes récursifs
+   TD: Fin des chaines récursives
+   TP: Fin des exos PLM (tris et dessins récursivité)
+ Semaine 4: 
+   (pas de CM)
+   TD: recherche dichotomique, débroussaillage du probleme du sac à dos
+   TP: sac à dos
+ Semaine 5: 
+   TDP: Pyramides
+ Semaine 6:
+   CM: Dérécursivation
+   TD: dérécursivation
+   TD: Récipients
+ Semaine 7: 
+   CM: Algorithmes randomisés ? Glouton ? Dynamique ?
+   TP: 
+   TP:
+
+
+CM1:
+ * trop plein, j'ai pas eu le temps de faire bubble sort
+   -> Il faut couper les bouts sur la complexité, le programming at
+      large. Il faut en faire un transparent unique servant à
+      justifier le scala, et on vire les machines de rudberg.
+ * On peut améliorer encore la présentation en intro du SE 
+    http://www.lore.ua.ac.be/Teaching/SE3BAC/slides2007/
+ 
+CM2: un peu vide. En finissant CM1, j'avais encore 20mn vide
+  Un truc qui manque est la correction et la terminaison. On 
+    reviendra sérieusement dessus plus tard, mais faut en parler 
+CM2: mettre un peu de youtube pour la visu des tris
+   http://www.youtube.com/watch?v=vxENKlcs2Tw
+   http://www.sorting-algorithms.com/
+CM3: bien balancé, mais j'ai vraiment pris mon temps sur la fin
+ * La partie "derecursivation" prend presque visage humain
+  * il manque le schéma général "comment dérécursiver un algo"
+    Etat initial: algo rec; etat final: algo iterative
+    2 diamants "terminal O/N", et "associative/commutative"
+    et 3 chemins : O-> direct; N+O->forme terminale+précédement
+     N+N-> soyons brutaux
+  * Y'a des typos dans is_memb
+  * Les animations sont pas bonnes (style intro backtracking est pas
+      animé du tout, y'a aussi "this is backtracking" trop top)
+  * Pour la dérécursivation par pile, hanoi n'est pas un bon premier
+    exemple vu que c'est récursif mutuel. palindrome serait ptet mieux?
+  * D'ailleurs, puis-je dérécursiver simplement pascal, par exemple?
+  * l'algo ouverture de lock est faux: pas besoin de l'arg len, faut
+      descendre si réponse>=position, simplement.
+ * La partie backtracking est en sale état, meme après le dernier
+   rewrite partiel
+  * Le independent set n'est pas vraiment un backtracking as is.
+      Faudrait chercher l'ensemble maximal, par exemple.
+  * les N-reines sont expliquées de facon merdique: pseudo-code avant
+      exemple. Faudrait idée;exemple; pseudo-code,code java.
+  * Faudrait encore un exemple de backtracking, avec optim. 
+     Par exemple le voyageur ? Par exemple un EDT?
+CM4 (preuve): il ne fait qu'une heure, mais il fait mal à la tête
+  * On pourrait ajouter des exemples pour aider à comprendre.
+    Faire le premier exo du TD ensemble en amphi, calmement
+  * Finalement, inverser preuve et test serait plus logique : je passe
+    une partie du CM de preuve à dire que les tests ne sont pas
+    suffisants. Mais pour combattre l'idée des élèves que les preuves
+    c'est dur pour rien, je peux aussi montrer que c'est facile par
+    l'exemple au lieu d'argumenter encore et encore.
+
+
+TD1: on pourrait demander ex1, troisieme tableau à 10^9 opérations/s
+et aussi à 10^20 opérations/s, la puissance exascale de la machine la
+plus rapide de la prochaine décénie, mais on est déjà juste en temps.
+On peut le mettre en remarque dans la correction: "accelérer la
+machine ne sert à rien quand le code est naze"
+
+TD1: Le cormen contient d'autres choses qu'il serait intéressant de
+prouver, comme le fait que O(max(f,g)) = O(f+g).
+
+TD1: Correction de la plus grande instance faisable: 
+ Dans le cas linéaire, on cherche \max{n|n<10^9}. On a bien n=10^9
+ Dans le cas quadratique, on cherche \max{n|n^2<10^9}=\max{n|n<\sqrt{10^9}}
+ Dant le cas log, on cherche \max{n|log(n)<10^9}=\max{n|n<2^(10^9)}
+TD1: Le listing 6 est écrit en java
+
+CM: le cormen contient de la bonne matière pour améliorer un peu le
+discours sur les tris. et skiena a tout ce qu'il faut pour introduire
+les algos randomisés en utilisant QuickSort.
+
+TD2: Ajouter l'exo suivant (source: IUT d'Orsay): Country recurrence
+
+    En choisissant quatre personnes parmi vous, numérotées de 0 à 3,
+    donner le résultat de l’exécution de la procédure suivante, pour
+    un appel initial raconte(3).
+   
+    Procédure raconte(numPersonne : entier)
+	début
+	   si numPersonne = 0
+           alors     crier(“ bouh ! ! ! ”)
+	   sinon     dire(“ il était une fois ”, Num_Personne, “ cow-boys ”)
+                     dire(“ autour d’un feu de camp ”)
+		     dire(“ l’un dit à l’autre ”)
+                     raconte(numPersonne-1)
+		     crier(“ bouh ! ! ! ”)
+           fsi
+	fin
+			      
+
+TD2: il faut marquer plus explicitement les questions optionnelles
+pour éviter que les groupes pas trop rapides ne fassent que les
+questions inintéressantes du début. En fait, le cheminement de ce TD
+n'est pas vraiment linéaire, et il faut l'expliciter.
+
+TD2: il faut le convertir à scala, c'est urgent
+
+TP2 (récursion): il faut insister sur le dessin d'arbre car c'est
+fondamental pour la suite. En particulier:
+ * il faut expliciter le fait qu'un étage donné doit remettre la
+   tortue là où elle l'a trouvé.
+ * Il faut expliciter le pseudo-code (en dessinant à chaque étape, et
+   en différentiant la couleur de ce qui est neuf à cette étape et
+   qu'est ce qui date des étapes précédentes)
+   - avance de la taille du tronc
+   - tourne à droite
+   - fait un appel récursif
+   - tourne 2 fois à gauche
+   - fait un appel récursif
+   - tourne à droite
+   - recule de la taille du tronc
+  Montrer qu'on laisse bien la tortue en place à chaque étape (à
+    condition que les appels récursifs en fassent de meme, ce qui est
+    donné par induction)
+
+TDP3 (knapsack):
+* Le piège est qu'on fait pas vraiment de boucle dans ce backtracking
+là. Enfin, si, mais sur l'ensemble des valeurs booleenes, et du coup
+on l'écrit en éclaté.
+* Renomer les classes en "Sac à dos" pour KSSolution et "Ali Baba"
+pour KS, c'est plus expressif
+* Il faut demander l'arbre d'appel
+            / \
+  Obj1     O   N
+          /     \
+ 	 * 
+        / \
+  Obj2 O   N
+  
+  etc.
+* il faut donner (au bout d'un moment) le pseudo code:
+  Récursion(n)
+    si sac déborde STOP // backtracking
+    si solution courante meilleure connue
+      la stocker
+    si n trop grand alors STOP // cas terminal
+    Explorer les solutions où l'obj n est pris
+    Explorer les solutions où l'obj n n'est pas pris
+* Il faut inclure dans le sujet un output du programme version prof
+  (qui explicite bien les étapes prises)
+  -> J'ai fait un .jar avec la version prof pour qu'ils puissent
+     expérimenter par eux-même (et je l'ai mis dans le dépot)
+  -> Faut en parler dans le sujet
+  -> faut faire en sorte que le .jar soit reconstruit automatiquement
+* Faut intégrer les choses mises sur la photo 110126-TOPknapsackTP.jpg
+* J'ai changé le code sur ma machine pour qu'on puisse passer une
+  instance en ligne de commande au lieu de forcément changer le code.
+  -> faut adapter le sujet pour en parler, et tuer cree_instance
+  -> faut faire la meme chose au code avec prix!=poids
+* Il faut corriger le code de cree_instance pour qu'il modifie les poids
+* Il faut inverser certaines questions entre le sujet de TD et le sujet de TP
+  (l'arbre d'appel, ...)
+* Il faut rajouter des tests unitaires pour le sujet de TP.
+
+
+TDP4 (pyramide), il est embrouillé, surtout sur la correction. J'ai
+tenté de faire un correct() pour toutes les quesitons, mais c'est
+stupide car dans le 2ieme exo (là où est la correction), le critère
+sur "ce nombre est original" est bête. Et quand elle devient utile,
+exo4, on a intéret à utiliser un tab de boolean pour générer valide
+direct au lieu de poser des billes bêtes. 
+Il faut mieux faire ressortir le plan : 
+ - une recherche exaustive pour faire une boucle dans un appel 
+   récursif
+ - une première idée de backtracking (remplissage par ligne), qui 
+   s'avère pas super car les contraintes arrivent trop tard
+ - une méthode qui gagne (remplissage par colonne) car y'a un max de
+   contraintes ASAP.
+* Pour la partie TP, il serait judicieux de fournir les tests unitaire 
+  pour remplir(), correcte(), etc.
+* Passer le codage diagonal à la fin: c'est une optim de "est présente"
+* Et suivre les photos, plus explicative que le sujet
+
+TD5 : Dérécursivation :
+ Q1) il manque un x* dans le dernier return..
+ Q4) if (n % 2) == 1 et non pas == 0 ( ça doit etre le cas impair et   
+     non pas le cas pair)
+ EX2 Question 2  :  dans l'algo itératif (le dernier) il faut
+  remplacer tout "ch" par "ch_tmp" dans la boucle while (faute de
+  frappe). 
+ Question 3: le dernier algo (retourne itérative) :
+  adj(premier(ch_tmp),res) ==> mal-positionnement des parenthèses..
+ Question 5 : le dernier algo est appelé version terminale alors que 
+  c'est la version itérative (encore une faute de frappe)
+ Aymen BAOUAB
+
+TD5 (transfo): en fait, seul l'exo 1 est intéressant, il faut remettre
+a jour la formulation et/ou la correction des autres pour insister sur
+ce fait.
+
+TD7 (preuve): il faut passer le premier exo en WP() aussi, c'est bien
+mieux. Il faut intégrer la correction de l'exo3. Il faut ajouter une
+preuve d'algo récursive (avec les WP, on devrait y arriver)
+
+TP eclipse: il est nul, faut le refaire. Par exemple en le remplaçant
+par ce qu'il y a après sur le debug (mais faut trouver des idées pour
+remplacer la suite, ptet un second TD preuve ou un TD performance
+testing ou un TD Modern Jass)
+
+CM (testing) : il faut parler explicitement de Test Driven Development
+Betrand Meyer est docteur de Nancy
+Faut parler de test fixture
+
+CM (DBC): le cours est un peu moisi en la matière. on pourrait le
+rafraichir avec de la matière venue du cours POCA de jussieu par YRG.
+Voir biblio-CSH/ Il manque aussi les règles pour le subclassing et
+subcontracting, que l'on peut trouver dans le cours de preuve du même
+monsieur, au meme endroit.
+
+static checking pas assez expliqué (ca marche par propagation
+d'intervale de valeur, par typage, par déduction des suppositions du
+programmeur) Ya de la matière dans les cours de YRG de jussieu, et
+aussi dans un tuto de l'auteur de coverity. Ca pourrait remplacer une
+partie du détail sur le MC.
+
+MC: trop de détail? Mal expliqué? Ils savent pas ce que programmation
+concurrente veut dire. Autre exemple?
+
+Glossaire: 
+tail recursion->programmation terminale (vérifier qu'il ne reste pas
+ d'occurence de Terminal Recursion)
+Les noms des tris
+
+
