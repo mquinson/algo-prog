@@ -1,0 +1,118 @@
+title: Contrôle continu de TOP numéro 1
+description: >  
+  <p>Répondez aux questions suivantes, puis validez. Si plusieurs réponses
+  sont possibles à une question donnée, vous devez toutes les indiquer
+  pour que votre réponse soit validée.</p>
+
+  <p>Utilisez votre login unix comme identifiant, en bas de la page.
+  Indiquez une adresse valide pour recevoir le corrigé de votre copie
+  électronique (une fois que tous les groupes auront passé le test).</p>
+
+  <p>Attention, ceci est un examen. Toute (tentative de) triche sera
+  sévérement punie. Pour information, les éléments de votre copie ne sont pas 
+  dans le même ordre que celles de l'écran à coté / devant vous...</p>
+ID: TOP0801
+questions:
+ - question: le temps d'exécution d'un algorithme dépend principalement:
+   type: radio
+   choices: 
+    - 1 de la taille des donnéees
+    - 0 de la taille du code
+    - 0 du type de l'ordinateur utilisé
+    - 0 du langage de programmation utilisé
+
+ - question: >
+    entre un algorithme A de complexité O(n^2) et un algorithme B de
+    complexité O(n), il faut choisir...
+   type: multi
+   choices: 
+    - 0 Toujours A
+    - 0 Toujours B
+    - 0 Cela dépend de l'architecture de l'ordinateur
+    - 0 Cela dépend du vent
+    - 1 Cela dépend de la taille des données
+
+ - question: Associez chaque algorithme à son idée générale
+   type: match
+   choices:
+    - Tri par insertion ## Pour chaque élément, trouver sa place dans la partie de la liste déjà triée, et l'y mettre  
+    - Tri par sélection ## Pour chaque case, trouver le plus petit élément de la partie de la liste pas encore trié, et l'y mettre.
+    - Tri à bulle ## Tant que le tableau n'est pas trié, trier un peu.
+
+ - title: À quelle(s) classe(s) de complexité appartient l'algorithme suivant ?
+   question: |
+    <pre>
+    pour i = 1 à n faire
+    &nbsp;&nbsp;pour j = 1 à n faire
+    &nbsp;&nbsp;&nbsp;&nbsp; x += 3
+    </pre>
+   type: multi
+   columns: 3
+   choices:
+    - 0 O(log n)
+    - 0 O(n)
+    - 1 O(n^2)
+    - 1 O(n^3)
+    - 1 O(2^n)
+    - 1 &Omega;(log n)
+    - 1 &Omega;(n)
+    - 1 &Omega;(n^2)
+    - 0 &Omega;(n^3)
+    - 0 &Omega;(2^n)
+    - 0 &Theta;(log n)
+    - 0 &Theta;(n)
+    - 1 &Theta;(n^2)
+    - 0 &Theta;(n^3)
+    - 0 &Theta;(2^n)
+
+ - title: À quelle(s) classe(s) de complexité appartient l'algorithme suivant ?
+   question: |    
+    <pre>
+    pour i = 1 à n faire
+    &nbsp;&nbsp;pour j = 1 à n faire
+    &nbsp;&nbsp;&nbsp;&nbsp;x += 3
+    pour i = 1 à n faire
+    &nbsp;&nbsp;y = x + 5
+    </pre>
+   type: multi
+   columns: 3
+   choices:
+    - 0 &Theta;(n+n)
+    - 1 &Theta;(n^2+n)
+    - 0 &Theta;(n^3+n)
+    - 0 &Theta;(n)
+    - 1 &Theta;(n^2)
+    - 0 &Theta;(n^3)
+    
+ - question: >
+    Pour certaines instances de taille fixée N, mon algorithme trouve la réponse en 1.
+   type: multi
+   choices:
+    - 0 mon algorithme est de complexité O(1)
+    - 0 mon algorithme est de complexité &Omega;(1)
+    - 0 mon algorithme est de complexité &Theta;(1)
+    - 1 Tmin vaut 1
+    
+ - question: Le problème de stabilité algorithmique a trait à l'absence de bug dans son écriture.
+   type: radio
+   columns: 2
+   choices:
+    - 0 vrai
+    - 1 faux
+   explanation: C'est plutôt dû au fait que les ordinateurs utilisent des nombres en précision limitée par défaut.
+   
+ - question: Face à un problème complexe, augmenter le nombre de module permet toujours de réduire la complexité par composition.
+   type: radio
+   columns: 2
+   choices:
+    - 0 vrai
+    - 1 faux
+   explanation: Si on a trop de modules, leurs interactions compliquent le tout.
+
+ - question: Entre deux algorithmes quelconques, le meilleur est le plus rapide.
+   type: radio
+   columns: 2
+   choices:
+    - 0 vrai
+    - 1 faux
+   explanation: La correction est un critère encore plus important que la vitesse.

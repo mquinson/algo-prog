@@ -1,0 +1,71 @@
+title: Quiz de TOP numéro 2
+description: >
+  <h1>Contrôle continu de TOP numéro 2</h1>
+  Répondez aux questions suivantes, puis validez. Si plusieurs réponses
+  sont possibles à une question donnée, vous devez toutes les indiquer
+  pour que votre réponse soit validée (et seulement elles).   
+
+  <p>Utilisez votre login unix comme identifiant, en bas de la page.
+  Indiquez une adresse valide pour recevoir le corrigé de votre copie
+  électronique (une fois que tous les groupes auront passé le test).</p>  
+
+  <p>Attention, ceci est un examen. Toute (tentative de) triche sera
+  sévérement punie. Pour information, les éléments de votre copie ne sont pas 
+  dans le même ordre que celles de l'écran à coté / devant vous...</p>
+ID: TOP0802
+questions:
+ - question: Quelques définitions
+   type: match
+   choices: 
+    - La récursivité multiple, ##c'est quand une fonction contient deux appels récursifs dedans
+    - La récursivité mutuelle, ##c'est quand deux fonctions s'appellent l'une l'autre
+    - La récursivité multilatérale, ##ca n'existe pas
+    - La récursivité imbriquée, ##c'est quand un appel récursif est en paramètre d'un autre appel récursif
+
+ - question: La solution classique aux tours de hanoï est récursive terminale
+   type: radio
+   choices: 
+    - 0 Vrai
+    - 1 Faux
+
+ - question: Un programme itératif est plus efficace qu'un programme récursif équivalent.
+   type: multi
+   choices: 
+    - 0 C'est toujours faux.
+    - 0 C'est souvent vrai. Par exemple, la fonction calculant Fibonnacci en récursif nécessite fib(n) appels pour calculer fib(n) tandis qu'une fonction itérative serait linéaire.
+    - 1 C'est souvent vrai, car le processeur n'a pas à gérer la pile dans le cas d'une fonction itérative.
+
+ - question: >
+     Une fonction est récursive terminale si aucun calcul n'a lieu 
+     pendant le cas de base.
+   type: radio
+   choices: 
+    - 0 Vrai
+    - 1 Faux
+
+ - question: >
+     Il est plus facile de dérécursiver une fonction récursive terminale.
+   type: radio
+   choices: 
+    - 1 Vrai
+    - 0 Faux
+
+ - question: Laquelle de ces fonctions croit le plus vite?
+   type: radio
+   choices:
+    - 0 2 puissance n (2^n)
+    - 1 Ackerman(4,n)
+    - 0 n puissance un million (n^1000000000)
+
+ - question: Qu'est ce qui NE peut PAS être récursif?
+   type: multi
+   choices:
+    - 1 Problème
+    - 0 Algorithme
+    - 0 Structure de données
+
+---
+questions:
+ - title: ArrÃªt d'une fonction rÃ©cursive
+   question: Avoir un cas de base est [0Inutile#1Necessaire#0Suffisant] pour que la fonction s'arrÃªte Ã  coup sÃ»r.
+   type: fillChoice

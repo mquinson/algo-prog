@@ -1,0 +1,173 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>Quiz de TOP numéro 1</title>
+<style type="text/css">
+.jsclass body .randomordercontent {
+  display: none;
+}
+</style>
+<script type='text/javascript'>// <![CDATA[
+  function check() { 
+    if (window.document.forms["quiz"].user.value != "") {
+      if (window.document.forms["quiz"].email.value != "") {
+	  window.document.forms["quiz"].submit();
+      } else {
+        alert("No email provided");
+        return false;
+      }
+    } else {
+      alert("No user name provided");
+      return false;
+    }
+  } 
+
+/***********************************************
+* Random Order Content (from DIVs) script- by JavaScript Kit (www.javascriptkit.com)
+* This notice must stay intact for usage
+* Visit JavaScript Kit at http://www.javascriptkit.com/ for this script and 100s more
+***********************************************/
+
+if (document.getElementById)
+document.documentElement.className = 'jsclass'; //hide content for DOM capable browsers
+
+var randomordercontentdisplay={
+	divholders:new Object(),
+	masterclass: "randomordercontent",
+
+	init:function(){
+		if (!document.getElementById)
+			return
+		var alldivs=document.getElementsByTagName("span")
+		var randomcontentsearch=new RegExp(this.masterclass+"\\s+(group\\d+)", "i") //check for CSS class="randomcontent groupX" (x=integer)
+		for (var i=0; i<alldivs.length; i++){
+			if (randomcontentsearch.test(alldivs[i].className)){
+				if (typeof this.divholders[RegExp.$1]=="undefined"){ //if object to hold this group of divs doesn't exist yet
+					this.divholders[RegExp.$1]=new Object() //create object
+					this.divholders[RegExp.$1].ref=[] //create array to hold each div within group
+					this.divholders[RegExp.$1].contents=[] //create array to hold each div's content within group
+				}
+					this.divholders[RegExp.$1].ref.push(alldivs[i]) //add this div to the array
+					this.divholders[RegExp.$1].contents.push(alldivs[i].innerHTML) //add this div's content to the array
+			}
+		}
+	this.scrambleorder()
+	},
+
+	scrambleorder:function(){
+		for (group in this.divholders){ //loop thru each array within object
+			this.divholders[group].contents.sort(function() {return 0.5 - Math.random()}) //scramble contents array
+			for (var i=0; i<this.divholders[group].ref.length; i++){
+				this.divholders[group].ref[i].innerHTML=this.divholders[group].contents[i]
+				this.divholders[group].ref[i].style.display="inline"
+			}
+		}
+	}
+}
+//]]
+</script>
+</head>
+<body bgcolor='#ffffff'>
+<h1>Contrôle continu de TOP numéro 1</h1> Répondez aux questions suivantes, puis validez. Si plusieurs réponses sont possibles à une question donnée, vous devez toutes les indiquer pour que votre réponse soit validée.    <p>Utilisez votre login unix comme identifiant, en bas de la page. Indiquez une adresse valide pour recevoir le corrigé de votre copie électronique (une fois que tous les groupes auront passé le test).</p>   <p>Attention, ceci est un examen. Toute (tentative de) triche sera sévérement punie. Pour information, les éléments de votre copie ne sont pas  dans le même ordre que celles de l'écran à coté / devant vous...</p>
+
+<form name="quiz" action="http://www.loria.fr/~quinson/result.php" method="post" onSubmit="return check()">
+<input type="hidden" name="qcount" value="11"/>
+<input type="hidden" name="quizname" value="Quiz de TOP numéro 1"/>
+<input type="hidden" name="quizID" value="TOP0801"/>
+  <p><b>1.</b> le temps d'exécution d'un algorithme dépend:<br/>
+    A <span class="randomordercontent group1"><input type="checkbox" name="q1_A" value="A"/>  de la taille des donnéees</span><br/>
+    B <span class="randomordercontent group1"><input type="checkbox" name="q1_B" value="B"/>  de la taille du code</span><br/>
+    C <span class="randomordercontent group1"><input type="checkbox" name="q1_C" value="C"/>  du type de l'ordinateur utilisé</span><br/>
+    D <span class="randomordercontent group1"><input type="checkbox" name="q1_D" value="D"/>  du langage de programmation utilisé</span><br/>
+  </p>
+  <p><b>2.</b> entre un algorithme A de complexité O(n^2) et un algorithme B de complexité O(n), il faut choisir...
+<br/>
+    A <span class="randomordercontent group2"><input type="checkbox" name="q2_A" value="A"/>  Toujours A</span><br/>
+    B <span class="randomordercontent group2"><input type="checkbox" name="q2_B" value="B"/>  Toujours B</span><br/>
+    C <span class="randomordercontent group2"><input type="checkbox" name="q2_C" value="C"/>  Cela dépend de l'architecture de l'ordinateur</span><br/>
+    D <span class="randomordercontent group2"><input type="checkbox" name="q2_D" value="D"/>  Cela dépend du vent</span><br/>
+    E <span class="randomordercontent group2"><input type="checkbox" name="q2_E" value="E"/>  Cela dépend de la taille des données</span><br/>
+  </p>
+  <p><b>3.</b> L'idée générale du tri par insertion est:<br/>
+    A <span class="randomordercontent group3"><input type="radio" name="q3" value="A"/>  Tant que le tableau n'est pas trié, trier un peu.</span><br/>
+    B <span class="randomordercontent group3"><input type="radio" name="q3" value="B"/>  Pour chaque élément, trouver sa place dans la partie de la liste déjà triée, et l'y mettre</span><br/>
+    C <span class="randomordercontent group3"><input type="radio" name="q3" value="C"/>  Pour chaque case, trouver le plus petit élément de la partie de la liste pas encore trié, et l'y mettre.</span><br/>
+  </p>
+  <p><b>4.</b> L'idée générale du tri par sélection est:<br/>
+    A <span class="randomordercontent group4"><input type="radio" name="q4" value="A"/>  Pour chaque élément, trouver sa place dans la partie de la liste déjà triée, et l'y mettre</span><br/>
+    B <span class="randomordercontent group4"><input type="radio" name="q4" value="B"/>  Pour chaque case, trouver le plus petit élément de la partie de la liste pas encore trié, et l'y mettre.</span><br/>
+    C <span class="randomordercontent group4"><input type="radio" name="q4" value="C"/>  Tant que le tableau n'est pas trié, trier un peu.</span><br/>
+  </p>
+  <p><b>5.</b> L'idée générale du tri à bulle est:<br/>
+    A <span class="randomordercontent group5"><input type="radio" name="q5" value="A"/>  Pour chaque élément, trouver sa place dans la partie de la liste déjà triée, et l'y mettre</span><br/>
+    B <span class="randomordercontent group5"><input type="radio" name="q5" value="B"/>  Tant que le tableau n'est pas trié, trier un peu.</span><br/>
+    C <span class="randomordercontent group5"><input type="radio" name="q5" value="C"/>  Pour chaque case, trouver le plus petit élément de la partie de la liste pas encore trié, et l'y mettre.</span><br/>
+  </p>
+  <p><b>6.</b> À quelle(s) classe(s) de complexité appartient l'algorithme suivant ?
+<pre>
+pour i = 1 à n faire
+&nbsp;&nbsp;pour j = 1 à n faire
+&nbsp;&nbsp;&nbsp;&nbsp; x += 3
+</pre>
+<br/>
+    A <span class="randomordercontent group6"><input type="checkbox" name="q6_A" value="A"/>  O(log n)</span><br/>
+    B <span class="randomordercontent group6"><input type="checkbox" name="q6_B" value="B"/>  O(n)</span><br/>
+    C <span class="randomordercontent group6"><input type="checkbox" name="q6_C" value="C"/>  O(n^2)</span><br/>
+    D <span class="randomordercontent group6"><input type="checkbox" name="q6_D" value="D"/>  O(n^3)</span><br/>
+    E <span class="randomordercontent group6"><input type="checkbox" name="q6_E" value="E"/>  O(2^n)</span><br/>
+    F <span class="randomordercontent group6"><input type="checkbox" name="q6_F" value="F"/>  &Omega;(log n)</span><br/>
+    G <span class="randomordercontent group6"><input type="checkbox" name="q6_G" value="G"/>  &Omega;(n)</span><br/>
+    H <span class="randomordercontent group6"><input type="checkbox" name="q6_H" value="H"/>  &Omega;(n^2)</span><br/>
+    I <span class="randomordercontent group6"><input type="checkbox" name="q6_I" value="I"/>  &Omega;(n^3)</span><br/>
+    J <span class="randomordercontent group6"><input type="checkbox" name="q6_J" value="J"/>  &Omega;(2^n)</span><br/>
+    K <span class="randomordercontent group6"><input type="checkbox" name="q6_K" value="K"/>  &Theta;(log n)</span><br/>
+    L <span class="randomordercontent group6"><input type="checkbox" name="q6_L" value="L"/>  &Theta;(n)</span><br/>
+    M <span class="randomordercontent group6"><input type="checkbox" name="q6_M" value="M"/>  &Theta;(n^2)</span><br/>
+    N <span class="randomordercontent group6"><input type="checkbox" name="q6_N" value="N"/>  &Theta;(n^3)</span><br/>
+    O <span class="randomordercontent group6"><input type="checkbox" name="q6_O" value="O"/>  &Theta;(2^n)</span><br/>
+  </p>
+  <p><b>7.</b> À quelle(s) classe(s) de complexité appartient l'algorithme suivant ?
+<pre>
+pour i = 1 à n faire
+&nbsp;&nbsp;pour j = 1 à n faire
+&nbsp;&nbsp;&nbsp;&nbsp;x += 3
+pour i = 1 à n faire
+&nbsp;&nbsp;y = x + 5
+</pre>
+<br/>
+    A <span class="randomordercontent group7"><input type="checkbox" name="q7_A" value="A"/>  &Theta;(n+n)</span><br/>
+    B <span class="randomordercontent group7"><input type="checkbox" name="q7_B" value="B"/>  &Theta;(n^2+n)</span><br/>
+    C <span class="randomordercontent group7"><input type="checkbox" name="q7_C" value="C"/>  &Theta;(n^3+n)</span><br/>
+    D <span class="randomordercontent group7"><input type="checkbox" name="q7_D" value="D"/>  &Theta;(n)</span><br/>
+    E <span class="randomordercontent group7"><input type="checkbox" name="q7_E" value="E"/>  &Theta;(n^2)</span><br/>
+    F <span class="randomordercontent group7"><input type="checkbox" name="q7_F" value="F"/>  &Theta;(n^3)</span><br/>
+  </p>
+  <p><b>8.</b> Pour certaines instances de taille fixée N, mon algorithme trouve la réponse en 1.
+<br/>
+    A <span class="randomordercontent group8"><input type="checkbox" name="q8_A" value="A"/>  mon algorithme est de complexité O(1)</span><br/>
+    B <span class="randomordercontent group8"><input type="checkbox" name="q8_B" value="B"/>  mon algorithme est de complexité &Omega;(1)</span><br/>
+    C <span class="randomordercontent group8"><input type="checkbox" name="q8_C" value="C"/>  mon algorithme est de complexité &Theta;(1)</span><br/>
+    D <span class="randomordercontent group8"><input type="checkbox" name="q8_D" value="D"/>  Tmin vaut 1</span><br/>
+  </p>
+  <p><b>9.</b> Le problème de stabilité algorithmique a trait à l'absence de bug dans son écriture.<br/>
+    A <span class="randomordercontent group9"><input type="radio" name="q9" value="A"/>  vrai</span><br/>
+    B <span class="randomordercontent group9"><input type="radio" name="q9" value="B"/>  faux</span><br/>
+  </p>
+  <p><b>10.</b> Face à un problème complexe, augmenter le nombre de module permet toujours de réduire la complexité par composition.<br/>
+    A <span class="randomordercontent group10"><input type="radio" name="q10" value="A"/>  vrai</span><br/>
+    B <span class="randomordercontent group10"><input type="radio" name="q10" value="B"/>  faux</span><br/>
+  </p>
+  <p><b>11.</b> Entre deux algorithmes quelconques, le meilleur est le plus rapide.<br/>
+    A <span class="randomordercontent group11"><input type="radio" name="q11" value="A"/>  vrai</span><br/>
+    B <span class="randomordercontent group11"><input type="radio" name="q11" value="B"/>  faux</span><br/>
+  </p>
+   Your name: <input type="text" name="user"> <br/>
+   Your email: <input type="text" name="email"> <br/>
+   Your group: <input type="text" name="group"> <br/>
+<input type="submit"/><br/>
+</form>
+<script type="text/javascript">
+  randomordercontentdisplay.init()
+</script>
+</body>
+</html>
