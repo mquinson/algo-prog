@@ -1,0 +1,292 @@
+%\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+\documentclass[10pt]{article}\usepackage[nu]{esial}
+\TOP\1A
+
+\usepackage{amsthm,pifont,textcomp}
+\usepackage{amsmath,amssymb}
+
+\usepackage[utf8]{inputenc}
+\graphicspath{{fig/}}
+
+\begin{document}
+\title{Examen du 26 mars 2009 (2h)}
+\fvset{fontsize=\footnotesize}
+\maketitle
+
+\bigskip
+\begin{quote}
+  La notation tiendra compte de la validité des réponses, mais aussi de la
+  présentation et de la clarté de la rédaction. 
+\end{quote}
+
+\bigskip
+\begin{centering}
+  \textbf{\large Documents interdits, à l'exception d'une feuille A4 à rendre
+    avec votre copie.}
+\end{centering}
+
+
+\bigskip\QuestionCours~(2pts)
+
+\Question Définissez en français (sans équation) les notations $O$, $\Omega$ et
+$\Theta$ utilisées pour dénoter la complexité algorithmique en insistant sur
+leurs relations les unes avec les autres (\textonehalf pt).   
+
+\Question Quel est le rapport entre les notations que vous venez de définir et
+les temps de calcul dans le meilleur des cas, le pire des cas et le cas moyen? (\textonehalf pt)
+
+\Question À quelles classes de complexité (en notation $\Theta$) appartiennent
+les algorithmes 1 et 2 suivants? (\textonehalf pt)
+
+\medskip\noindent\begin{minipage}{.45\linewidth}
+  \begin{Verbatim}[label=algorithme 1]
+pour i = 1 à n faire
+  pour j = 1 à n faire
+     x += 3    
+  \end{Verbatim}
+\end{minipage}\hfill\begin{minipage}{.45\linewidth}
+  \begin{Verbatim}[label=algorithme 2]
+pour i = 1 à n faire
+  pour j = 1 à n faire
+    x += 3
+pour i = 1 à n faire
+  y = x + 5
+  \end{Verbatim}
+\end{minipage}
+
+\Question Qu'est ce que le backtracking (\textonehalf pt)?
+
+
+
+\Exercice\textbf{Preuve de programmes} (5pts).
+
+On suppose que $P$ est un prédicat défini pour tous les entiers. On considère
+le code ci-dessous.
+
+\Question Calculez la précondition la plus faible pour que ce code effectue une
+recherche linéaire bornée, ie la post-condition suivante:
+
+\noindent\begin{minipage}{.6\linewidth}
+
+
+~~~~$x\in\mathbb{N}\wedge p\leq x\wedge x\leq q$
+
+$\wedge~~ x<q \Rightarrow P(x)$
+
+$\wedge~~ x=q \Rightarrow (\forall i\in\mathbb{N}, p\leq i\wedge i\leq q
+\Rightarrow \neg P(i)) $
+
+
+\medskip On rappelle les règles de calcul des préconditions suivantes:
+\end{minipage}\hfill
+\begin{minipage}{.35\linewidth}
+\begin{Verbatim}
+x = p;
+y = q;
+tant que x != y faire
+  si P(x) alors y = x
+          sinon x = x+1;
+fait  
+\end{Verbatim}
+\end{minipage}
+
+\newcommand{\WP}[1]{\textbf{WP}($#1$)}
+\begin{enumerate}
+\item \WP{nop, Q}  $\equiv Q$
+\item \WP{x:=E, Q} $\equiv Q[x:=E]$
+\item \WP{C;D, Q}  $\equiv$ \WP{C, \WP{D,Q}}
+\item \textbf{WP}(\texttt{if} $Cond$ \texttt{then} $C$ \texttt{else} $D$)
+  $\equiv (Cond=\mathtt{true}\Rightarrow \mathbf{WP}(C,Q))~\wedge~
+          (Cond=\mathtt{false}\Rightarrow \mathbf{WP}(D,Q))$
+\item \textbf{WP}(\texttt{while} $E$ \texttt{do} $C$ \texttt{done} \{inv I var V\},Q)
+  $\equiv I$\hfill
+  Plus les obligations de preuves suivantes:
+  \begin{itemize}
+  \item[$\bullet$] $(E=\mathtt{true}\wedge I\wedge V=z) \Rightarrow
+    \mathbf{WP}(C,I\wedge V<z))$
+  \item[$\bullet$] $I\Rightarrow V\geq 0$
+  \item[$\bullet$] $(E=\mathtt{false}\wedge I) \Rightarrow Q$
+  \end{itemize}
+\end{enumerate}
+
+
+\Exercice\textbf{Code récursif mystère} (5pts).
+
+\noindent\begin{minipage}{.65\linewidth}
+Considérez le code mystère ci-contre.
+
+\Question Explicitez les appels récursifs effectués pour 
+\fbox{\texttt{puzzle(4)}} (\textonehalf pt).
+
+\Question Quelle somme cette fonction calcule-t-elle? (\textonehalf pt)\\ Exprimez le calcul
+réalisé par la fonction sous forme d'un $\displaystyle\sum_?^?$ 
+\end{minipage}\hfill
+\begin{minipage}{.33\linewidth}
+\begin{Verbatim}
+private int puzzle(int i, int j) {
+  if (i == 0)     
+    return 0;
+  if (j % 2 == 1)
+    return j+puzzle(i-1,j+1);
+  else 
+    return   puzzle(i  ,j+1);
+}
+public int puzzle (int i) {
+  return puzzle(i,1);
+}
+\end{Verbatim}
+\end{minipage}
+
+\Question Calculez le résultat de la fonction puzzle pour i=1, i=2, i=3, i=4,
+i=5 et i=6.\\ Que semble calculer cette fonction (en plus de la somme vue plus
+haut) ? (\textonehalf pt)
+
+\Question Montrez la terminaison de cet algorithme (\textonehalf pt).
+
+\Question Quelle est la complexité algorithmique de \texttt{puzzle} (en
+nombre d'appels récursifs)? (\textonehalf pt)
+
+\Question Est-il possible de dérécursiver directement cette fonction ? Pourquoi
+? (\textonehalf pt)
+
+\Question Dérécursivez cette fonction en appliquant les méthodes vues en cours
+(en une ou plusieurs étapes). Explicitez ce que vous faites et pourquoi (2pts).
+
+\newpage
+\Exercice\textbf{Identification d'algorithmes de tris} (4pts).
+
+La colonne la plus à gauche constitue les données d'entrée du problème. La
+colonne la plus à droite représente les données de sortie, c'est-à-dire les
+données triées alphabétiquement. Chacune des autres colonnes représente une
+étape intermédiaire de l'un des algorithmes de tri listés ci-dessous.
+
+\ding{172} Tri à bulle, \ding{173} Tri fusion, \ding{174} Tri par insertion,
+\ding{175} Tri par selection, \ding{176} QuickSort (en prenant le premier
+élément du sous-tableau comme pivot), \ding{177} ShellSort.
+
+\begin{center}
+\begin{tabular}{|c c c c c c c c|}\hline
+  \textbf{(in)}&\textbf{A}&\textbf{B}&\textbf{C}&\textbf{D}&\textbf{E}&\textbf{F}&\textbf{(out)}\\
+  gens&aveu&dard&gens&dard&gens&aveu&aveu\\
+  lama&base&file&lama&file&lama&base&base\\
+  zoom&miel&gens&pain&char&pain&char&char\\
+  pain&char&inox&inox&base&zoom&dard&dard\\
+  inox&file&lama&dard&aveu&dard&file&file\\
+  tape&rage&pain&file&gens&file&gens&gens\\
+  dard&dard&tape&miel&lama&inox&lama&inox\\
+  file&inox&zoom&char&zoom&tape&zoom&kilo\\
+  miel&tape&miel&kilo&pain&char&pain&lama\\
+  char&gens&char&base&inox&kilo&inox&miel\\
+  kilo&kilo&kilo&aveu&tape&miel&tape&pain\\
+  rage&vous&rage&rage&miel&rage&miel&rage\\
+  sort&pain&sort&sort&kilo&aveu&kilo&sort\\
+  base&lama&base&tape&rage&base&rage&tape\\
+  vous&zoom&vous&vous&sort&sort&sort&vous\\
+  aveu&sort&aveu&zoom&vous&vous&vous&zoom\\
+\R{&shell&insert&bubble&quick&fusion&selection&\\}
+  \hline
+\end{tabular}
+\end{center}
+
+\Question Pour chacun des algorithmes, indiquez la colonne représentant une
+étape intermédiaire. Décrivez également quelle serait l'opération suivante (il
+n'est pas nécessaire de calculer l'état du tableau après cette opération, mais
+simplement de décrire en français l'opération réalisée).
+
+\begin{Reponse}
+  \noindent\textbf{Barême:} 1pt pour insertion et selection, 0,5 pour les autres
+\end{Reponse}
+
+\Exercice\textbf{Tests} (4pts).
+
+Les fonctions ci-dessous appartiennent à une classe permettant de stocker des
+chaînes de caractères sous forme d'une pile.
+
+\Question Pour chaque méthode, indiquez les tests qu'il faudrait écrire pour
+vérifier leur bon fonctionnement. Écrivez simplement les tests à réaliser en
+français (vous n'avez pas à les écrire explicitement en utilisant JUnit ou une
+autre technique) (2pts).
+
+\Question Écrivez en JUnit les tests de la méthode \texttt{isEmpty()} (1pt).
+
+\Question Avez vous utilisé une approche whitebox, greybox, bluebox ou blackbox
+testing? Justifiez votre réponse? (1pt)
+
+\begin{Verbatim}
+public class MyStack {
+  /** Tests if this stack is empty.
+   * @return True if and only if this stack contains no items; false otherwise
+   */
+  public boolean isEmpty()
+
+  /**
+   * Pushes an item onto the top of this stack.
+   * @param item – the item to be pushed onto this stack
+   * @return The item that was pushed onto the stack
+   */
+  public String push(String item)
+
+  /**
+   * Removes the object at the top of this stack and returns that object as the value of this
+   * function.
+   * @return The object at the top of this stack
+   * @throws EmptyStackException if this stack is empty.
+   */
+  public String pop()
+
+  /**
+   * Looks at the object at the top of this stack without removing it from the stack.
+   * @return the object at the top of this stack
+   * @throws EmptyStackException if this stack is empty
+   */
+  public String peek()
+}
+\end{Verbatim} 
+
+\begin{Reponse}
+  \begin{itemize}
+  \item \textbf{isEmpty()}
+    \begin{itemize}
+    \item 1. Test that calling empty() on an empty stack returns true
+    \item 2. Test that calling empty() on a non-empty stack returns false
+    \end{itemize}
+  \item \textbf{push(item)}:
+    \begin{itemize}
+    \item 1. Test that pushing an item on the stack does in fact put it at the
+      head of the stack
+    \item 2. Adding a null item
+    \item 3. Pushing elements until you run out of space
+    \end{itemize}
+  \item \textbf{pop()}: Any 3 of the following 4:
+    \begin{itemize}
+    \item 1. Test that the exception is thrown if the stack is empty
+    \item 2. Test that the exception is not thrown if the stack is not empty
+    \item 3. Test that it is indeed the object at the top of the stack that is
+      returned
+    \item 4. Test that the object at the top of the stack is removed
+    \end{itemize}
+  \item \textbf{peek()}: Any 3 of the following 4:
+    \begin{itemize}
+    \item 1. Test that the exception is thrown if the stack is empty
+    \item 2. Test that the exception is not thrown if the stack is not empty
+    \item 3. Test that it is indeed the object at the top of the stack that is
+      looked at
+    \item 4. Test that the object at the top of the stack is not removed
+    \end{itemize}
+  \end{itemize}
+\end{Reponse}
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+
+%%% Local Variables:
+%%% coding: utf-8

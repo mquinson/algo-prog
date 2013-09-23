@@ -1,0 +1,379 @@
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+%\documentclass[10pt]{article}\usepackage[nu]{esial}
+\usepackage{amstext,amsmath,amsfonts}
+\TOP\1A
+\newcommand{\WP}[1]{\textbf{WP}($#1$)}
+
+\usepackage{amsthm,pifont,textcomp}
+\usepackage{amsmath,amssymb}
+
+\usepackage[utf8]{inputenc}
+\graphicspath{{fig/}}
+\newcommand{\bareme}[1]{{\small (#1 pt)}}
+
+\begin{document}
+\title{Examen du 17/06/2010 (2h -- conso)}
+\fvset{fontsize=\footnotesize}
+\maketitle
+
+\begin{centering}
+  \textbf{\large Documents interdits, à l'exception d'une feuille A4 à rendre
+    avec votre copie.}
+
+\end{centering}
+\centerline{La notation tiendra compte de la présentation et de la clarté de
+  la rédaction.}
+\bigskip
+
+
+
+\bigskip\QuestionCours~(4pt)
+
+\Question(2pts) Décrivez en quelques mots chacun des algorithmes suivants: tri
+à bulle, tri par sélection, tri fusion et tri par insertion.
+
+\Question(1pt) À quelles classes de complexité (en notation
+$\Theta$) appartiennent les algorithmes 1 et 2 suivants?
+%
+
+\medskip\noindent\begin{minipage}{.45\linewidth}
+  \begin{Verbatim}[label=algorithme 1]
+pour i = 1 à n faire
+  pour j = 1 à n faire
+     x += 3    
+  \end{Verbatim}
+\end{minipage}\hfill\begin{minipage}{.45\linewidth}
+  \begin{Verbatim}[label=algorithme 2]
+pour i = 1 à n faire
+  pour j = 1 à n faire
+    x += 3
+pour i = 1 à n faire
+  y = x + 5
+  \end{Verbatim}
+\end{minipage}
+
+\Question(1pt) Qu'est ce que le backtracking?
+
+\begin{Reponse}
+  C'est une technique algorithmique permettant d'effectuer des recherches
+  combinatoires bien plus efficacement qu'un parcours exaustif. L'idée de base
+  est de construire peu à peu les solutions en ne parcourant que des
+  sous-solutions valides. Dès qu'une sous-solution est invalide, on arrête
+  l'exploration de cette branche, ce qui permet d'éviter le parcours de
+  nombreuses solutions complètes qui seraient invalidées par la présence de la
+  sous solution courante. Ouf.
+  
+  Pour mettre en œuvre le backtracking, on utilise généralement une récursion
+  (pour construire peu à peu la solution) avec une boucle ou similaire pour
+  parcourir tous les choix possibles à une étape donnée de la construction de
+  notre solution. Pour chaque choix, s'il mène à une sous-solution valide
+  également, on opère un appel récursif pour explorer les sous-solutions plus
+  grandes que l'on peut construire avec celle que l'on a pour l'instant. 
+\end{Reponse}
+
+
+\bigskip\Exercice\textbf{Code récursif mystère} (5pt). 
+
+\noindent\begin{minipage}{.56\linewidth}
+%On considère l'algorithme présenté à droite.
+
+  \Question(1pt) On considére le code de droite et les tableaux
+  \texttt{tab=\{3, 4, 1, 2\}} et \texttt{tab2=\{17, 12, 51, 20\}}.  Explicitez
+  les appels \fbox{\texttt{mystification(tab)}} et
+  \fbox{\texttt{mystification(tab2)}} en indiquant le détail de chaque appel
+  récursif.
+
+\begin{Reponse}
+\begin{verbatim}
+mystification([3,4,1,2], 0)
+  3 > 2 -> return mystification([3,4,1,2], 1)
+                4 > 2 -> return 1+mystification([3,4,1,2], 2)   
+                              1 > 2  -> return 1+(1+mystification([3,4,1,2], 3))    
+                                              1+mystification([3,4,1,2], 4)
+                                                           return 1+1+0       
+\end{verbatim}
+\end{Reponse}
+
+\Question(\textonehalf pt) Que semble calculer ce code?
+\begin{Reponse}
+Cette fonction calcule le nombre de valeurs contenues dans le tableau et qui
+sont strictement plus grande que la dernière valeur du tableau. 
+\end{Reponse}
+
+\Question(\textonehalf pt) Montrez la terminaison de la fonction récursive
+\texttt{mystification}.
+\begin{Reponse}
+La fonction ``s'arrête'' quand \texttt{i} est égal à \texttt{tab.length-1}.
+Au premier appel, \texttt{i = 0}. Puis à chaque appel la valeur de \texttt{i}
+croît strictement. Elle atteindra donc inévitablement la valeur
+\texttt{tab.length-1}. 
+\end{Reponse}
+
+  
+\end{minipage}~\begin{minipage}{.44\linewidth}
+  \VerbatimInput[numbers=right]{Mystere.java}
+\end{minipage}
+
+
+
+\Question(\textonehalf pt) Quelle est la complexité  de
+\texttt{mystification} (en nombre d'appels récursifs)? 
+\begin{Reponse}
+  Le paramètre de récursion, $i$, croit linéairement. Il faut donc naïvement
+  $O(n)$ étapes pour traiter un problème de taille $n$.
+\end{Reponse}
+
+\Question(\textonehalf pt) Est-il possible de dérécursiver directement cette
+fonction ? Pourquoi ? 
+
+\begin{Reponse}
+  Non, car elle n'est pas terminale: il y a des calculs à la remontée (en ligne
+  10). 
+\end{Reponse}
+
+\Question(2pt) Dérécursivez cette fonction en appliquant les méthodes vues en
+cours (en une ou plusieurs étapes). Explicitez ce que vous faites et pourquoi.
+
+\begin{Reponse}
+  La première étape est de rendre cette fonction récursive terminale. Pour
+  cela, on écrit une fonction ayant un argument supplémentaire, et on y fait
+  lors de la descente les opérations que l'on aurait dû faire lors de la
+  remontée. Ceci n'est bien sûr possible que parce que l'opération à modifier
+  est une addition, qui est associative et commutative.
+
+  \begin{Verbatim}
+public int mystification(int [ ] tab) {
+  return mystification(tab,0,0);
+}
+public int mystification(int [ ] tab, int i, int accumulateur) {
+  if (i==tab.length-1) {
+    return accumulateur;
+  } else {
+    if (tab[i] > tab[tab.length-1]) {
+      return mystification(tab, i+1, accumulateur+1);
+    } else {
+      return mystification(tab, i+1, accumulateur);
+    }
+  }
+}
+  \end{Verbatim}
+
+Une fois rendue terminale, on peut dérécursiver cette fonction de la façon
+[simple] vue en cours.
+
+  \begin{Verbatim}
+public int mystification(int [ ] tab) {
+  int accumulateur = 0;
+  int i = 0;
+  while (i!=tab.length-1) {
+    if (tab[i] > tab[tab.length-1]) {
+      accumulateur ++;
+      i++;
+    } else {
+      i++;
+    }
+  }
+
+  return accumulateur
+}
+  \end{Verbatim}
+
+  On peut évidement factoriser du code et écrire i++ une seule fois.
+\end{Reponse}
+
+\bigskip\Exercice\textbf{Encore un code récursif (mais pas mystère
+  normalement)} (7pt). 
+
+\noindent La multiplication de deux nombres entiers positifs peut se faire de
+la manière suivante:
+
+\noindent\begin{minipage}{.87\linewidth}
+
+\begin{itemize}
+\item Écrivez le multiplicateur et le multiplicande l'un à côté de l'autre.
+\item Formez une colonne en dessous de chacun des opérandes en itérant la règle
+  suivante jusqu'à ce que le nombre sous le multiplicateur soit égal à 1:
+  divisez par deux le nombre sous le multiplicateur, sans tenir compte du
+  reste éventuel, et doublez par addition le nombre sous le multiplicande.
+
+  Par exemple, pour multiplier 19 par 45, vous obtenez la suite de nombres
+  de droite.
+\end{itemize}
+  
+\end{minipage}~\begin{minipage}{.13\linewidth}
+  \begin{Verbatim}[numbers=none]
+  45    19
+  22    38
+  11    76
+  5     152
+  2     304
+  1     608    
+  \end{Verbatim}
+\end{minipage}
+
+\smallskip\noindent\begin{minipage}{\linewidth}
+\begin{itemize}
+\item Finalement, rayez tous les nombres de la colonne du multiplicande
+  correspondant à multiplicateur pair (ceux pour les multiplicateurs 22 et 2).
+  Il ne reste plus qu'à additionner les nombres restants :\\ 19 + 76 + 152 +
+  608 = 855.
+\end{itemize}  
+\end{minipage}
+
+
+\medskip\noindent
+Une autre façon de présenter ce calcul est la suivante: 
+$$
+\begin{array}{l l l}
+  45\times 19 &=& (1+44)\times 19 = 19 + 22\times 2\times 19 = 19 + 22 \times 38\\
+  &=&19+11\times 2\times 38=19+11\times76\\
+  &=&19+(1+5\times 2)\times76=19+76+5\times152\\
+  &=&\ldots
+\end{array}$$
+
+\Question(3pt) Écrivez un algorithme (récursif) calculant la multiplication de
+cette manière.
+
+\Question(1pt) Montrez la terminaison de votre algorithme. Est il récursif
+terminal?
+
+\Question(1pt) Calculez la complexité temporelle de votre code (en nombre
+d'appels) dans le cas moyen, dans le meilleur cas et dans le pire cas.
+
+\Question(2pt) Dérécursivez votre code.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\bigskip\Exercice\textbf{Preuve de programmes} (4pt).
+
+\noindent\begin{minipage}{.73\linewidth}
+  Considérez le code de la fonction ci-contre calculant la factorielle de façon
+  itérative. Calculez la plus faible précondition (Weakest Precondition,
+  \textbf{WP}) nécessaire pour que la post-condition soit:
+
+  \begin{center}
+    $Q \triangleq res = n!$
+  \end{center}
+
+  Les règles de calcul des préconditions sont rappelées en annexe.
+\end{minipage}\hfill\begin{minipage}{.24\linewidth}
+\begin{Verbatim}[numbers=right]
+int res;
+void Factorial (int n) {
+  int f = 1;
+  int i = 1;
+  while (i < n) {
+    i = i + 1;
+    f = f * i;
+  }
+  res = f;
+}
+\end{Verbatim}  
+\end{minipage}
+
+\newcommand{\eq}{ \:\triangleq\: }
+\newcommand{\ET}{ \:\wedge\: }
+\begin{Reponse}
+  Il faut, comme toujours, partir du bas de l'algorithme. Calculons tout
+  d'abord la WP permettant à la boucle while d'avoir Q en post-condition.
+%
+  L'invariant de la boucle est assez simple dans ce cas: $I\eq (f=i!)\ET (i\in[0,n])$
+  Le variant est $n-i$
+
+  \medskip\noindent 
+  WP(while, Q) = I, avec les obligations habituelles. Considérons d'abord les
+  deux dernières obligations, habituellement plus simples.
+
+  \medskip\noindent
+  \begin{tabbing}
+  Obligation 2 \=$\eq I\Rightarrow V\geq 0$\\
+  \>$\eq (f=i!)\ET (i\in[0,n])\Rightarrow n-i\geq 0$\\
+  \>$\Leftarrow i\in[0,n]\Rightarrow n-i\geq 0$ ~~~(ce qui est trivialement
+  vrai)\\
+  \end{tabbing}
+
+  \medskip\noindent
+  \begin{tabbing}
+  Obligation 3 \=$\eq (E=\mathtt{false}\ET I) \Rightarrow Q$\\
+  \>$\eq n=i \ET (f=i!)\ET (i\in[0,n]) \Rightarrow f=n!$\\
+  \>$\Leftarrow n=i \ET (f=i!) \Rightarrow f=n!$ ~~~ (c'est bon aussi).
+  \end{tabbing}
+  Reste la première obligation de preuve, la plus dure.
+
+  \medskip\noindent
+  \begin{tabbing}
+  Obligation 1 \=$\eq (E=\mathtt{true}\ET I\ET V=z) \Rightarrow
+    \mathbf{WP}(C,I\ET V<z))$
+  \end{tabbing}
+
+  Commençons par calculer le membre droit de l'implication
+  \begin{tabbing}
+    $\mathbf{WP}(C,I\ET V<z)$\=$\eq \mathbf{WP}(C,(f=i!)\ET
+    (i\in[0,n])\ET n-i<z) $\\
+    \>$\eq \left((f=i!)\ET (i\in[0,n])\ET n-i<z\right)_{[i:=i+1;f:=f+1]}$\\
+    \>$\eq \left((f+1=(i+1)!)\ET (i+1\in[0,n])\ET n-i-1<z\right)$
+  \end{tabbing}
+
+  Ce qui nous donne:
+  \begin{tabbing}
+  Obligation 1 \=$\eq i<n \ET f=i! \ET i\in[0,n] \ET n-i=z$
+  \=$\Rightarrow f\times i=(i+1)! \ET i+1\in[0,n] \ET n-i-1<z$\\
+  \>$\eq f=i! \ET i\in[0,n[ \ET n-i=z$
+  \>$\Rightarrow  f\times i=(i+1)! \ET  i+1\in[0,n] \ET n-i-1<z$  
+  \end{tabbing}
+  Notons $P_1$, $P_2$ et $P_3$ les trois prédicats à droite de
+  l'implication.
+  \begin{itemize}
+  \item $P_1\eq f\times i=(i+1)!$ est donné par le fait que $f=i!$ (en prémisse
+    de l'implication) et la définition de la factorielle.
+  \item $P_2\eq i+1\in[0,n]$ se déduit de la prémisse $i\in[0,n[$
+  \item $P_3\eq n-i-1<z$ se déduit de la prémisse $n-i=z$
+  \end{itemize}
+
+  \hrule
+
+  On a donc montré que $WP(while,Q)\equiv I$. Reste à finir.
+
+  \noindent
+  \begin{tabbing}
+  WP(l3-4,I)~~\=$\eq$ WP(l3-4,$(f=i!)\ET (i\in[0,n])$)\\    
+  \>$\eq\left((f=i!)\ET (i\in[0,n])\right)_{[i:=1,f:=1]}$\\    
+  \>$\eq\left((1=1!)\ET (1\in[0,n])\right)$    \\
+  \>$\eq n\geq 1$  
+  \end{tabbing}
+  L'élément de droite est toujours vrai par définition de la factorielle, et
+  l'élément de gauche est vrai si et seulement si n est plus grand que 1
+  (sinon, l'écriture est même invalide).
+
+  Donc c'est fini. \fbox{WP(factoriel, res=n!)$\equiv n\geq 1$}
+\end{Reponse}
+
+\bigskip
+\noindent\hspace{-1.3em}$\bigstar$\textbf{Annexe:} Règles de calcul des
+préconditions. 
+
+\begin{itemize}
+\item \WP{nop, Q}  $\equiv Q$
+\item \WP{x:=E, Q} $\equiv Q[x:=E]$
+\item \WP{C;D, Q}  $\equiv$ \WP{C, \WP{D,Q}}
+\item \textbf{WP}(\texttt{if} $Cond$ \texttt{then} $C$ \texttt{else} $D$,$Q$)
+  $\equiv (Cond=\mathtt{true}\Rightarrow \mathbf{WP}(C,Q))~\wedge~
+          (Cond=\mathtt{false}\Rightarrow \mathbf{WP}(D,Q))$
+\item \textbf{WP}(\texttt{while} $E$ \texttt{do} $C$ \texttt{done} \{inv I var
+  V\},Q)  $\equiv I$ ~~;~~  Obligations de preuve:
+  \begin{enumerate}
+  \item[$\bullet$] $(E=\mathtt{true}\wedge I\wedge V=z) \Rightarrow
+    \mathbf{WP}(C,I\wedge V<z))$
+  \item[$\bullet$] $I\Rightarrow V\geq 0$
+  \item[$\bullet$] $(E=\mathtt{false}\wedge I) \Rightarrow Q$
+  \end{enumerate}
+\end{itemize}
+
+
+\end{document}
+
+
+%%% Local Variables:
+%%% coding: utf-8
