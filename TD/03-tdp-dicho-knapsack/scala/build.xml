@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="all" name="TD3: Knapsack">
+
+<target name="all" depends="jar, template"/>
+
+<target name="template">
+  <exec executable="grep" output="knapsack.scala">
+    <arg value="-v" />
+    <arg value="KILL" />
+    <arg value="knapsack-solution.scala" />
+  </exec>
+</target>
+
+<target name="compile">
+  <exec executable="scalac">
+    <arg value="knapsack-solution.scala" />
+  </exec>
+</target>
+
+<target name="jar" depends="compile">
+    <jar jarfile="knapsack.jar">
+            <manifest>
+  	       <attribute name="Built-By" value="Martin Quinson" />
+               <attribute name="Main-Class" value="knapsack" />
+               <attribute name="Class-Path" value="." />
+            </manifest>
+      <fileset dir="." includes="*.class"/>
+      <zipfileset excludes="META-INF/*.SF" src="/usr/share/java/scala-library.jar"/>
+    </jar>
+</target>
+
+<target name="clean">
+  <delete>
+     <fileset dir="." includes="*.class" />
+     <fileset dir="." includes="*~" />
+  </delete>
+</target>
+
+</project>

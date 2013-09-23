@@ -1,0 +1,332 @@
+\documentclass[10pt]{article}\usepackage[correction]{esial}
+%\documentclass[10pt]{article}\usepackage{esial}
+\TOP
+
+\definecolor{gris}{gray}{0.9}
+\newcommand{\trou}[1]{\ifcorrection{\colorbox{gris}{#1}}{}}
+
+\usepackage[utf8]{inputenc}
+\usepackage{subfigure}
+\graphicspath{{fig/}}
+
+\begin{document}
+\title{TD1: Complexité algorithmique}
+\fvset{fontsize=\footnotesize}
+\maketitle
+
+\Exercice \textbf{Complexité asymptotique et Faisabilité pratique.}
+
+\Question Complètez les tableaux suivants. Dans le tableau (a), il s'agit de
+calculer le nombre d'opérations nécessaire pour exécuter l'algorithme en
+fonction de sa complexité et de la taille d'instance du problème traité. Dans
+le tableau (b), il s'agit de calculer le temps nécessaire à cela en supposant
+que l'on dispose d'un ordinateur capable de réaliser $10^9$ opérations par
+seconde. Dans le tableau (c), on calcule la plus grande instance de problème
+traitable dans le temps imparti.
+
+On rappelle que une nanoseconde (ns) vaut $10^{-9}$s et que une microseconde
+($\mu$s) vaut $10^{-6}$. De plus, $10^{x^y}=10^{x\times y}$ et $\sqrt{n}=n^{1/2}$.
+
+\newcommand{\ms}{$\mu$s}
+\begin{table}[h]
+  \centering
+  \subfigure[Nombre d'opérations.\label{tab:nbop}]{ 
+    \begin{tabular}{|c|c|c|c|}\hline
+      \textbf{Complexité} & ~~\textbf{n=10}~ & \textbf{n=100} &
+      \textbf{n=1000}\\\hline
+      
+      n&\trou{$10^1$}&\trou{$10^2$}&\trou{$10^3$}\\\hline
+      $n^2$&\trou{$10^2$}&\trou{$10^4$}&\trou{$10^6$}\\\hline
+      $n^3$&\trou{$10^3$}&\trou{$10^6$}&\trou{$10^9$}\\\hline
+      $2^n$&\trou{$10^3$}&\trou{$10^{30}$}&\trou{$10^{300}$}\\\hline
+      $\sqrt{n}$&\trou{$3.3$}&\trou{$10$}&\trou{$31$}\\\hline
+      $\sqrt[3]{n}$&\trou{$2.15$}&\trou{$4.64$}&\trou{$10$}\\\hline
+      $\log_2(n)$&\trou{3.3}&\trou{6.6}&\trou{9.9}\\\hline
+    \end{tabular}
+  }\vspace{-\baselineskip}
+  \subfigure[Temps nécessaire à $10^9$ op/sec.]{
+    \begin{tabular}{|c|c|c|c|}\hline
+      \textbf{Complexité} & ~~\textbf{n=10}~ & \textbf{n=100} &
+      \textbf{n=1000}\\\hline
+      
+      n&\trou{10ns}&\trou{100ns}&\trou{1\ms}\\\hline
+      $n^2$&\trou{100ns}&\trou{10\ms}&\trou{1ms}\\\hline
+      $n^3$&\trou{1\ms}&\trou{1ms}&\trou{1s}\\\hline
+      $2^n$&\trou{$>$1\ms}&\trou{(note 1)}&\trou{\footnotesize$10^{284}$ ans}\\\hline
+      $\sqrt{n}$&\trou{3.3ns}&\trou{10ns}&\trou{31ns}\\\hline
+      $\sqrt[3]{n}$&\trou{2.15ns}&\trou{4.64ns}&\trou{10ns}\\\hline
+      $\log n$&\trou{3.3ns}&\trou{6.6ns}&\trou{9.9ns}\\\hline
+    \end{tabular}
+  }
+\end{table}  
+\begin{Reponse}
+  (note 1): 30000 milliards d'années, 2300 fois l'âge de l'univers (estimé à
+  13.7 milliards d'années).
+\end{Reponse}
+
+\begin{table}[h]
+  \centering
+  \subfigure[Plus grande instance faisable à $10^9$ op/sec.]{
+    \begin{tabular}{|c|c|c|c|}\hline
+      \textbf{Complexité} & ~~~~\textbf{1s}~~~~ & ~~~~\textbf{1h}~~~~ &
+      ~~~~\textbf{1 an}~~~~\\\hline
+      
+      n&\trou{$10^9$}&\trou{$10^{12}$}&\trou{$10^{16}$}\\\hline
+      $n^2$&\trou{$\sqrt{10^9}=3\cdot 10^4$}&\trou{$10^6$}&\trou{$10^8$}\\\hline
+      $n^3$&\trou{$\sqrt[3]{10^9}=10^3$}&\trou{$10^4$}&\trou{$2\cdot 10^5$}\\\hline
+      $2^n$&\trou{$log(10^9)=29$}&\trou{39}&\trou{53}\\\hline
+      $\sqrt{n}$&\trou{$\left(10^9\right)^2=10^{18}$}&\trou{$10^{24}$}&\trou{$10^{32}$}\\\hline
+      $\sqrt[3]{n}$&\trou{$10^{27}$}&\trou{$10^{36}$}&\trou{$10^{48}$}\\\hline
+      $\log (n)$&\trou{$10^{30\,000\,000}$}&\trou{$\infty$}&\trou{$\infty$}\\\hline
+    \end{tabular}
+  }
+\end{table}
+
+\begin{Reponse}
+  1s=$10^9$ opérations. Donc l'algo n fait $10^9$ opérations,
+  $n^2\leadsto\sqrt(10^9)$, $2^n\leadsto\log_2(10^9)$ , $\log n\leadsto
+  2^{10^9}$
+
+  1h, c'est idem $\times$ 3600. En gros, on calcule le nb d'op sur la première
+  ligne, et après on extrait des racines carrés, des racines cubiques, des logs
+  et des exp.
+
+  $2^{(10^9)} = (2^{100})^{10^7} \approx (10^{30})^{10^7} = 10^{300,000,000}$
+  
+  A comparer au nombre estimé de particules dans l'univers : $10^{80}${\ldots} 
+\end{Reponse}
+
+\ifcorrection{\newpage}{\vspace{-\baselineskip}} 
+\Exercice Donnez la complexité des programmes suivants. Vous donnerez une borne
+supérieure avec un $O()$ dans un premier temps, puis vous affinerez votre
+calcul en utilisant la notation $\Theta()$. \bigskip
+
+\noindent\begin{minipage}{.3\linewidth}
+  \begin{Verbatim}[gobble=4,label=listing 1]
+    pour i = 1 à n faire
+       pour j = 1 à n faire
+         x += 3
+  \end{Verbatim}  
+\end{minipage}~~~~\begin{minipage}{.3\linewidth}
+  \begin{Verbatim}[gobble=4,label=listing 2]
+    pour i = 1 à n faire
+       pour j = 1 à i faire
+         x += 3    
+  \end{Verbatim}
+\end{minipage}~~~~\begin{minipage}{.3\linewidth}
+  \begin{Verbatim}[gobble=4,label=listing 3]
+    pour i = 5 à n-5 faire
+       pour j = i-5 à i+5 faire
+         x += 3    
+  \end{Verbatim}
+\end{minipage}
+
+\medskip\noindent\begin{minipage}{.3\linewidth}
+\begin{Verbatim}[gobble=4,label=listing 4]
+    pour i = 1 à n faire 
+        pour j = 1 à n faire 
+             pour k = 1 à n faire 
+                  x := x+a
+\end{Verbatim}
+\end{minipage}~~~~\begin{minipage}{.3\linewidth}
+\begin{Verbatim}[gobble=4,label=listing 5]
+    pour i = 1 à n faire 
+        pour j = 1 à i faire 
+             pour k = 1 à j faire 
+                  x := x+a
+\end{Verbatim}
+\end{minipage}~~~~\begin{minipage}{.3\linewidth}
+\begin{Verbatim}[gobble=4,label=listing 6]
+    for (i = n; i>1; i = i/2)
+       for (j=0;j<i;j++)
+         x := x+a
+\end{Verbatim}
+\end{minipage}
+
+\begin{Reponse}
+  Le listing 6 a des for(;;) car on divise i par 2 à chaque étape. C'est
+  impossible à écrire en pseudo-pascal, il me semble.
+  
+  \begin{enumerate}
+  \item $\Theta(n^2)$ trivialement (gérald: ca veut dire $0(n^2)$ et
+    $\Omega(n^2)$ en même temps ;)
+  \item $O(n^2)$ facilement (n est une borne sup du nombre de tours de
+    boucles)\\
+    $\Theta(n^2)$ un peu plus péniblement (en dénombrant exactement les étapes
+    comme on a fait en cours pour le tri sélection qui ressemble beaucoup)
+  \item $O(n)$ la boucle interne a tjs un nombre constant d'opérations (10
+    étapes). Les variations de longueur sur la boucle externe étant constantes,
+    on les ignore.
+  \item $\Theta(n^3)$ trivialement
+  \item $O(n^3)$ facilement car les boucles internes font \underline{au plus} n
+    tours.
+
+    En dénombrant, on trouve 
+    $\displaystyle \sum_{i\in[1,N]}\sum_{j\in[1,i]}\sum_{k\in[1,j]}$
+    $=\displaystyle\sum_{i\in[1,N]}\sum_{j\in[1,i]}j$
+    $=\displaystyle\sum_{i\in[1,N]}\frac{i(i+1)}{2}$
+    $=\frac{1}{2}\left(\displaystyle\sum_{i\in[1,N]}i^2+\sum_{i\in[1,N]}i\right)$
+    $=\frac{1}{2}\left(\frac{(2N+1)(N+1)N}{6}+\frac{N(N+1)}{2}\right)$
+    $\leadsto \Theta(n^3)$
+  \item $O(n \log_2(n))$ assez trivialement, une fois qu'on sait que diviser le
+    travail à chaque étape introduit du log dans les coûts. L'an prochain, je
+    vous dirais comment le montrer. Je me souviens juste que c'est pas si
+    dur...
+    
+    Mais en fait, ce code est dans $\Theta(n)$ (et donc aussi dans $O(n)$;
+    Gérald, t'es pas attentif!). C'est parce que la boucle intérieure s'arrête
+    à $i$ et pas à $n$. Donc, si on compte les étapes faites par j dedans, on
+    trouve: 1+2+4+8+...+n.
+
+    Autrement dit, si on pose $n=2^p$, 
+    $$\sum_{k=1}^{p} \sum_{j=1}^{2^k} 1 = 
+    \sum_{k=1}^{p} 2^k = \frac{2^{p+1}-1}{2} = n-\frac{1}{2} \in \Theta(n)$$
+
+    Ben oui, y'a quand meme des fois où c'est plus coquin, les décomptes de
+    complexité, hein.
+  \end{enumerate}
+\end{Reponse}
+
+\medskip
+\Exercice \textbf{Cas favorable, défavorable. Coût moyen.}
+
+
+\vspace{-.2\baselineskip}\noindent\begin{minipage}{.65\linewidth}
+
+  \Question Étudiez le nombre d'additions réalisées par les
+  algorithmes suivants dans le meilleur cas, le pire cas, puis dans le
+  cas moyen en supposant que les tests ont une probabilité de
+  $\frac{1}{2}$ d'être vrai.
+
+  \Question Donnez une instance du code 2 de coût $t_{avg}$.
+
+\end{minipage}\hfill\begin{minipage}{.3\linewidth}
+\begin{Verbatim}[label=code 1]
+pour i de 1 à n faire
+   si T[i]>a alors
+       s := s + T[i]  
+\end{Verbatim}
+
+\begin{Verbatim}[label=code 2]
+si a > b alors 
+  pour i = 1 à n faire 
+    x := x+a 
+sinon x := x+b
+\end{Verbatim}
+\end{minipage}
+
+
+\begin{Reponse}
+  \begin{description}
+  \item[Question 4] ~
+    \begin{enumerate}
+    \item[code 1:] 0 au mieux, n au pire, n/2 en moyenne. 
+    \item[code 2:] 1 au mieux, n au pire. Donc, en moyenne, on a aussi n/2
+    \end{enumerate}
+  \item[Question 5] Y'en a pas, bien sûr. Dieu que je suis machiavélique.
+  \end{description}
+\end{Reponse}
+
+\Exercice \textbf{Un peu de calculabilité.}  
+
+\Question Démontrez que tous les algorithmes de tri comparatif sont dans
+$\Omega(n\log n)$. \\
+\noindent \textit{Indice:} Il faut repartir de la spécificiation du problème,
+dénombrer le nombre de solutions candidates, et quantifier la somme
+d'information accumulée lors de chaque test. Cela permet de calculer la borne
+inférieure de tests à réaliser pour sélectionner la bonne solution parmi les
+candidates. 
+\begin{Reponse}
+  Cet exercice est hors sujet vis-à-vis des évaluations, mais faut rester
+  \textit{challenging} :)
+
+  Il faut donc repartir de la spec du problème:
+  \begin{itemize}
+  \item \textsc{input}: tableau d'éléments
+  \item \textsc{output}: permutation sur les éléments telle que ...
+  \end{itemize}
+
+  Combien de permutations sont possibles? $n!$ bien sûr. On cherche donc la
+  bonne permutation parmis $n!$ existantes.
+
+  Les algos comparatifs basent leur décision sur des comparaisons (si,
+  si). Donc, à chaque étape, ils gagnent une information booléenne. Donc, en 3
+  étapes, ils peuvent trouver le bon élément dans un ensemble de $2^3$
+  possibles.
+
+  Si on a un algo comparatif (correct) qui répond en $f(n)$ étapes, on est donc
+  sûr que $2^{f(n)}>n!$ car s'il avait pas assez d'info, il pourrait pas
+  trouver la bonne permutation. 
+
+  Donc, $f(n)>log(n!)$. Hors, les taupins dans la salle devraient savoir
+  montrer en utilisant l'approximation de Stirling que 
+  $\log(n!)\in\Omega(n\log n)$
+
+  Donc un algo comparatif correct est forcément dans $\Omega(n\log n)$. Voyez,
+  les preuves de calculabilité sont pas forcément infaisables.
+\end{Reponse}
+
+\Exercice \textbf{Tri par dénombrement} [Seward 1954].
+
+Si on sait que les valeurs sont comprises entre 0 et $max$ (avec $max$
+pas trop grand), on peut trier les valeurs en comptant tout d'abord le nombre
+de 0, le nombre de 1, le nombre de 2 ... le nombre de $max$ en entrée. Ensuite,
+il suffit de parcourir le tableau à nouveau en indiquant la bonne quantité de
+chaque valeur.
+
+\Question Écrire cet algorithme. On utilisera un tableau annexe $count$ où
+$count[i]$ indique le nombre de $i$ dans le tableau initial.
+
+\begin{Reponse}
+  \begin{Verbatim}[gobble=4]
+    for (i=0;i<length;i++)
+      count[ tab[i] ]++;
+    j=0
+    for (u=0;u<max;u++)
+      for (v=0;v<count[u];v++) 
+        tab[j] = u
+        j++ 
+  \end{Verbatim}
+\end{Reponse}
+
+\Question Calculer la complexité asymptotique de cet algorithme.
+
+\begin{Reponse}
+  La première boucle a clairement $len$ tours. 
+ 
+  Pour le second nid de boucle, c'est agacant à calculer au premier abord. Le
+  plus simple est de compter le nombre de valeurs successives que la variable
+  $j$ prend: pile-poil $len$.
+
+  Du coup, on est en $\Theta(n+n)=\Theta(n)$. Ben oui, c'est linéaire...
+
+\end{Reponse}
+
+\Question Discutez cette complexité par rapport à la borne théorique
+inférieure démontrée à l'exercice précédent. 
+
+\begin{Reponse}
+  Bon, la question est pas claire, mais j'arrive pas bien à le dire sans que
+  l'énoncé de la question 6 spoile le travail de la question 5.
+
+  Nous avons vu en cours que la complexité des algorithme de tri basés sur la
+  comparaison des éléments est $\Omega(n\log n)$, mais il est bien possible que
+  le fait que ce soit que pour les tris comparatifs soit un peu passé à la
+  trappe. Là, on fait mieux car on ne compare pas les éléments entre eux, mais
+  on utilise une connaissance supplémentaire sur les données (le fait que le
+  max est petit).
+
+  Remarquons également qu'on est plus en $\Theta(1)$ en mémoire, mais en
+  $\Theta(max)$.
+  \bigskip
+
+  Ce résultat est amusant vis-à-vis de l'exercice précédent, mais ce n'est pas
+  si choquant que le tri par dénombrement aille plus vite que la borne
+  inférieure des tris comparatifs vu qu'il acquiere ses infos par un autre
+  moyen que les comparaisons.
+\end{Reponse}
+
+\end{document}
+
+%%% Local Variables:
+%%% coding: utf-8

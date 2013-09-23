@@ -1,0 +1,358 @@
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}%[correction]{esial}
+
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{amstext,amsmath,amsfonts}
+\usepackage{fancyvrb}
+
+\TOP\unA
+\title{TDP3: Récursivité (dichotomie et sac à dos)}
+
+\begin{document}
+\maketitle
+
+\begin{Reponse}
+Cette semaine, on a un TD de (45mn de dichotomie/1h15 sac à dos), et un TP sur
+le sac à dos. But du jeu: ne pas écrire le code du TP en TD, mais faire assez
+d'exos d'échauffement sur le thème pour qu'ils écrivent le code seul sans
+soucis ensuite. Si tout va bien, faut se décarcasser en TD et ne plus rien
+avoir à faire en TP.
+\end{Reponse}
+
+\Exercice\textbf{Diviser pour régner: la dichotomie}
+
+\begin{Reponse}
+  L'objectif de cet exercice est d'appliquer les recettes de cuisine du cours
+  pour (1) écrire une fonction récursive (voir le traitement appliqué aux tours
+  de hanoi dans le cours) (2) dérécursiver une fonction récursive terminale.
+  Evidement, sur un cas aussi simple, on peut faire directement au feeling,
+  mais il faut insister sur la recette de cuisine histoire que tout le monde
+  l'intègre.
+\end{Reponse}
+
+La dichotomie (du grec « couper en deux ») est un processus de recherche où
+l'espace de recherche est réduit de moitié à chaque étape. 
+
+Un exemple classique est le jeu de devinette où l'un des participants doit
+deviner un nombre tiré au hasard entre 1 et 100. La méthode la plus efficace
+consiste à effectuer une recherche dichotomique comme illustrée par cet
+exemple:
+\begin{itemize}
+\item[--] Est-ce que le nombre est plus grand que 50? (100 divisé par 2)
+\item[--] Oui
+\item[--] Est-ce que le nombre est plus grand que 75? ((50 + 100) / 2)
+\item[--] Non
+\item[--] Est-ce que le nombre est plus grand que 63? ((50 + 75 + 1) / 2)
+\item[--] Oui
+\end{itemize}
+On réitère ces questions jusqu'à trouver 65. Éliminer la moitié de l'espace de
+recherche à chaque étape est la méthode la plus rapide en moyenne.
+
+\begin{Question}
+  Écrivez une fonction récursive cherchant l'indice d'un élément donné dans un
+  tableau trié. La recherche sera dichotomique.
+
+  \textsc{Données:}
+  \begin{itemize}
+  \item Un tableau trié de n éléments (\texttt{tab})
+  \item Les bornes inférieure (\texttt{borne\_inf}) et
+    supérieure (\texttt{borne\_sup}) du tableau
+  \item L'élément cherché (\texttt{élément})
+  \end{itemize}
+
+  \textsc{Résultat:} l'indice où se trouve l'élément dans tab s'il y est, -1
+  sinon.
+
+\end{Question}
+\begin{Reponse} 
+  \textbf{Recette de cuisine:}
+  \begin{itemize}
+  \item Paramètre : l'intervale (et sa taille)
+  \item Cas triviaux : si l'intervale est de taille 1 ou 0
+  \item Comment résoudre le pb avec l'aide d'un bon génie : 
+    \begin{itemize}
+    \item Couper l'intervale en deux moitiés
+    \item Regarder dans quelle moitié peut être l'élément cherché (le tableau
+      est trié)
+    \item Demander au génie de chercher pour de vrai dans cette moitié
+    \end{itemize}
+  \end{itemize}
+
+
+
+  \textbf{Code:}
+  Je pense qu'on peut faire plus simple que le code ci-après, mais pas
+  sûr. Attention, si vous changez le test en \hbox{$min == max$}, ça merdoie
+  grâce à cette saloperie de division entière contre-intuitive: ce cas
+  (taille=0) n'arrive jamais si la taille initiale de l'intervale est impaire et
+  que l'élément cherché est dans une case impaire (ou un plan du genre).
+
+  Remarquez que dans ce code, je définis la fonction récursive \textbf{dans} la
+  fonction publique. On peut tout à fait déclarer des fonctions dans les
+  fonctions en scala, ca réduit leur visibilité comme on s'y attend. Dans ce
+  cas, la fonction récursive est de la cuisine interne, et l'appellant n'a pas à
+  savoir comment c'est implémenté dedans (ca lui évite de savoir initialiser les
+  arguments récursifs).
+  \newpage
+
+  %\VerbatimInput[label=Version récursive]{src/dicho/DichoRec.java}
+  \VerbatimInput[label=Version récursive]{dichoRec.scala}
+  
+\end{Reponse}
+
+\Question Calculez la complexité de cette fonction.
+\begin{Reponse}
+  $O( log(n) )$ car on divise la quantité de chose à
+  faire par 2 à chaque fois. Donc, en 1 étape, je gère 1 élément au max. En 2
+  étapes, 2 fois plus. En 3 étapes, encore 2 fois plus. En N étapes, je gère
+  $2^N$ éléments. Donc, pour gérer $p$ éléments, il faut $n$ étapes tel que
+  $2^n>p$, ie, $n>log(p)$. CQFD.  
+\end{Reponse}
+
+\Question Montrez la terminaison de cette fonction.
+\begin{Reponse}
+  Quand on fait une fonction récursive, il est très important de montrer
+  qu'elle s'arrête tout le temps, pour 2 raisons : (1) écrire une fonction
+  récursive qui boucle à l'infini est facile et courant; (2) montrer ceci est
+  relativement simple, c'est pas une preuve avancée.
+
+  Une condition suffisante pour montrer la terminaison d'un algo recursif (mais
+  pas forcément nécessaire), c'est de montrer qu'il y a une grandeur qui varie
+  de façon strictement monotone, et qu'elle atteint à coup sûr les cas d'arrêt
+  de la récursion. 
+
+  \textbf{Ici:} la taille du tableau est divisé par 2 à chaque étape, et on
+  s'arrête quand la taille est inférieure ou égale à 1.  Suite strictement
+  monotone (attention aux divisions entières pour ca), effectivement
+  convergeante vers le cas terminal, c'est bon.
+
+  Si on avait marqué explicitement que la longueur entre min et max est 0 ou 1,
+  on aurait pu se faire avoir avec des cas où max passe à gauche de
+  min. Peut-être bien que cela aurait pu passer à travers, ie partir se
+  promener chez les négatifs et donc partir à l'infini ($-\infty$). Mais cette
+  simple précaution (écrire $i<=1$ quand on pense à $i\in[0,1]$) nous assure que ce
+  ne sera pas le cas.
+\end{Reponse}
+
+\begin{Question} 
+  Dérécursivez la fonction précédente.
+\end{Question}
+\begin{Reponse}
+  \textbf{Cette question est optionnelle.}  Si votre groupe a posé trop de
+  questions sur le début, passez à la suite. On refera de la dérécursivation, et
+  il faut absolument défricher le knapsack en TD car c'est le sujet du TP.
+
+  Il faut appliquer la recette de cuisine du cours. Tant que condition fausse,
+  traitements du cas général. Ensuite, traitements du cas terminal.
+
+  %\VerbatimInput[label=Version récursive]{src/dicho/DichoIter.java}
+  \VerbatimInput[label=Version récursive]{dichoIter.scala}
+\end{Reponse}
+
+\Exercice\textbf{Présentation du problème du sac à dos}
+
+L'objectif du prochain TP sera de réaliser un algorithme de recherche avec
+retour arrière dans un graphe d'états. Nous allons maintenant nous familiariser
+avec ce problème.
+
+Le problème du sac à dos (ou \textit{knapsack problem}) est un problème
+d'optimisation classique. L'objectif est de choisir autant d'objets que peut en
+contenir un sac à dos (dont la capacité est limitée). Des problèmes similaires
+apparaissent souvent en cryptographie, en mathématiques appliquées, en
+combinatoire, en théorie de la complexité, \textit{etc.}
+\medskip
+
+\noindent\textsc{Problème:} \vspace{-.2\baselineskip}
+\begin{quote}
+  Étant donné un ensemble d'objets ayant chacun une valeur $v_i$ et un poids
+  $p_i$, déterminer quels objets choisir pour maximiser la
+  valeur de l'ensemble sans que le poids du total ne dépasse une borne $N$.\\
+  (on pose dans un premier temps $\forall i, v_i=p_i$. Imaginez qu'il s'agit de
+  lingots d'or de tailles différentes)
+\end{quote}
+
+
+\textsc{Données}:
+\begin{itemize}
+\item Le poids de chaque objet \texttt{i} (rangés dans un tableau
+  \texttt{poids[0..n-1]})
+\item La capacité du sac à dos \texttt{N}
+\end{itemize}
+
+\textsc{Résultat}:
+\begin{itemize}
+\item un tableau \texttt{pris[0..n-1]} de booléens indiquant pour chaque objet
+  s'il est pris ou non
+\end{itemize}
+
+\medskip Le seul moyen connu\footnote{Ceci est du moins vrai dans la forme non
+  simplifiée du problème et en utilisant des valeurs non entières.
+  \ifcorrection{\color{red}Pour de vrai, dans le cas qu'on présente ici, on peut le
+    claquer en temps polynomial par programmation linéaire. Mais c'est hors
+    sujet...}{}} de résoudre ce problème est de tester différentes combinaisons
+possibles d'objets, et de comparer leurs valeurs respectives.  Une première
+approche serait d'effectuer une recherche exaustive d'absolument toutes les
+remplissages possibles.
+
+\Question Calculez le nombre de possibilités de sac à dos possible lors d'une
+recherche exaustive.
+
+\begin{Reponse}
+  On devrait s'en sortir avec un $C_n^p$, mais on peut aussi constater qu'on a
+  $n$ objets, et que chacun est soit pris, soit pas pris. Ce qui nous fait $n$
+  caractères sur un alphabet à 2 lettre, soit $2^n$ possibilités.
+\end{Reponse}
+
+\medskip Une approche plus efficace consiste à mettre en œuvre un algorithme de
+recherche avec retour arrière (lorsque la capacité du sac à dos est dépassée)
+tel que nous l'avons vu en cours. Elle permet de couper court au plus tôt à
+l'exploration d'une branche de l'arbre de décision. Par exemple, quand le sac
+est déjà plein, rien ne sert de tenter d'ajouter encore des objets.
+
+La suite de cet exercise vise à vous faire mener une réflexion préliminaire au
+codage, que vous ferez dans l'exercise suivant, lors du prochain TP.
+
+\Question De combien de classes Java avez vous besoin? Dessinez le
+diagramme de classes.
+
+\begin{Reponse}
+  La première tentation de certain est de répondre ``on a pas fait d'UML à
+  l'ESIAL''. Ceux qui disent ça ont déjà fait de l'UML ailleurs vu qu'ils font
+  le rapprochement avec ``diagramme de classes''; sinon, pour détendre
+  l'atmosphere, j'ai jamais fait d'UML, perso, ni à l'esial ni ailleurs, c'est
+  pas ça qui empêche de réfléchir aux classes à écrire et aux fonctions
+  qu'elles doivent offrir...
+
+  Sinon, il faut couper immédiatement court à l'idée de faire un objet Java
+  pour chaque objet qu'on va mettre (ou non) dans  le sac à dos. Les deux ont
+  le même nom, mais les objets du problème sont passifs là où un objet Java est
+  actif (quelles seraient les méthodes à écrire dans la classe
+  ``KnapsackObjet''?).
+
+  \textbf{Faut bien les faire ramer avant de leur donner le schéma suivant.}
+  Mais faut pas les laisser ramer seuls, faut guider leurs recherches en
+  posant des questions et en écrivant peu à peu interactivement. L'autre piège
+  est qu'il faut subtilement guider cette ``interactivité'' pour s'assurer
+  que le groupe retrouve ce schéma là, puisque c'est celui utilisé dans les 
+  templates fournis lors du TP. Mener le groupe à un autre design serait
+  alors troublant.
+
+  \includegraphics{fig/diagramme-classe.fig}
+\end{Reponse}
+
+\Question Dessinez l'arbre d'appel que votre fonction doit parcourir lorsqu'il
+y a quatre objets de tailles respectives $\{ 5, 4, 3, 2 \}$ pour une capacité
+de 15.
+
+\begin{Reponse}
+  Dans le schema ci-dessous, la moitié gauche, sous ``5'' est les cas où on
+  prend le premier objet, de taille 5. La moitié droite, sous ``5 barré'' est
+  les cas où on prend pas 5.
+
+  \includegraphics[width=\linewidth]{fig/arbre-appels.fig}  
+
+  Ouaip, y'a pas de bactraking. Car le sac est trop grand, ca tient tout dedans.
+\end{Reponse}
+
+\Question Même question avec un sac de capacité 10.
+
+\begin{Reponse}
+  Là, faut couper des branches. Comme par exemple 5,4,3 (pas besoin de tenter
+  de mettre 2 en plus, ca tient déjà pas à 5,4,3).
+\end{Reponse}
+
+\medskip Réfléchissez à la structure de votre programme. Il s'agit d'une
+récursion, et il vous faut donc choisir un paramètre portant la
+récursion. Appliquez le même genre de réflexion que celui mené en cours à
+propos des tours de Hanoï. Il est probable que vous ayez à introduire une
+fonction récursive dotée de plus de paramètres que la méthode
+\texttt{cherche()}.
+
+\Question Quel sera le prototype de la fonction d'aide?
+
+\begin{Reponse}
+  \noindent\texttt{%
+  void cherche() \{\\
+  \null~~cherche\_helper(int profondeur, KnapsackSolution etat\_courant);\\
+  \}    
+  }
+\end{Reponse}
+
+\Question Explicitez en français l'algorithme à écrire. Le fonctionnement en
+général (en vous appuyant sur l'arbre d'appels dessiné à la question 3), puis
+l'idée pour chaque étage de la récursion.
+
+\begin{Reponse}
+  Ce qui semble mal passer, c'est que ce n'est pas un if/then/else, mais une
+  séquence. Je prend l'objet, je descend [à gauche], je le pose, je descend [à
+  droite]. À chaque étage, c'est très similaire une fois qu'on a vu que c'est
+  à  l'objet N qu'on s'intéresse à l'étage N.
+
+  Un autre piège à expliciter est qu'on a vu en cours des backtracking avec une
+  boucle, et ici y'a pas de boucle. C'est qu'on parcours l'ensemble \{pris, pas
+  pris\} alors on fait pas une vraie boucle. A la place, on teste les deux cas
+  explicitement.
+
+  Il faut qu'ils comprennent car la semaine prochaine, on refait un autre
+  backtracking.
+\end{Reponse}
+
+\Exercice\textbf{Implémentation d'une solution au problème du sac à dos}
+
+Vous trouverez dans \url{/home/depot/1A/TOP/knapsack} une classe
+\texttt{Knapsack} contenant des éléments pour vous aider. Elle utilise la
+classe \texttt{KnapsackSolution}, également fournie. 
+
+\Question Complétez la fonction \texttt{Knapsack.cherche()} afin de résoudre le
+problème du sac à dos. Vous utiliserez la classe \texttt{KnapsackSolution}.
+Vérifiez avec la classe \texttt{Test} fournie la validité de votre travail.
+
+\begin{Reponse}
+  Il y a 3 classes:
+  \begin{description}
+  \item[Test.java] contient le main
+  \item[Knapsack.java] fait le parcourt récursif avec retour arrière
+  \item[KnapsackSolution.java] réifie les solutions au problème (on en
+    manipule plusieurs lors du parcours: la courante, la meilleure
+    rencontrée jusque là, etc)
+  \end{description}
+
+  \noindent\textbf{Ce sont les corrections du TP suivant, alors c'est pas une
+    bonne idée de tout leur donner : faut qu'ils cherchent, un peu,
+    aussi.}
+    
+  \VerbatimInput[label=Test.java]{src/knap/Test.java}
+  \VerbatimInput[label=Knapsack.java]{src/knap/Knapsack.java}
+  \VerbatimInput[label=KnapsackSolution.java]{src/knap/KnapsackSolution.java}
+\end{Reponse}
+
+
+\Question Combien d'appels récursifs effectue votre code?
+
+\begin{Reponse}
+  Y'a des étudiants qui vérifient la validité de leur travail en comptant le
+  nombre d'appels récursifs effectués. Bonne idée. Le bon résultat est 15. Pas
+  le nombre de feuilles de l'arbre, mais le nombre de nœuds internes...
+\end{Reponse}
+
+\Question Généralisez votre solution pour résoudre des problèmes où la valeur
+d'un objet est décorrélée de son poids (on ne suppose donc plus que $v_i=p_i$).
+Il s'agit maintenant de maximiser la valeur du contenu du sac en respectant les
+contraintes de poids. Vous serez pour cela amené à modifier toutes les classes
+fournies.
+
+\Question Vous trouverez dans le répertoire du dépôt un script
+\texttt{cree\_instance.sh} capable de créer une nouvelle instance du problème à
+écrire dans le fichier \texttt{Test.java}. Observez les variations du temps
+d'exécution lorsque la taille du problème augmente.
+
+\begin{Reponse}
+  Oui, c'est exponentiel. Un peu mieux que $2^n$, mais ça reste très douloureux
+  très vite.
+\end{Reponse}
+
+
+
+\end{document}
+%%% Local Variables:
+%%% coding: utf-8
