@@ -1,0 +1,10 @@
+*.mk
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.aux
+*.log
+*.aux.orig
+*~handout.stamp

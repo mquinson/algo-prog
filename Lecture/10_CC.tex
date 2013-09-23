@@ -1,0 +1,125 @@
+\part{Conclusion on TOP}\mypartpage
+
+\begin{frame}[squeeze]{Lectures content}
+  \begin{block}{What we saw}
+  \begin{enumerate}
+  \item \structure{Practical and Theoretical Foundations of Programming}
+    \begin{itemize}
+    \item CS vs. SE; Abstraction for complex algorithms; Algorithmic efficiency.
+    \end{itemize}
+
+  \item \structure{Iterative Sorting Algorithms}
+    \begin{itemize}
+    \item Specification; Selection, Insertion and Bubble sorts.
+    \end{itemize}
+
+  \item \structure{Recursion}
+    \begin{itemize}
+    \item Principles; Practice; Recursive sorts; Non-recursive From;
+      Backtracking.
+    \end{itemize}
+
+
+  \item \structure{Software Correction}
+    \begin{itemize}
+    \item Introduction; Specifying Systems; Hoare Logic; Proving Recursive
+      Functions. 
+    \end{itemize}
+
+  \item \structure{Testing Software}
+    \begin{itemize}
+    \item Testing techniques; Testing strategies; JUnit; Design By Contract.
+    \end{itemize}
+  \end{enumerate}    
+  \end{block}
+
+  \begin{block}{What's missing}
+    \begin{itemize}
+    \item A LOT! This module is an initiation on several domains
+    \item End of CS: complexity (P vs. NP), data structures
+    \item End of SE: Programming methodo, Refactoring and automated code
+      handling
+    \item Tools: Practical Performance Assesment (a bit in labs), VCS, bug
+      trackers 
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[squeeze]{Choice criteria between algorithms}
+  \begin{block}{\alert{Correctness}}
+    \begin{itemize}
+    \item \structure{Provides the right answer}
+    \item This crucial issue is delayed a bit further
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+  \begin{block}{\alert{Simplicity}}
+    \begin{itemize}
+    \item \structure{Keep it simple, silly}
+    \item Simple programs can evolve (problems and client's wishes often do)
+    \item Rube Goldberg's machines cannot evolve
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+  \begin{block}{\alert{Efficiency}}
+    \begin{itemize}
+    \item \structure{Run fast, use little memory}
+    \item Asymptotic complexity must remain polynomial
+    \item Note that you cannot have a decent complexity with the wrong
+      data structure
+    \item You still want to test the actual performance of your code in practice
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+  \begin{block}{Numerical stability}
+    \begin{itemize}
+    \item \structure{Small change in input does not change output}
+    \item Advanced issue, critical for numerical simulations (but beyond our
+      scope)
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[squeeze]{Who you want to be?}
+  ~\vspace{-1.5\baselineskip}
+  \begin{block}{What tech guys tend to do when submitted a problem}
+    \vspace{-.4\baselineskip}
+    \begin{itemize}
+    \item They code it directly, and rewrite everything once they
+      understood
+    \item And rewrite everything to improve performance
+    \item And rewrite everything when the code needs to evolve
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+
+  \begin{block}{What managers tend to do when submitted a problem}
+    \vspace{-.4\baselineskip}
+    \begin{itemize}
+    \item They write up a long and verbose specification
+    \item They struggle with the compiler in vain
+    \item Then they pay a tech guy 
+      {\small(and pay too much since they don't get the grasp)}
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+
+  \begin{block}{What theoreticians tend to do when submitted a problem}
+    \vspace{-.4\baselineskip}
+    \begin{itemize}
+    \item They write a terse but formal specification
+    \item They write an algorithm, and prove its optimality
+    \item[] (the algorithm never gets coded)
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+
+  \begin{block}{What good programmers do when submitted a problem}
+    \vspace{-.4\baselineskip}
+    \begin{itemize}
+    \item They write a clear specification
+    \item They come up with a clean design
+    \item They devise efficient data structures and algorithms
+    \item Then (and only then), they write a clean and efficient code
+    \item They ensure that the program does what it is supposed to do
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% LocalWords:  LocalWords
+%% coding: utf-8

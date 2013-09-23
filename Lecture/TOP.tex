@@ -1,0 +1,173 @@
+% VERSION        texte?  TODO?   réponses?
+%\documentclass[10pt,handout,notes=show]{beamer}% ENSEIGNANT LONGUE  oui     oui      oui
+%\documentclass[10pt,trans,notes=show]{beamer}  % ENSEIGNANT COURTE  non     non      oui
+%\documentclass[10pt,notes=hide]{beamer}        % PRESENTÉE          oui     non      non
+
+%\documentclass[10pt,prof]{beamer}
+\documentclass[10pt]{beamer}
+%\documentclass[10pt,handout]{beamer}
+%options utiles: 
+%  - prof: affiche les notes et les corrections des exercices
+%  - handout: replie les animations
+
+%%%
+%%% Beamer et reglages de la bete
+%%%
+\usepackage{pgf,tikz}
+\usetikzlibrary{decorations.pathmorphing,backgrounds,fit,arrows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{patterns}
+\usepackage{beamerthemeEmptty3} 
+%\setbeamercovered{highly dynamic} 
+\setbeamertemplate{section in toc}[ball unnumbered]
+
+\usepackage{algorithm2e}
+
+%%%%%% Define the document
+\def\logoesial{\includegraphics[height=1.3\baselineskip]{img/logo-TN.pdf}}
+\def\logoUHP{}%\includegraphics[height=2\baselineskip]{logoUHP_original.eps}}
+
+\def\shorttitle{TOP (2013-2014)}
+\def\agendatitle{Techniques and tOols for Programming}
+\title{Techniques and tOols for Programming (TOP)}
+
+\author[\logoesial~Martin Quinson]{Martin Quinson \normalsize{$<$martin.quinson@loria.fr$>$}}
+\institute[]{Telecom Nancy -- 1$^\text{ère}$ ann\'ee}
+\date{2013-2014}
+
+
+%%%%%% Mess with the table of contents
+\setcounter{tocdepth}{3}
+\hypersetup{bookmarksdepth=4,bookmarksopenlevel=2}
+\newcommand{\toc}{%
+  \frame{%
+    \frametitle{\hyperlink{end}{\agendatitle}}
+    \tableofcontents[sectionstyle=show/shaded,%
+                     subsectionstyle=show/show/shaded,%
+                     subsubsectionstyle=hide]
+  }
+}
+\renewcommand{\toc}{\mypartpage}
+\newcommand{\subtoc}{%
+  \frame{%
+    \frametitle{\hyperlink{end}{\agendatitle}}
+    \tableofcontents[sectionstyle=show/shaded,%
+                     subsectionstyle=show/shaded/shaded,%
+                     subsubsectionstyle=show/show/hide]
+  }
+}
+\renewcommand{\subtoc}{\sectionpage}
+\newcommand{\subsubtoc}{%
+  \frame{%
+    \frametitle{\hyperlink{end}{\agendatitle}}
+    \tableofcontents[sectionstyle=show/shaded,%
+                     subsectionstyle=show/shaded/shaded,%
+                     subsubsectionstyle=show/hide/hide]
+  }
+}
+%%%%%% Mess with the background presentation 
+\makeatletter
+\renewcommand{\footlineSubTitle}{%
+  \hspace*{1em}%
+  \usebeamerfont{date in head/foot}%
+  \ifnum\c@section>0{Chap \thepart: }\fi%
+  \insertpart{}%
+}
+\makeatother
+
+%%% Other packages, and their settings
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp,multirow,fancyvrb}
+
+\fvset{frame=single,fontsize=\footnotesize}
+
+\makeatletter
+\def\framecounter{\the\beamer@slideinframe}
+\makeatother
+
+\newcommand{\recvVal}{$<$-}
+
+\graphicspath{{fig/}}
+%\includeonly{2_simpleSorts}
+%\includeonly{0_presentation,1_algorithmic,2_simpleSorts}
+%\includeonly{3_recursivite}
+%\includeonly{4_proof,6_testing}
+%\includeonly{4_proof}
+\renewenvironment{Coupe}{}{}
+
+\begin{document}
+
+\frame{\thispagestyle{empty}\titlepage
+\medskip\centerline{\includegraphics[width=3\baselineskip]{img/by-sa.pdf}}}
+
+\newcommand{\CClogo}[1]{\includegraphics[height=\baselineskip]{{#1}}}
+\begin{frame}{About this document}
+  \begin{block}{License of this document: 
+      \includegraphics[width=3\baselineskip]{img/by-sa.pdf}}\medskip
+    \begin{itemize}
+    \item[\CClogo{img/cc.pdf}] Licence Creative Commons version 3.0 France
+      (or later)
+    \item[\CClogo{img/by.pdf}] Attribution; ~~~
+      \CClogo{img/sa.pdf}~ Share alike
+    \item[] \url{http://creativecommons.org/licenses/by-sa/3.0/fr/}
+    \end{itemize}
+  \end{block}\vspace{-.3\baselineskip}
+
+  \begin{block}{Technical aspects}
+    \begin{itemize}
+    \item \structure{\LaTeX} document (class \structure{latex-beamer}), compiled
+      with
+      \structure{latex-make}
+    \item Figures: Some \structure{xfig}, some \structure{tikz}, some
+      \structure{inkscape}
+    \end{itemize}
+  \end{block}\vspace{-.3\baselineskip}
+
+  \begin{block}{URL: {\color{black}\normalsize\url{http://www.loria.fr/~quinson/Teaching/TOP/}}}
+     \begin{itemize}
+    \item Sheets, Practicals, exams, projects {\small(sources available to teachers that ask
+        me)}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\include{0_presentation}\include{1_algorithmic}\include{2_simpleSorts}
+
+\include{3_recursivite}
+\include{4_proof}
+\include{5_derecursivation}
+
+%\include{10_CC}
+
+
+
+%\include{6_testing}
+
+
+%\include{99-apropos}
+
+\end{document}
+\makeatletter
+\newcommand{\parttoc}[1]{%
+  \setcounter{part}{#1} %
+  \begin{block}{\hyperlink{Chapter #1}\medskip %
+    \tableofcontents[part=#1] %
+  \end{block}
+}
+\makeatother
+\begin{frame}[shrink=0]{{\normalsize Detailed agenda}}\label{Plan}
+  \parttoc{1}\parttoc{2}%\parttoc{3}\parttoc{4}\parttoc{5}\parttoc{6}\parttoc{7}\parttoc{8}  
+\end{frame}
+
+
+\end{document}
+
+% Figures pleine page : 122mm x 80mm
+
+
+
+%%% Local Variables:
+%%% coding: utf-8

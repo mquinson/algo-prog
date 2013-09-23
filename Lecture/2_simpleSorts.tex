@@ -1,0 +1,459 @@
+\part{Iterative Sorting Algorithms}
+\label{sort}\toc
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Problem Specification}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}[squeeze]{Sorting Problem Specification}
+  \begin{block}{Input data}
+    \begin{itemize}
+    \item A sequence of N comparable items $<a_1,a_2,a_3,\ldots,a_N>$
+    \item Items are \textit{comparable} iff $\forall a, b$ in set,
+      either \underline{$a<b$} or \underline{$a>b$} or \underline{$a=b$}
+    \end{itemize}
+  \end{block}\vspace{-.7\baselineskip}
+
+  \begin{block}{Result}
+    \begin{itemize}
+    \item Permutation\footnote{reordering} $<a_1',a_2',a_3',\ldots,a_N'>$ so
+      that: $a_1'\leq a_2'\leq a_3'\leq\ldots\leq a_N'$
+    \end{itemize}
+  \end{block}\vspace{-.7\baselineskip}
+
+  \begin{block}{Sorting complex items}
+    \begin{itemize}
+    \item For example, if items represent students, they encompass name, class,
+      grade
+    \item \structure{Key:} value used for the sort 
+    \item \structure{Extra data:} other data associated to items, permuted
+      along with the keys
+    \end{itemize}
+  \end{block}\vspace{-.7\baselineskip}
+
+  \begin{block}{Problem simplification}
+    \begin{itemize}
+    \item We assume that items are chars or integers to be sorted in
+      ascending order\\ (no loss of generality)
+    \end{itemize}
+  \end{block}\vspace{-.7\baselineskip}
+
+  \begin{block}{Memory consideration}
+    \begin{itemize}
+    \item Sort \textit{in place}, without any auxiliary array.
+      Memory complexity: O(1)
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Selection Sort}
+\subsection{Presentation}
+\begin{frame}{Selection Sort}
+  \begin{block}{Big lines}
+    \begin{itemize}
+    \item First get the smallest value, and put it in first position
+    \item Then get the second smallest value, and put it in second position
+    \item and so on for all values
+    \end{itemize}
+  \end{block}
+
+  \begin{columns}
+    \begin{column}{.4\linewidth}
+      \begin{block}{Example:}\bigskip
+        \includegraphics<1| handout:0>[subfig=1]{fig/sort_selection.fig}
+        \includegraphics<2| handout:0>[subfig=2]{fig/sort_selection.fig}
+        \includegraphics<3| handout:0>[subfig=3]{fig/sort_selection.fig}
+        \includegraphics<4| handout:0>[subfig=4]{fig/sort_selection.fig}
+        \includegraphics<5| handout:0>[subfig=5]{fig/sort_selection.fig}
+        \includegraphics<6| handout:0>[subfig=6]{fig/sort_selection.fig}
+        \includegraphics<7| handout:0>[subfig=7]{fig/sort_selection.fig}
+        \includegraphics<8| handout:0>[subfig=8]{fig/sort_selection.fig}
+        \includegraphics<9| handout:0>[subfig=9]{fig/sort_selection.fig}
+        \includegraphics<10-| handout:1>[subfig=10]{fig/sort_selection.fig}
+      \end{block}
+    \end{column}
+
+    \begin{column}{.55\linewidth}
+      \visible<11->{
+        \begin{boitecode}{\only<11>{Pseudo}\only<12->{Scala} code}
+          \structure{\visible<12->{/*} for each element, do: \visible<12->{*/}}
+
+          \visible<12->{for (i <- 0 to length-1) \{}
+
+          ~
+
+          ~~\structure{\visible<12->{/*} (1) search min on [i;N] \visible<12->{*/}}
+
+          \visible<13->{
+            ~~var minpos=i
+            
+            ~~for (j <- i to length-1) \{ \structure{/* $\forall j\in[i;length-1]$ */}
+
+            ~~~~if (tab(j) < tab(minpos)) \{
+
+            ~~~~~~minpos = j
+
+            ~~~~\}
+
+            ~~\}
+          }
+          
+          ~
+
+          ~~\structure{\visible<12->{/*} (2) put min first \visible<12->{*/}}
+
+          \visible<14->{
+            ~~temp=tab(i)
+
+            ~~tab(i)=tab(minpos)
+
+            ~~tab(minpos)=temp
+
+          }
+          \visible<12->{\}}
+
+          ~
+        \end{boitecode}
+      }
+    \end{column}
+  \end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\subsection{Discussion}
+\begin{frame}[fragile]{Selection sort discussion}
+  \begin{block}{We apply a very generic approach here:}
+    \begin{itemize}
+    \item Do right now what you can, delay the rest for later (put min first)
+    \item Progressively converge to what you are looking for (sort the remaining)
+    \end{itemize}
+  \end{block}
+
+  \begin{columns}
+    \begin{column}{.37\linewidth}
+        \begin{boitecode}{}
+for (i <- 0 to length-1) \{
+  var minpos=i
+  for (j <- i to length-1) \{
+    if (tab(j) < tab(minpos)) \{
+      minpos = j
+    \}
+  \}
+  temp=tab(i)
+  tab(i)=tab(minpos)
+  tab(minpos)=temp
+\}
+        \end{boitecode}
+    \end{column}
+
+    \begin{column}{.6\linewidth}
+      \begin{block}<2->{Memory Analysis}
+        \begin{itemize}
+        \item 2 extra variables\\
+          {\small(only one at the same time, actually)}
+        \item[$\Rightarrow$] Constant amount of extra memory
+        \item[$\Rightarrow$] Space complexity is $O(1)$
+        \item $O(1)$ is the smallest complexity $\leadsto$ $\Theta(1)$
+        \end{itemize}
+      \end{block}      
+    \end{column}
+  \end{columns}
+  
+  \begin{block}<3->{Time Analysis}
+    \begin{itemize}
+    \item Forget about constant times, focus on loops!
+    \item<4-> Two interleaved loops which length is \textit{at most} N
+    \item<5->[$\Rightarrow$] Time complexity is $O(N^2)$
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}[fragile]{Finer analysis of selection sort's time performance}
+  \begin{columns}
+    \begin{column}{.37\linewidth}
+        \begin{boitecode}{}
+for (i <- 0 to length-1) \{
+  var minpos=i
+  for (j <- i to length-1)
+    if (tab(j) < tab(minpos))
+      minpos = j
+  temp=tab(i)
+  tab(i)=tab(minpos)
+  tab(minpos)=temp
+\}
+        \end{boitecode}
+    \end{column}
+
+    \begin{column}{.6\linewidth} 
+      \begin{block}<+->{Best case, worst case, average case}
+        \begin{itemize}
+        \item No matter the order of the data,\\
+          'selection sort' does the same
+        \item[$\Rightarrow$] $t_{min}=t_{max}=t_{avg}$
+        \end{itemize}
+      \end{block}     
+    \end{column}
+  \end{columns}\vspace{-\baselineskip}
+
+  \begin{block}<+->{Counting steps more precisely (but only dominant term)}
+    \begin{itemize}\vspace{-.2\baselineskip}
+    \item $\displaystyle T(N)=\sum_{i\in[1,N]}\left(\sum_{j\in{[i,N[}}1\right)$
+      \visible<+->{$=\displaystyle\sum_{i\in[1,N]}(N-i)$
+      $=\displaystyle\sum_{i\in[1,N]}N-\sum_{i\in[1,N]}i$\\\smallskip
+      \hspace{9.5mm}$= N^2-\frac{N\times(N+1)}{2}$
+      $= N^2-\frac{N^2+N}{2}$
+      $=\frac{1}{2}N^2-\frac{1}{2}N$
+      $=\frac{1}{2}(N^2-N)$}
+
+    \item<+-> \structure{Let's prove that $T(n)\in\Omega(n^2)$.}
+      For that, we want:
+    \item<.-> $\exists c, n_0 / \forall N>n_0,$ 
+      \framebox{$\frac{1}{2}(N^2-N)\ge cN^2$} 
+      \visible<+->{
+        $\!\Leftarrow\!$ \framebox{$N^2-N\ge 2cN^2$}
+        $\!\Leftarrow\!$ \framebox{$N-1\ge 2cN$}
+      }
+    \item<+-> So, we want $\exists c, n_0 / \forall N>n_0, N\ge \frac{1}{1-2c}$
+    \item<+-> Let's take anything for c ($\neq\frac{1}{2}$), and
+      $n_0=\frac{1}{1-2c}$. Trivially gives what we want.
+      
+      % \smallskip
+    \item<.->[] \centerline{\alert{$T(n)\in\Theta(n^2)$}}
+
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+\section{Insertion Sort}
+\subsection{Presentation}
+\begin{frame}[squeeze]{Insertion Sort}
+  \begin{columns}
+    \begin{column}{.8\linewidth}
+      \begin{block}<+->{How do you sort your card deck?}
+        \begin{itemize}
+        \item No human would apply \textit{selection sort} to sort a deck!
+        \end{itemize}
+      \end{block}\vspace{-.7\baselineskip}
+      \begin{block}<.->{Algorithm used most of the time to sort a card deck:}
+        \begin{itemize}
+        \item[1.] If the cards \#1 and \#2 need to be swapped, do it
+        \item[2.] Insert card \#3 at its position in the [1,2] part of the deck
+        \item[3.] Insert card \#4 at its position in the [1,3] part of the deck
+        \item[] \ldots
+        \end{itemize}
+      \end{block}\vspace{-.7\baselineskip}
+    \end{column}
+
+    \begin{column}{.2\linewidth}
+      \includegraphics<+->[width=\linewidth]{fig/sort_insertion_cards.fig}
+    \end{column}
+  \end{columns}\vspace{-.4\baselineskip}
+
+
+  \begin{columns}
+    \begin{column}{.68\linewidth}
+      \begin{block}<.->{Finding the common pattern}
+        \begin{itemize}
+        \item Step n ($\ge2$) is ``insert card \#(n+1) into [1,n]''
+        \item<+-> Step 1 =  insert the 2. card into [1,1]
+        \item<.-> We may add a Step 0 to generalize the pattern{\small\\
+            (that's a no-op)}
+        \end{itemize}
+      \end{block}\vspace{-\baselineskip}
+
+      \begin{alertblock}<12->{Algorithm big lines}%\medskip
+      \framebox{\begin{minipage}{1.0\linewidth}\begin{tabbing}
+            For each element\\
+            ~~\=Find insertion position\\
+            \>Move element to position
+      \end{tabbing}\vspace{-1\baselineskip}\end{minipage}}
+      \end{alertblock}
+    \end{column}
+
+    \begin{column}{.3\linewidth}
+      \begin{block}<4->{This is \textit{Insertion Sort}}\medskip
+        \includegraphics<-.| handout:0>[subfig=1]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=2]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=3]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=4]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=5]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=6]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=7]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=8]{fig/sort_insertion.fig}
+        \includegraphics<+| handout:0>[subfig=9]{fig/sort_insertion.fig}
+        \includegraphics<+-| handout:1>[subfig=10]{fig/sort_insertion.fig}
+      \end{block}      
+    \end{column}
+  \end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{frame}{Writing the \textit{insertion sort} algorithm}
+  \vspace{-.5\baselineskip}
+  \begin{block}{Fleshing the big lines}\smallskip
+  \begin{columns}
+    \begin{column}{.3\linewidth}
+      \framebox{\begin{minipage}{1.0\linewidth}\small\begin{tabbing}
+            For each element\\
+            ~~\=Find insertion point\\
+            \>Move element to position
+      \end{tabbing}\vspace{-1\baselineskip}\end{minipage}}      
+    \end{column}
+
+    \begin{column}{.7\linewidth}
+      \begin{itemize}\vspace{-.8\baselineskip}
+      \item Finding the insertion point is easy (searching loop)
+      \item Moving to position is a bit harder: ``make room''
+      \item We have to \textit{shift} elements one after the other
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \end{block}
+
+  \only<+| handout:0>{\centerline{\includegraphics[subfig=1]{fig/sort_insertion_shift.fig}}}
+  \only<+| handout:0>{\centerline{\includegraphics[subfig=2]{fig/sort_insertion_shift.fig}}}
+  \only<+| handout:0>{\centerline{\includegraphics[subfig=3]{fig/sort_insertion_shift.fig}}}
+  \only<+| handout:0>{\centerline{\includegraphics[subfig=4]{fig/sort_insertion_shift.fig}}}
+  \only<+-|
+  handout:1>{\centerline{\includegraphics[subfig=5]{fig/sort_insertion_shift.fig}}}  
+
+  \vspace{-1.5\baselineskip}
+  \uncover<+->{
+  \begin{itemize}
+  \item Shifting elements induce a loop also
+  \item We can do both searching insertion point and shifting at the same time
+  \end{itemize}}
+
+  \uncover<+->{
+    \begin{columns}
+      \begin{column}{.9\linewidth}
+    \begin{boitecode}{}
+      \visible<+->{for (i $<$- \alert{1} to length-1) \{ \structure{/* i: boundary between unsorted/sorted areas*/}}
+
+      ~~\structure{/* save current value (it this case, that's O) */}
+
+       \visible<+->{~~val tmp = tab(i)}
+
+       ~~\structure{/* shift to right any element on the left being smaller than tmp */}
+
+       \visible<+->{
+         ~~var j = i
+
+         ~~while (j$>$0 \&\& tab(j-1)$>$tmp) \{ \structure{/* while previous cell exists and is bigger */}
+
+         ~~~~tab(j) = tab(j-1) \structure{/* copy that element */}
+
+         ~~~~j = j -1 \structure{/* consider the next element */}
+
+         ~~\}}
+
+       ~~\structure{/* put tmp in cleared position */}
+
+       \visible<+->{~~tab(j)=tmp}
+
+       \}
+
+    \end{boitecode}        
+      \end{column}
+    \end{columns}
+  }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Bubble Sort}
+\subsection{Presentation}
+\begin{frame}{Bubble Sort}
+  \begin{itemize}
+  \item All these sort algorithms are quite difficult to write. Can we do simpler?
+  \item<+-> Like ``while it's not sorted, sort it a bit''
+  \end{itemize}
+
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+      \begin{block}<+->{Detecting that it's sorted}\medskip
+        \framebox{\begin{minipage}{1.0\linewidth}\scriptsize\begin{tabbing}
+          for (i $<$- 0 to length-2)\\
+          ~~~\structure{/* if these two values are badly sorted */}\\
+          ~~~if (tab(i)$>$tab(i+1))\\
+          ~~~~~~return false\\
+          return true
+      \end{tabbing}\vspace{-1\baselineskip}\end{minipage}}
+      \end{block}
+    \end{column}
+
+    \begin{column}{.5\linewidth}
+      \begin{block}<+->{How to ``sort a bit?''}
+        \begin{itemize}
+        \item We may just swap these two values
+        \end{itemize}
+        \centerline{\framebox{\begin{minipage}{1.0\linewidth}\scriptsize\begin{tabbing}
+          val tmp=tab(i)\\
+          tab(i)=tab(i+1)\\
+          tab(i+1)=tmp
+        \end{tabbing}\vspace{-1\baselineskip}\end{minipage}}}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \bigskip
+
+  \begin{columns}
+    \begin{column}{.4\linewidth}
+      \begin{block}<+->{All together}
+        \begin{itemize}
+        \item Add boolean variable to check whether it sorted
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{.6\linewidth}
+      \visible<.->{
+        \centerline{\framebox{\begin{minipage}{1.0\linewidth}\scriptsize\begin{tabbing}
+          var swapped = true\\
+          while (swapped) \{ \structure{/* until we do one traversal without swap */}\\
+          ~~~swapped = false\\
+          ~~~for (i $<$- 0 to length-2)\\
+          ~~~~~~if (tab(i) $>$ tab(i+1)) \{ \structure{/* if these 2 values are badly sorted */}\\
+          ~~~~~~~~~\structure{/* swap them */}\\
+          ~~~~~~~~~val tmp = tab(i)\\
+          ~~~~~~~~~tab(i) = tab(i+1)\\
+          ~~~~~~~~~tab(i+1) = tmp\\
+          ~~~~~~~~~\structure{/* and remember we swapped something */}\\
+          ~~~~~~~~~swapped = true\\
+          ~~~~~~\}\\
+          \} \structure{/* repeat until a traversal without swapping */}
+        \end{tabbing}\vspace{-1\baselineskip}\end{minipage}}}}
+    \end{column}
+  \end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Conclusion}
+\begin{frame}{Conclusion on Iterative Sorting Algorithms}
+  \begin{block}{Cost Theoretical Analysis}\medskip
+
+    \begin{tabular}{|l|c|c|c|}\hline
+      \structure{Amount of comparisons}&\structure{Best Case}&
+      \structure{Average Case}&\structure{Worst Case}\\\hline
+
+      Selection Sort&$O(n^2)$&$O(n^2)$&$O(n^2)$\\\hline
+      Insertion Sort&$O(n)$&$O(n^2)$&$O(n^2)$\\\hline
+      Bubble Sort&$O(n)$&$O(n^2)$&$O(n^2)$\\\hline 
+
+%      \hline
+%      Quick Sort&$O(n\log(n))$&$O(n\log(n))$&$O(n^2)$\\\hline
+%      Merge Sort&$O(n\log(n))$&$O(n\log(n))$&$O(n\log(n))$\\\hline      
+    \end{tabular}
+  \end{block}
+
+  \begin{block}{Which is the best in practice?}
+    \begin{itemize}
+    \item We will explore practical performance during the lab
+    \item But in practice, bubble sort is \alert{awfully slow} and should never be used
+    \end{itemize}    
+  \end{block}
+
+  \begin{block}<2->{Is it optimal?}
+    \begin{itemize}
+    \item The lower bound is $\Omega(n\log(n))$ -- cf. TD lab
+    \item Some other algorithms achieve it (Quick Sort, Merge Sort)
+    \item We come back on these next week
+    \end{itemize}    
+  \end{block}
+
+  \begin{flushright}
+    (this ends the first lecture)    
+  \end{flushright}
+\end{frame}
