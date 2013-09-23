@@ -1,0 +1,70 @@
+ ______                       __  
+|   __ \.-----..-----..-----.|  |.-----.
+|   __ <|  _  ||  _  ||  _  ||  ||  -__|
+|______/|_____||___  ||___  ||__||_____|
+               |_____||_____|           
+                   ESIAL/TOP Project'11
+
+Loading lexicon, Please wait.
+Please enter your name: Sheldon Cooper
+
+        /---\/---\/---\/---\
+        | r || r || g || t |
+        \---/\---/\---/\---/
+        /---\/---\/---\/---\
+        | s || h || m || i |
+        \---/\---/\---/\---/
+        /---\/---\/---\/---\
+        | g || a || d || d |
+        \---/\---/\---/\---/
+        /---\/---\/---\/---\
+        | e || t || s || q |
+        \---/\---/\---/\---/
+
+Player:Sheldon Cooper        Score:0
+Please enter a word: tas
+Player:Sheldon Cooper        Score:1
+Please enter a word: gate
+Player:Sheldon Cooper        Score:2
+Please enter a word: mats
+Player:Sheldon Cooper        Score:3
+Please enter a word: bidule
+Sorry, but you cannot make this word from the board.
+Please enter a word: de
+Sorry, but you must enter at least a 3-characters word.
+Please enter a word: gate
+Sorry, but this word is already in your list.
+Please enter a word: 
+Congratulations Sheldon Cooper, your score is 3
+The computer will now play...
+I just found 'git'
+I just found 'sas'
+I just found 'sate'
+I just found 'sage'
+I just found 'samit'
+I just found 'hast'
+I just found 'haste'
+I just found 'hate'
+I just found 'mit'
+I just found 'mas'
+I just found 'mat'
+I just found 'mats'
+I just found 'mate'
+I just found 'mage'
+I just found 'mahdi'
+I just found 'image'
+I just found 'gate'
+I just found 'admit'
+I just found 'age'
+I just found 'ami'
+I just found 'date'
+I just found 'dam'
+I just found 'dit'
+I just found 'eta'
+I just found 'team'
+I just found 'tas'
+I just found 'tag'
+I just found 'tags'
+I just found 'stage'
+Player:computer        Score:32
+Bazinga!

@@ -1,0 +1,842 @@
+\documentclass[10pt]{article}
+\usepackage[nu,tightmargin]{esial}
+%\usepackage[nu,tightmargin,correction]{esial}
+\TOP\unA
+
+\usepackage[utf8x]{inputenc}
+\usepackage{marvosym}
+\usepackage{eurosym}
+\usepackage{url}
+\usepackage{amstext,amsmath,amsfonts}
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+%\usepackage[color,all]{xypic}
+%\usepackage{xyling}
+\usepackage{titlesec}
+\usepackage{starsection}
+\usepackage{tikz}
+\usepackage{pgf-umlcd}
+\usepackage{epsfig}
+
+\usetikzlibrary{arrows}
+
+\hyphenpenalty=10000
+\parindent0pt
+
+\addtolength{\parskip}{.5em}
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+\newcommand{\Sedge}[1]{\Bk{-1.2}{1.2}{#1}}
+\newcommand{\bareme}[1]{{\footnotesize (#1~pt)}}
+\newcommand{\TODO}[1]{\emph{#1}\marginpar{\textsf{*ToDo*}}}
+
+\newcommand{\BoxRep}{\ifcorrection{\boxtimes}{\Box}}
+\newcommand{\boite}{$\Box$\xspace}
+\newcommand{\boiteRep}{$\BoxRep$\xspace}
+
+%\newcommand{\codebox}[1]{\fbox{\footnotesize\texttt{#1}\normalsize}}
+%\newcommand{\codebox}[1]{\footnotesize\texttt{#1}\normalsize}
+%\newcommand{\code}[1]{\footnotesize\texttt{#1}\normalsize}
+\newcommand{\codebox}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\titleformat*{\subsection}{\bf}
+
+
+\newcommand{\crccard}[3]{%
+\begin{center}
+\fbox{%
+\begin{tabular}{p{115mm}|p{5cm}}
+\multicolumn{2}{l}{\vspace{.2em} {\bf Classe : } #1 } \\
+\hline
+\vspace{.1em} {\bf Responsabilités : } & \vspace{.1em} {\bf Collaborateurs : }  \\
+\vspace{-.5em}\raggedright #2 & \vspace{-.5em} #3 \\
+\end{tabular}
+}
+\end{center}
+}
+
+\begin{document}
+\color{black}
+\title{Mini Projet 2010-2011}
+\maketitle
+
+\vspace{-1cm}
+\begin{center}
+\includegraphics[width=5cm]{boggle.png}
+\end{center}
+
+\section*{Modalités}
+
+Ce projet est à réaliser en binôme. Vous indiquerez la composition de
+votre binôme dans un fichier dénommé \texttt{AUTHORS} (placé  à la
+racine du répertoire de votre projet) qui doit contenir les logins
+UNIX des membres du groupe, un par ligne. L'usage de la plate-forme de
+travail collaborative de l'école (et du SVN qu'elle offre en
+particulier) est \textit{très fortement} conseillée: \textit{"version control
+  means you can relax"} -- Karl Fogel. 
+
+
+{\bf Travail à rendre :} Vous devez rendre un mini-rapport de projet (5 pages
+maximum, format pdf) en plus de vos fichiers sources.  Vous y détaillerez les
+difficultés auxquelles vous avez été confronté, et comment vous les avez
+résolues. Vous indiquerez également le nombre d'heures passées sur les
+différentes étapes de ce projet (conception, codage, tests, rédaction du
+rapport) par chaque membre du groupe.
+
+{\bf Comment rendre votre projet :} Vous devez placer les fichiers nécessaires
+dans un répertoire sur neptune, vous placer dedans, et invoquer la commande
+suivante (seuls les fichiers sources et le document pdf sont copiés). Vous pouvez
+lancer le script autant de fois que vous le souhaitez, seule la dernière
+soumission est conservée.
+\begin{center}
+\fbox{\texttt{/home/EqPedag/quinson/bin/rendre\_projet TOP}}
+
+{\Large Avant le Lundi 14 Mars 2011, à 23h59.} 
+
+(le script n'acceptera pas de soumission en retard)
+\end{center}
+
+Un projet ne compilant pas sera sanctionnée par une note adéquate. Toute
+soumission par email ou sous une autre forme sera refusée.
+
+{\bf Évaluation :}  Des soutenances individuelles de projet seront organisées la
+semaine du \underline{21 Mars 2010}. Vous serez jugé sur la qualité de votre
+programme, celle de votre rapport et votre capacité à expliquer son
+fonctionnement. Vous aurez également à répondre à des questions en rapport avec
+les TP effectués dans le module, sans rapport  avec le projet.
+
+%Vous serez jugé sur la qualité de votre programme, celle de votre rapport qui
+%doit expliquer son fonctionnement. Vous fournirez évidemment les différents
+%tests que vous avez utilisé.
+
+\section*{Travail personnel et honnêteté}
+
+\begin{quote}
+Ne trichez pas! Ne copiez pas!
+Si vous le faites, vous serez lourdement sanctionnés. Nous ne ferons pas de distinction entre copieur et copié.
+Vous n'avez pas de (bonne) raison de copier. En cas de problème, nous sommes prêt à vous aider. 
+Encore une fois : en cas de doute, envoyez un courriel à vos enseignants, ça ne les dérange pas.
+
+Par tricher, nous entendons notamment :
+\begin{itemize}
+  \item Rendre le travail d'un collègue avec votre nom dessus ;
+  \item Obtenir une réponse par Google\texttrademark{} ou autre et mettre votre nom dessus ;
+  \item Récupérer du code et ne changer que les noms de variables et fonctions ou leur ordre avant de mettre votre nom dessus
+      (\emph{``moving chunks of code around is like moving food around on your plate to diguise the fact that you havn't eated all your brussel sprouts''}) ;
+  \item Permettre à un collègue de \emph{s'inspirer} de votre travail. Assurez vous que votre répertoire de travail n'est lisible que par vous même.
+\end{itemize}
+
+Il est plus que très probable que nous détections les tricheries. Chacun a son
+propre style de programmation, et personne ne code la même chose de la même
+manière. De plus, il existe des programmes très efficaces pour détecter les
+similarités douteuses entre copies (MOSS,
+\url{http://theory.stanford.edu/~aiken/moss/}). En cas de litige grave, seul un
+historique progressif de vos travaux (comme en offre le système SVN) constitue
+une preuve de votre innocence. \textit{Commit soon, commit often.}
+
+\medskip
+En revanche, il est possible (voire conseillé) de discuter du projet et
+d'échanger des idées avec vos collègues. Mais vous ne pouvez rendre que du code
+écrit par vous-même. Vous indiquerez dans votre rapport toutes vos sources
+d'inspiration (comme les sites internet de vulgarisation de l'informatique que
+vous auriez consulté), en indiquant brièvement ce que vous en avez retiré.
+
+\bigskip
+
+\hspace{-2em}\begin{minipage}{1.0\linewidth}
+  
+\noindent \begin{minipage}{.3\linewidth}
+\hrule
+
+~
+\end{minipage}
+
+\noindent Grand merci à Gérald Oster pour le montage de ce projet.
+\end{minipage}
+
+
+
+\end{quote}
+
+\clearpage
+\section*{Présentation du problème : Boggle}
+
+[{\it extrait de l'encyclopédie Wikipedia} (\url{http://fr.wikipedia.org/wiki/Boggle})]
+
+Boggle est un jeu de lettres conçu par Alan Turoff et déposé par Parker Brothers / Hasbro, Inc.
+
+Le jeu commence par le mélange d'un plateau (carré) de 16 dés à 6 faces, généralement en le secouant. 
+Chaque dé possède une lettre différente sur chacune de ses faces. Les dés sont rangés sur le plateau
+4 par 4, et seule leur face supérieure est visible. Après cette opération, un compte à rebours de
+3 minutes est lancé et tous les joueurs commencent à jouer.
+
+Chaque joueur cherche des mots pouvant être formés à partir de lettres adjacentes du plateau. 
+Par \emph{adjacentes}, il est sous-entendu horizontalement, verticalement ou en diagonale. Les mots
+doivent être de 3 lettres au minimum, peuvent être au singulier ou au pluriel, conjugués ou non,
+mais ne doivent pas utiliser plusieurs fois le même dé pour le même mot. Les joueurs écrivent
+tous les mots qu'ils ont trouvés sur leur feuille personnelle. Après les 3 minutes de recherche,
+les joueurs doivent arrêter d'écrire et le jeu entre dans la phase de calcul des points.
+
+
+\tikzstyle{dice}=[rectangle,thick,draw=black!75,fill=white,rounded corners,minimum size=9mm,font=\sf\Large]
+
+\begin{center}
+\begin{tikzpicture}
+	
+\fill [green,rounded corners,fill=black!20] (-.6,.6) rectangle (3.6,-3.6); 
+
+\node [dice] (d1) {M} ;
+\node [dice,right of=d1] (d2) {E} ;
+\node [dice,right of=d2] (d3) {R} ;
+\node [dice,right of=d3] (d4) {T} ;
+
+\node [dice,below of=d1]  (d11) {D} ;
+\node [dice,right of=d11] (d12) {A} ;
+\node [dice,right of=d12] (d13) {S} ;
+\node [dice,right of=d13] (d14) {J} ;
+
+\node [dice,below of=d11] (d21) {O} ;
+\node [dice,right of=d21] (d22) {P} ;
+\node [dice,right of=d22] (d23) {I} ;
+\node [dice,right of=d23] (d24) {H} ;
+
+\node [dice,below of=d21] (d31) {C} ;
+\node [dice,right of=d31] (d32) {L} ;
+\node [dice,right of=d32] (d33) {A} ;
+\node [dice,right of=d33] (d34) {G} ;
+
+\pgfsetstrokeopacity{0.7}
+\draw[line width=5mm,color=red!30,cap=round,join=round] (1,0) -- (2,-1) -- (2,-2) -- (2,-3) -- (1,-3);
+
+\pgfsetarrowsend{latex}
+\draw[line width=.5mm,dashed,color=red!70,cap=round,join=round] (1,0) -- (2,-1) -- (2,-2) -- (2,-3) -- (1,-3);
+
+\end{tikzpicture}
+\end{center}
+
+%Il est possible qu'un dé possède deux lettres. La lettre \texttt{Q} est très souvent utilisée avec la
+%lettre \texttt{U}. Et si un \texttt{Q} apparaît sur le plateau, il faudrait qu'il apparaisse à côté d'un \texttt{U} pour
+%être utilisé. Pour avoir une chance d'utiliser plus fréquemment la lettre \texttt{Q}, \texttt{Qu} est donnée
+%comme une lettre unique. Cependant \texttt{Qu} compte pour 2 lettres : le mot \texttt{quota} rapportera 2 points
+%(pour un mot de 5 lettres) mais est formé de 4 dés seulement sur le plateau de jeu.
+
+Lors du calcul des points, chaque joueur lit à haute voix les mots trouvés. Si deux joueurs
+ou plus ont trouvé le même mot, il est rayé des listes le contenant. Tous les joueurs doivent
+vérifier la validité d'un mot. Un dictionnaire est utilisé pour accepter ou refuser un mot. Après
+avoir éliminé les mots communs aux listes des joueurs, les points sont attribués suivant
+la taille des mots trouvés. Le gagnant est le joueur ayant le plus grand nombre de points.
+
+\begin{center}
+\begin{tabular}{lcccccc}
+\hline
+\bf Taille du mot & 3 & 4 & 5 & 6 & 7 & 8+ \\ 
+\bf Points        & 1 & 1 & 2 & 3 & 5 & 11 \\
+\hline
+\end{tabular}
+\end{center}
+
+Pour la version classique de Boggle, il y a $4,36 \times 10^{22}$ possibilités de dispositions
+de lettres. Cela correspond à environ 40 000 milliards de milliards de combinaisons.
+
+\bigskip
+L'objectif de ce mini-projet est d'écrire un programme permettant à un joueur humain d'affronter
+un ordinateur. Malheureusement, il y a bien peu de chances que le joueur humain réussisse à battre
+son adversaire informatisé.
+
+
+\section*{Travail à réaliser}
+
+\subsubsection*{De quelle manière vous allez procéder ?}
+
+Votre programme commencera par lire un fichier indiquant pour chaque dé
+quelles sont les lettres qui sont inscrites sur ses faces. Ensuite, le
+programme réalisera un lancé des dés et positionnera ce jet sur le plateau de
+jeu.
+
+C'est le joueur humain qui aura l'avantage de commencer la partie. Il devra
+saisir les mots qu'il trouve (un mot à la fois!). \`A chaque saisie, votre
+programme vérifiera que ce mot respecte la contrainte de longueur (au moins 3
+caractères de long), que le mot n'a pas encore été proposé (un mot n'est
+comptabilisé qu'une seule fois, même s'il apparaît plusieurs fois sur le
+plateau), que le mot appartient bien au dictionnaire de mots connus et bien
+entendu qu'il est possible de former ce mot à partir des faces visibles des
+dés positionnés sur le plateau. Si tout ces tests sont valides alors le mot
+sera ajouté à la liste de mots trouvés par le joueur et le score du joueur sera
+crédité des points correspondants. Lorsque le joueur humain ne souhaite plus
+saisir de nouveau mot, il l'indique en saisissant un mot vide (uniquement un
+retour chariot).
+
+C'est alors au tour du joueur artificiel de jouer. Votre programme va donc
+chercher tous les mots qui sont dans le dictionnaire et qu'il peut réaliser à
+partir du plateau. Chaque mot trouvé qui n'aurait pas été trouvé par le joueur
+humain est ajouté à la liste des mots trouvés par le joueur artificiel, et le
+score du joueur artificiel est crédité du nombre de points correspondants.
+
+Généralement, le joueur artificiel vaincra sans appel son pendant humain. Mais
+le joueur humain est libre de recommencer autant qu'il le souhaite \ldots
+
+
+\subsubsection*{Les dés}
+
+Les lettres du Boggle ne sont pas placées au hasard sur les faces des dés. En
+fait, elle sont placées de manière à ce que les lettres les plus communes
+soient tirées le plus souvent et de manière à ce que l'on ait une bonne
+combinaison entre le nombre de voyelles et de consonnes.
+
+Pour recréer cette situation, votre programme devra être capable de lire un
+fichier dont le format est le suivant. Chaque ligne contient soit un
+commentaire si la ligne commence par un point virgule, soit la description
+d'un dé. La description d'un dé est un mot de 6 lettres indiquant les 6
+lettres à placer sur les 6 faces du dés. Il y a exactement 16 descriptions de
+dé par fichier. Le contenu suivant vous donne un exemple de fichier valide :
+
+\begin{Verbatim}[label=dices-definition.txt,numbers=none,fontsize=\small]
+; description des dés
+BAJOQM
+RALESC
+LIBART
+TOKUEN
+ROFIAX
+AVEZDN
+NULEGY
+MEDAPC
+SUTELP
+HEFSIE
+ROMASI
+GINEVT
+RUEILW
+RENISH
+TIEAAO
+DONEST
+\end{Verbatim}
+
+
+% CRC card - DICE - 
+% CRC card - BOARD - 
+% CRC card - CONFIGREADER - 
+
+
+Lors de la phase d'initialisation, votre programme devra donc lire le
+fichier, créer les dés correspondants, générer une configuration d'un plateau
+en plaçant de manière aléatoire chaque dé sur le plateau. Par ailleurs, pour
+chaque dé, la face visible sera également tirée de manière aléatoire.
+
+Une fois la phase d'initialisation terminée, vous êtes prêt à implémenter les
+deux types de recherches récursives: l'une pour le tour de jeu de
+l'utilisateur (recherche d'un mot spécifique), et l'autre pour le tour de jeu
+de l'ordinateur (recherche exhaustive de tous les mots).
+
+Pour l'utilisateur, la méthode récursive cherche un mot spécifique sur le
+plateau et s'arrête dès que celui est trouvé. Pour l'ordinateur, la méthode
+récursive cherche tous les mots contenus dans le dictionnaire qui sont
+susceptibles d'être sur le plateau.
+
+Vous pourriez être tenté d'unifier ces deux recherches récursives, mais c'est
+une très mauvaise idée. {\bf Nous vous demandons explicitement d'implémenter
+séparément ces deux fonctions récursives}.
+
+
+\subsubsection*{Le tour du joueur humain}
+
+Une fois que le plateau est affiché, le joueur peut saisir chaque mot qu'il
+trouve sur le plateau. Le joueur indiquera son souhait de ne plus saisir de
+mot en saisissant une simple ligne blanche (un simple retour chariot).
+
+\`A chaque fois qu'un joueur aura saisi un mot, votre programme devra
+vérifier les conditions suivantes :
+
+\begin{itemize}
+ \item le mot est un mot d'au moins trois lettres ;
+ \item le mot est contenu dans le dictionnaire ;
+ \item le mot apparaît sur le plateau (il est formé d'une séquence de lettres
+adjacentes et un dé est utilisé au plus une fois) ;
+ \item le mot n'est pas encore déjà contenu dans la liste de mots saisis par
+l'utilisateur.
+\end{itemize}
+
+Si l'une de ces conditions échoue, le programme doit en informer explicitement
+l'utilisateur et ne pas lui attribuer de points pour cette saisie. Par contre,
+si le mot satisfait toutes ces conditions, il doit être ajouté à la liste de
+mots saisis par l'utilisateur et le score de l'utilisateur doit être mis à
+jour en conséquence.
+
+La longueur du mot détermine le nombre de point : 1 point pour le mot lui-même
+et 1 point supplémentaire pour chaque lettre au dessus du nombre minimum de
+lettre dans un mot. Ainsi, puisque la longueur minimale d'un mot est 3, le mot
+\texttt{geek} rapporte 1 point, le mot \texttt{idiot} rapporte 2, et le mot
+\texttt{esialien} rapporte 5 points.
+
+
+\subsubsection*{Le tour du joueur artificiel}
+
+Lors du tour du joueur artificiel, la tâche de l'ordinateur consiste à trouver
+tous les mots que le joueur humain aurait oublié, et ce, en cherchant de
+manière récursive tous les mots qui peuvent débuter par la lettre présente sur
+un dé du plateau. Lors de cette phase de jeu, les mêmes conditions sur les
+mots trouvés s'appliquent. Cependant, l'ordinateur n'est pas autorisé à
+comptabiliser les points des mots qui auraient déjà été trouvés par le joueur
+humain.
+
+Comme dans tout algorithme de recherche exponentielle, il est important de
+limiter la recherche au maximum afin de s'assurer que la tâche sera achevée
+dans un temps raisonnable. 
+
+L'une des stratégies les plus importantes consiste à déterminer lorsque la
+recherche s'engage sur une voie morte afin de l'abandonner au plus vite. Par
+exemple, si la recherche a construit un chemin menant au préfixe \texttt{zx},
+vous pouvez utiliser votre dictionnaire pour déterminer qu'il n'y a pas de mot
+qui commence par ce préfixe. Et donc, vous pouvez arrêter cette recherche pour
+continuer sur une voie plus prolifique. Si vous n'appliquez pas cette
+optimisation, votre ordinateur passera un temps non négligeable à vérifier la
+construction de mots qui n'existent pas tels que \texttt{zxgub} ou
+\texttt{zxaep}.
+
+
+
+\section*{Programme de travail}
+
+Comme il s'agit principalement de votre premier projet informatique de cette
+envergure, et afin que vous puissiez travailler de manière efficace vers un
+objectif bien défini, nous vous proposons de découper votre travail en 5
+étapes
+
+	
+\subsection*{\'Etape 1 : Lecture de dés, affichage du plateau, mélange des dés}
+
+Dans cette étape, vous concevez et écrivez les classes qui représentent à un
+dé et un plateau de jeu. Ajouter les méthodes permettant d'afficher un dé et
+un plateau. Ajouter les méthodes nécessaires pour lire la définition des dés
+depuis un fichier. Ajouter les méthodes permettant de générer aléatoirement le
+plateau en mélangeant les dés.
+
+\crccard{\code{boggle.Dice}}{
+  \begin{itemize}
+    \item Conserve la valeur (un caractère) de chacune des six faces du dés.
+	\item Conserve quelle est la face visible du dé.
+	\item Permet de consulter la face visible du dé.
+	\item Permet de calculer un nouveau lancer de dé (la face visible est donc mise à jour).
+  \end{itemize}
+}{
+  \begin{itemize}
+    \item \code{java.util.Random}	
+  \end{itemize}
+}
+
+\crccard{\code{boggle.Board}}{
+  \begin{itemize}
+    \item Conserve la position de chacun des 16 dés.
+	\item Permet de mélanger les dés (la nouvelle position d'un dé est tirée aléatoirement, un nouveau lancer de ce dé est réalisé pour obtenir une nouvelle valeur).
+	\item Permet d'afficher l'état du plateau.
+  \end{itemize}
+}{
+  \begin{itemize}
+    \item \code{java.util.Random}	
+    \item \code{boggle.Dice}
+  \end{itemize}
+}
+
+Choisir aléatoirement une face d'un dé est trivial en utilisant la méthode
+\texttt{nextInt()} de la classe \texttt{java.util.Random}. Ré-arranger les dés
+est un peu plus difficile. Vous pouvez utiliser l'algorithme suivant qui
+permet de mélanger des éléments dans un tableau à 2 dimensions.
+
+\begin{Verbatim}[label=Algorithme de permutation aléatoire des dés,fontsize=\small]
+for (int row = 0; row < numRows; row++) {
+    for (int col = 0; col < numCols; col++) {
+        Dice aDice = this.field[row][col]; // récupère un élément
+        aDice.roll(); // effectue un lancer de dé
+        int rowDest = row + rand.nextInt(numRows - row); 
+        int colDest = col + rand.nextInt(numCols - col);
+        swap(row, col, rowDest, colDest); // change la place des deux dés de place
+    }
+}
+\end{Verbatim}
+
+\crccard{\code{boggle.Main}}{
+  \begin{itemize}
+    \item Permet de lire un fichier et de créer les 16 dés qui y sont décrits.
+	\item Permet de créer et de conserver un plateau de jeu.
+	\item Permet d'afficher le plateau de jeu.
+  \end{itemize}
+}{
+  \begin{itemize}
+	\item \code{java.util.Scanner}
+	\item \code{java.io.FileInputStream}
+	\item \code{boggle.Dice}
+	\item \code{boggle.Board}	
+  \end{itemize}
+}
+
+
+
+\subsection*{\'Etape 2 : Le tour du joueur humain (sans recherche des mots sur le plateau)}
+
+Dans la classe représentant votre application (\code{boggle.Main}), écrivez la
+boucle permettant à un joueur de saisir les mots qu'il trouve. Si les
+conditions ne sont pas respectées (mot déjà saisi, longueur minimale non
+respectée, mot non inclus dans le dictionnaire) rejetez explicitement le mot,
+sinon comptabiliser les points. Ne faites pas de supposition quand au nombre
+de mots maximal que le joueur peut trouver. Lors de cette étape, vous ne vous
+intéressez pas à savoir si le mot se trouve ou non sur le plateau.
+
+\crccard{\code{boggle.Main}}{
+  \begin{itemize}
+    \item Permet de lire un fichier et de créer les 16 dés qui y sont décrits.
+	\item Permet de créer et de conserver un plateau de jeu.
+	\item Permet d'afficher le plateau de jeu.
+	\item {\bf Permet de savoir si un mot est valide (taille, nouveau mot, mot appartenant au dictionnaire).}
+	\item {\bf Permet de calculer le score d'un mot.}
+	\item {\bf Permet de créer et de conserver un joueur.}
+	\item {\bf Permet à un utilisateur de saisir son nom de joueur.}
+	\item {\bf Permet à un joueur de saisir les mots qu'il a trouvés.}
+  \end{itemize}
+}{
+  \begin{itemize}
+	\item \code{java.util.Scanner}
+	\item \code{java.io.FileInputStream}
+	\item \code{boggle.Dice}
+	\item \code{boggle.Board}
+	\item {\bf boggle.Lexicon}
+	\item {\bf boggle.Player}
+  \end{itemize}
+}
+
+\crccard{\code{boggle.Player}}{
+  \begin{itemize}
+    \item Conserve le nom d'un joueur.
+ 	\item Conserve le score d'un joueur.
+	\item Permet de consulter le nom d'un joueur.
+	\item Permet de consulter le score d'un joueur.
+	\item Permet de mettre à jour le score d'un joueur.
+	\item Conserve la liste des mots trouvés par un joueur.
+  \end{itemize}
+}{
+  \begin{itemize}
+	\item \code{java.util.ArrayList}
+  \end{itemize}
+}
+
+
+En plus de la classe principale, vous aurez besoin d'une classe représentant
+le dictionnaire. Le contenu de ce dictionnaire sera chargé à partir d'un
+fichier qui contiendra sur chaque ligne un et un seul mot écrit en majuscules
+(non accentué). Un fichier de contenant le dictionnaire officiel du Scrabble
+(364,370 mots) est disponible à l'adresse
+\url{http://www.isc.ro/lists/ods.zip}.
+
+\crccard{\code{boggle.Lexicon}}{
+  \begin{itemize}
+    \item Permet de lire un fichier et d'ajouter les mots lus.
+	\item Permet d'ajouter un mot.
+	\item Permet de supprimer un mot.
+	\item Permet de savoir si un mot est contenu dans le dictionnaire.
+	\item Permet de savoir combien de mots sont dans le dictionnaire.
+  \end{itemize}
+}{
+  \begin{itemize}
+	\item \code{java.util.ArrayList}
+	\item \code{java.util.Scanner}
+	\item \code{java.io.FileInputStream}
+  \end{itemize}
+}
+
+
+\subsection*{\'Etape 3 : Trouver un mot sur le plateau}
+
+\'Ecrivez la recherche récursive d'un mot sur le plateau afin de vérifier que
+le joueur humain ne triche pas. Rappelez-vous, un mot valide doit respecter
+deux règles : i) les lettres doivent être adjacentes, ii) un dé ne peut être
+utilisé qu'une et une seule fois dans un mot. N'oubliez pas que dés que vous
+réalisez que vous ne pouvez pas former un mot à partir de cette position, vous
+devez passer à la position suivante.
+
+
+\crccard{\code{boggle.Board}}{
+  \begin{itemize}
+    \item Conserve la position de chacun des 16 dés.
+	\item Permet de mélanger les dés (la nouvelle position d'un dé est tirée aléatoirement, un nouveau lancer de ce dé est réalisé pour obtenir une nouvelle valeur).
+	\item Permet d'afficher l'état du plateau.
+	\item {\bf Permet de chercher (récursivement) si l'on peut construire à un mot donné à partir de l'état du plateau (en effectuant un parcours des dés).}
+  \end{itemize}
+}{
+  \begin{itemize}
+    \item \code{java.util.Random}	
+    \item \code{boggle.Dice}
+    \item \code{boggle.Lexicon}
+  \end{itemize}
+}
+
+\crccard{\code{boggle.Main}}{
+  \begin{itemize}
+    \item Permet de lire un fichier et de créer les 16 dés qui y sont décrits.
+	\item Permet de créer et de conserver un plateau de jeu.
+	\item Permet d'afficher le plateau de jeu.
+	\item Permet de savoir si un mot est valide (taille, nouveau mot, mot appartenant au dictionnaire, {\bf pouvant être construit à partir du plateau}).
+	\item Permet de calculer le score d'un mot.
+	\item Permet de créer et de conserver un joueur.
+	\item Permet à un utilisateur de saisir son nom de joueur.
+	\item Permet à un joueur de saisir les mots qu'il a trouvés.
+  \end{itemize}
+}{
+  \begin{itemize}
+	\item \code{java.util.Scanner}
+	\item \code{java.io.FileInputStream}
+	\item \code{boggle.Dice}
+	\item \code{boggle.Board}
+	\item \code{boggle.Lexicon}
+	\item \code{boggle.Player}
+  \end{itemize}
+}
+
+
+\subsection*{\'Etape 4 : Trouver tous les mots sur un plateau (tour du joueur artificiel)}
+
+Il est temps d'implémenter la logique du joueur artificiel et notamment
+l'algorithme de recherche récursive couplé à un dictionnaire. Cette
+récursivité est une recherche exhaustive. Vous devez donc explorer toutes les
+positions du plateau à la recherche des mots qui sont dans le dictionnaire.
+Cette étape est la plus difficile. Réfléchissez bien à toutes les étapes de la
+recherche avant de développer votre solution. Pensez également aux
+optimisations que vous pouvez mettre en place une fois que votre recherche
+fonctionne. Utilisez un dictionnaire plus petit lors de votre développement et
+pourquoi pas un plateau contenant moins de dés.
+
+Pour réaliser l'algorithme de recherche, plusieurs approches sont
+envisageables :
+
+\begin{enumerate}
+
+\item Prendre chaque mot du dictionnaire et utiliser la méthode de recherche
+développée à l'étape 3. Malheureusement, avec un dictionnaire d'une taille
+raisonnable (360 000 mots), cette approche est trop coûteuse en temps.
+
+\item \'Ecrire une méthode récursive qui génère toutes les combinaisons de
+lettres présentes sur le plateau, et pour chaque combinaison, regarder si
+celle-ci est contenu dans le dictionnaire. Malheureusement, il y a environ 40
+000 milliards de milliards de combinaisons.
+
+\end{enumerate}
+
+En fait, il faut utiliser la seconde approche et arrêter au plus tôt la
+génération d'une combinaison si celle-ci ne permet pas de générer des mots du
+dictionnaire. Autrement dit, à chaque génération d'une combinaison, si
+celle-ci ne peut pas servir de préfixe à un mot du dictionnaire, alors on
+arrête la descente de la recherche avec retour arrière (\emph{backtracking}).
+
+Pour utiliser cette méthode, vous devez être capable de connaître si un mot
+est un préfixe d'un ou plusieurs mots du dictionnaire. Pour cela, vous devez
+donc modifier l'implémentation de votre dictionnaire afin que celui repose
+sur l'utilisation d'un \emph{PATRICIA trie} (cf. bibliographie).
+
+Vous étudierez sûrement ce genre de structure dans le module SD (Structures de
+Données). Dans tous les cas, nous vous invitons fortement à lire la page
+Wikipedia sur le sujet (\url{http://en.wikipedia.org/wiki/Radix_tree}).
+
+Si cette structure de données ou l'implémentation que vous devez télécharger
+vous pose un problème, n'hésitez pas à contacter vos enseignants.
+
+\crccard{\code{boggle.LexiconTrie}}{
+  \begin{itemize}
+    \item Permet de lire un fichier et d'ajouter les mots lus.
+	\item Permet d'ajouter un mot.
+	\item Permet de supprimer un mot.
+	\item Permet de savoir si un mot est contenu dans le dictionnaire.
+	\item Permet de savoir combien de mots sont dans le dictionnaire.
+	\item Permet de savoir si une chaîne de caractère est un préfixe pour un ou plusieurs mots du dictionnaire.
+  \end{itemize}
+}{
+  \begin{itemize}
+	\item \code{java.util.Scanner}
+	\item \code{java.io.FileInputStream}
+	\item {\footnotesize \code{org.ardverk.collection.PatriciaTrie}}
+  \end{itemize}
+}
+
+\crccard{\code{boggle.Board}}{
+  \begin{itemize}
+    \item Conserve la position de chacun des 16 dés.
+	\item Permet de mélanger les dés (la nouvelle position d'un dé est tirée aléatoirement, un nouveau lancer de ce dé est réalisé pour obtenir une nouvelle valeur).
+	\item Permet d'afficher l'état du plateau.
+	\item Permet de chercher (récursivement) si l'on peut construire à un mot donné à partir de l'état du plateau (en effectuant un parcours des dés).
+	\item {\bf Permet de chercher (récursivement) tous les mots que l'on peut construire à partir de l'état du plateau (en utilisant le dictionnaire).}
+  \end{itemize}
+}{
+  \begin{itemize}
+    \item \code{java.util.Random}	
+    \item \code{boggle.Dice}
+    \item {\bf boggle.LexiconTrie}
+  \end{itemize}
+}
+
+\crccard{\code{boggle.Main}}{
+  \begin{itemize}
+    \item Permet de lire un fichier et de créer les 16 dés qui y sont décrits.
+	\item Permet de créer et de conserver un plateau de jeu.
+	\item Permet d'afficher le plateau de jeu.
+	\item Permet de savoir si un mot est valide (taille, nouveau mot, mot appartenant au dictionnaire, pouvant être construit à partir du plateau).
+	\item Permet de calculer le score d'un mot.
+	\item Permet de créer et de conserver un joueur.
+	\item Permet à un utilisateur de saisir son nom de joueur.
+	\item Permet à un joueur de saisir les mots qu'il a trouvés.
+	\item {\bf Permet de faire jouer le joueur artificiel.}
+	\item {\bf Permet de calculer le score du joueur artificiel.}
+  \end{itemize}
+}{
+  \begin{itemize}
+	\item \code{java.util.Scanner}
+	\item \code{java.io.FileInputStream}
+	\item \code{boggle.Dice}
+	\item \code{boggle.Board}
+	\item {\bf boggle.LexiconTrie}
+	\item \code{boggle.Player}
+  \end{itemize}
+}
+
+\subsection*{\'Etape 5 : Boucle pour jouer plusieurs fois, peaufinage}
+
+Maintenant qu'il est possible à un joueur de jouer une partie complète, il est
+temps de permettre à un joueur de jouer autant de partie qu'il le souhaite.
+
+Vous pouvez maintenant peaufiner votre programme : vérifiez que vous avez bien
+géré toutes les saisies possibles et cherchez à optimiser les différentes
+routines.
+
+\section*{Bonus (tâches facultatives)}
+
+\begin{quote}
+{\it To infinity, and beyond!} [Buzz Lightyear, Toy Story]
+\end{quote}
+
+
+L'état du code à la fin de la section précédente constitue le minimum à
+atteindre pour avoir une note potable (entre 12 et 15 selon le degré de
+finition et le rapport). Pour aller (vers l'infini et) au delà, il vous faudra
+implémenter certaines des extensions suivantes.
+
+Quelles que soient les extensions que vous choisissez, il devra toujours être
+possible d'utiliser la version originale et classique du jeu.
+
+{\bf Esthétisme} {\it (difficulté: faible)} : Améliorez l'aspect esthétique de
+votre application (un petit peu d'ASCII Art
+(\url{http://fr.wikipedia.org/wiki/Art_ASCII}) et voire même quelque code
+d'échappement ANSI pour mettre de la couleur).
+
+{\bf Jeu à deux} {\it (difficulté: faible)} : Offrez la possibilité à deux
+joueurs humains de se confronter lors d'une partie. L'ordinateur indiquera les
+mots non trouvés à la fin de la partie. 
+
+{\bf Hall of Fame} {\it (difficulté: faible)} : Votre programme sauvegardera et
+affichera les meilleurs scores (le nom des joueurs associés).
+
+{\bf Taille variable} {\it (difficulté: assez faible)} : Modifier votre programme afin
+que les dimensions du  plateau puissent être changées facilement, afin par
+exemple de pouvoir jouer sur une grille ($42 \times 42$). 
+
+{\bf Extension 3D} {\it (difficulté: moyenne)} : Modifier votre programme afin
+que le plateau ne soit plus uniquement un carré ($4 \times 4$), mais un cube
+($4 \times 4 \times 4$). 
+
+{\bf Limite de temps de jeu} {\it (difficulté: moyenne)} : Ajouter la
+possibilité de limiter le temps de jeu de chaque joueur. Par exemple, le
+joueur humain n'a que 5 minutes pour trouver et proposer ses mots (idem pour
+l'ordinateur).
+
+{\bf Interface graphique} {\it (difficulté: élevée)} : Proposer une interface
+utilisateur graphique (en utilisant la bibliothèque Swing, par exemple). 
+
+{\bf Klingon Boggle} {\it (difficulté: for geek only) ;b} : Proposer la possibilité de
+jouer au Boggle Klingon (\url{http://bigbangtheory.wikia.com/wiki/Klingon_Boggle}).
+
+{\bf Imaginer vos propres extensions !!!} 
+Vous êtes bien entendu libres
+d'implémenter toute autre extension ou option à ce jeu (qui ne voudrait pas jouer au Boggle en utilisant le Kinect\texttrademark{} ?).
+
+
+
+\section*{Bibliographie}
+
+L'Officiel du Scrabble: 364,370 mots : \url{http://www.isc.ro/lists/ods.zip}.
+
+La documentation de l'API Java : \url{http://download.oracle.com/javase/6/docs/api/}.
+
+Radix tree (Wikipedia) : \url{http://en.wikipedia.org/wiki/Radix_tree}.
+
+Une implémentation de la structure de données PATRICIA-Trie () : \url{http://code.google.com/p/patricia-trie/}.
+
+Vous pourrez trouver des informations complémentaires à l'adresse suivante:\\
+\url{http://www.loria.fr/~quinson/Teaching/TOP/}
+
+
+\section*{Indications}
+
+Dans ce projet vous devez mettre en applications les connaissances que vous
+avez acquises dans le module POO ainsi que dans le module TOP.
+
+Vous devrez donc réaliser un programme en respectant les principes de la
+programmation objet. Il vous est donc fortement conseillé de chercher à
+modéliser le problème en manipulant des classes et des objets. Par exemple,
+vous serez amenés à définir une classe pour le programme principal, une pour
+chaque dés, une pour le plateau de jeu, une pour représenter la liste des mots
+trouvés, une pour le dictionnaire, une pour un joueur, etc.
+
+Dernier conseil, n'attendez pas la dernière minute pour démarrer ce projet. Il
+n'est pas compliqué, mais parfois on peut rapidement passer beaucoup de temps à
+trouver une erreur bête. N'hésitez pas à contacter vos enseignants pour vous
+débloquer.
+
+% \section*{Critères d'évaluations}
+
+% La notation tiendra compte : 
+% \begin{itemize}
+%   \item	de la clarté du code rendu et de la documentation (commentaires, procédure d'utilisation, \ldots) ;
+%   \item	du choix approprié (ou non) des classes et des méthodes implémentées ;
+%   \item	de la correction et de l'efficacité de votre programme. Un programme qui résout correctement toutes les instances du problème et qui effectue moins d'appels sera mieux considéré qu'un programme nécessitant beaucoup plus d'appels pour trouver le même nombre de solutions.
+% \end{itemize}
+
+%\newpage
+
+\section*{Cas d'utilisation}
+
+Vous trouverez ci-dessous à titre d'exemple, l'affichage donné lors l'utilisation du programme que vous devez réaliser.
+
+\newpage\VerbatimInput[numbers=none,fontsize=\footnotesize]{output-example.txt}   
+
+
+
+% \tiny
+% \begin{verbatim}
+%	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8OOOOOOOOOOCOOOOOO8@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@@@@@@@@@@@@@@8888OO888@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8C8@@@@@@@@@@@@@8O8@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@@@@@@@8OOCOOCO8888888COCCO@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8C8@..........C@8C8@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@8OOOOC88@@@Co........oO@@OCO@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8C8@..........C@8O8@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@8OOOOO8@@@8C...................8@8CC@@@@@@8OCCOOOCCOOOC8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8C8@..........C@8C8@@@@@@@@@@@@@@@@@@@@@@@@
+%	@8OOOOO8@@@Oo..........................c@@OO@@COCO@@@@8888@@@@8OOC@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8C8@..........C@8C8@@8OOCOCOOOC8@@@@@cCO@@@
+%	@@OO@8:.................................c@8OOO8@@OOOCOCOOOOOOOO@@@CCO@88888@@@@@@@@@@@@@@@@@@@@@@@@@@@8OCCCCC8@..........C@8COCOO8@@@@@@@@8OOOO8OO@@@@
+%	@@8O8@o..................................@@O@@OOOOCOOOOCOCCCOCCOOO@@COO8888COOO8@@@@@@@@@@@8OOOOOOCCOC88@@@@8@@..........C@8O@@O:..........O@@OOC@@@@@
+%	@@@OO@@..................Co..............C@@@OOCCOOOOOOOOOOOOCOCOOO8@C.....o8@@OOOCO88@OOOO88@@@8@@OC:.......C@..........O@@c.................8@OOO@@@
+%	@@@8OO@C..............@@@@@@o............@@8OCCOOOOCC8@@@@8OOCCCOCOCc.........c@@@@@8OCO@@o......o@o..........@..........Oc....................c@@OO@@
+%	@@@@8O8@:.............c@@@@@o...........8@@CCCCOCCC@@@@@@@@@@CCCCCCCCc.........:@....CO8......................8..................8@@8...........O@8OO@
+%	@@@@@OO@@..............8@Cc...........c@@@8OCCCOOO@@@@@@@@@@@@COCCCCCo........................................:.................C@8c........o@@@8O@8O8
+%	@@@@@8OO@C................................OCOCCCCO@@@@@@@@@@@@8CCCCCCC..................................................................c8@@@o...C@8O8
+%	@@@@@@OO8@................................OCCCCOOC@@@@@@@@@@@@CCCCCCCo...8@@@8..................8@@@@:...............................O@@@o.......8@8O8
+%	@@@@@@@OO@8...............................oCCCOCOOO8@@@@@@@@@OOCCCCCC:..O@@@@@c.................@@@@@O.............................o@@@@:.......C@@OO@
+%	@@@@@@@8O8@C................oO@@8c.........CCCCCCOOCOC8888OCCCCCCCCC:....8@@@c...................8@@8..........................................8@@OO@@
+%	@@@@@@@@OO8@..............C@@@@@@@C.........cCCCCCOOCCCCOCCOCCCCCCC:.....................................................O...................C@@OOO@@@
+%	@@@@@@@@@OO@O..............@@@@@@@o...........oOCCOOOCOOOCCCCCCCC:....................c:.........................C@@@@@@@@@O..............c@@@8OO@@@@@
+%	@@@@@@@@@8CO@o.............o@@@8c...............@8OCCCCCOCCOCC8@@c........::..........@@c.............CC.........:@@CCCCCCO@@@OC.....CC@@@@8OOO@@@@@@@
+%	@@@@@@@@@@OO@@.................................8@@@@@@@@@@@@c..8@@@@@OCO@@C..........C@@@@c.........:@@C..........@@CC8888OCOO8@@@@@@@@8OOOO8@@@@@@@@@
+%	@@@@@@@@@@8OO@C..............................o@@8OOOOOOO8@8......o@@@@@@@c..........o@@COO@@@@8CO@@@@@@..........C@8C8@@@@@@@8OCOOOOCOO8@@@@@@@@@@@@@@
+%	@@@@@@@@@@@8C8@:..........................:8@@@OO8@@@OO8@c.........................:@@OCCO@OO@@@@@@@@C..........c@@CC@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@OO@@......................cO@@@@OOO8@@@@@OOC@@@c......................:@@8OOCO@C...................O@@OO8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@8OO@C...............oO@@@@@@OOOOO@@@@@@@@@@8OOO@@@C..................8@@OO8@OC@o.................8@@8OO@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@OO8@:.......:C@@@@@@88OOOOO8@@@@@@@@@@@@@@@@@OOOO@@@@8C.........cC@@@OOC@@8O8@..............C@@@@OOO@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@@OO@8.oC@@@@@@8OOOOOO8@@@@@@@@@@@@@@@@@@@@@@@@@@8OOOO8@@@@@@@@@@@@OOOC@@@@8O8@@@@@88@@@@@@@@@8COOO@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@@8O8@@@88OOOOO8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8OOOOOCOOOOOC8@@@@@@@OCCCOCO88888OCOCCOCO@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@@@OOOOOO8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@88888@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+%	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+% \end{verbatim}
+% \normalsize
+
+\end{document}

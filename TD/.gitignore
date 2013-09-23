@@ -1,14 +1,4 @@
 */dist
 
-*.pdf.mk
-*.aux
-*.log
-*.out
-*.bak
-*.subfig.mk
-*.pdftex
-*.pdftex_t
-*_[0123456789].fig
-*_1[0123456789].fig
 rube-localtaxes.pdf
 rube-toothpaste.pdf

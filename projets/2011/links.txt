@@ -1,0 +1,4 @@
+Some links with discussions about implementation/optimisation but also what is the best board?
+
+http://www.danvk.org/wp/category/boggle/
+http://www.danvk.org/wp/category/boggle/page/2/
