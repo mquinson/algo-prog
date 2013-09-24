@@ -12,19 +12,25 @@ while (<>) {
     if (!$kill && /ENDKILL/);
 
   if (/BEGINKILL/) {
-    print STDERR "enter kill (l$nline)\n";
-    $kill = 1;
+      chomp;
+      my $msg = $_;
+      $msg =~ s/.*?BEGINKILL ?//;
+      if (length ($msg) == 0) {
+          $msg = "A VOUS DE JOUER";
+      }
+      print "\n\n//" .('/' x length($msg)). "\n// $msg\n//" .('/' x length($msg)). "\n\n";
+      #print STDERR "enter kill (l$nline)\n";
+      $kill = 1;
   }
   if (/ENDKILL/) {
-    print STDERR "leave kill (l$nline)\n";
+    #print STDERR "leave kill (l$nline)\n";
     $kill = 0;
-    print "\n\n/*******************/\n/* A VOUS DE JOUER */\n/*******************/\n\n";
     next;
   } 
   last if /Local Variables:/;
   next if /- coding: utf-8 -/;
 
-  print $_ unless $kill || /KILL/;
+  print $_ unless $kill || /KILLLINE/;
 }
 
 die "End of file in kill section\n" if $kill;

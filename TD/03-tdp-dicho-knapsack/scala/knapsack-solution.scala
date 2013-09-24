@@ -2,9 +2,8 @@
 
 object knapsack { // KILLLINE
 
-/* ************************* */
-/* Diverses fonctions d'aide */
-/* ************************* */
+// Diverses fonctions d'aide
+////////////////////////////
 
 /** Calcule le gain d'un sac à dos donné */
 def valeurTotale(objets:Array[Boolean], poids:Array[Int]):Int = {
@@ -15,7 +14,7 @@ def valeurTotale(objets:Array[Boolean], poids:Array[Int]):Int = {
   return total
 }
 
-/** Affiche si les objets du sac à dos sont pris ou non dans une solution partielle (en cours de construction)
+/** Affiche si les objets sont pris ou non dans une solution partielle (en cours de construction)
  *
  * Le second argument est la taille déja construite.
  */
@@ -56,14 +55,14 @@ def poseObjet(objets:Array[Boolean], obj:Int) {
      objets(obj) = false
 }
 
-/* ********************** */
-/* La fonction principale */
-/* ********************** */
+// La fonction principale
+/////////////////////////
 
 /** La fonction publique, pour chercher la meilleure solution */
 def cherche(poids:Array[Int] , capacite:Int) {
 
-  // on va beaucoup utiliser cette valeur, alors on fait un alias pour simplifier les écritures suivantes
+  // on va beaucoup utiliser cette valeur, alors on fait un alias 
+  // pour simplifier les écritures suivantes
   val len = poids.length
   
   // Affiche l'instance du problème
@@ -75,13 +74,15 @@ def cherche(poids:Array[Int] , capacite:Int) {
   // variable locale pour sauvegarder la meilleure solution connue à tout moment
   var meilleure:Array[Boolean] = Array.fill(len)(false)
 
+  // BEGINKILL TODO: Placez ici l'appel récursif, avec les valeurs initiales des paramètres
   // Initialise l'appel récursif
   chercheRec(0,  // On commence le remplissage au rang 0
              Array.fill(len)(false) // Cette écriture crée un tableau
                                     // dans lequel la valeur 'false'
                                     //est répétée 'len' fois.
   ) // fin des paramètres de chercheRec. La récursion est lancée.
-  
+  // ENDKILL
+
   // Affiche la meilleure solution trouvée
   println
   print("Meilleure solution trouvée:")
@@ -90,6 +91,7 @@ def cherche(poids:Array[Int] , capacite:Int) {
   println(" Valeur:"+valeurTotale(meilleure,poids)+" (la capacité était "+capacite+")")
   
   
+  // BEGINKILL TODO: Definissez ici l'appel récursif à proprement parler
   // Défini l'appel récursif
   def chercheRec(profondeur:Int, courante:Array[Boolean]) {
 
@@ -126,22 +128,26 @@ def cherche(poids:Array[Int] , capacite:Int) {
     chercheRec(profondeur+1, courante);
 				
   }
-}
+  // ENDKILL
+} // Fin de la fonction cherche() principale
 
 
-def main(args:Array[String]) {
-  if (args.length == 0) {
-    println("Usage: knapsack <capacite> <obj1> <obj2> ... <objN>")
-    println("Arguments par défaut: 10 5 3 2")
-    cherche(Array(5,4,3,2), 10)
-    
-  } else {  
-    val capa = args(0).toInt
-    val objets:Array[Int] = new Array(args.length-1)
-    for (i <- 0 to objets.length-1)
-      objets(i) = args(i+1).toInt
-    cherche(objets, capa)  
-  }
-}
 
-}
+// Le code de test, qui appelle la fonction publique
+////////////////////////////////////////////////////
+/* KILLLINE */def main(args:Array[String]) { 
+/* KILLLINE */  if (args.length == 0) {
+/* KILLLINE */    println("Usage: knapsack <capacite> <obj1> <obj2> ... <objN>")
+/* KILLLINE */    println("Arguments par défaut: 10 5 3 2")
+cherche(Array(5,4,3,2), 10)
+/* KILLLINE */    
+/* KILLLINE */  } else {  
+/* KILLLINE */    val capa = args(0).toInt
+/* KILLLINE */    val objets:Array[Int] = new Array(args.length-1)
+/* KILLLINE */    for (i <- 0 to objets.length-1)
+/* KILLLINE */      objets(i) = args(i+1).toInt
+/* KILLLINE */    cherche(objets, capa)  
+/* KILLLINE */  }
+/* KILLLINE */}
+/* KILLLINE */
+/* KILLLINE */}
