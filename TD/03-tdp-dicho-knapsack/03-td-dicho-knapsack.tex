@@ -9,6 +9,7 @@
 \TOP\unA
 \title{TDP3: Récursivité (dichotomie et sac à dos)}
 
+\hypersetup{hidelinks}
 \begin{document}
 \maketitle
 
@@ -365,6 +366,27 @@ def cherche(poids:Array[Int] , capacite:Int) {
   \end{Verbatim}
 \end{Reponse}
 
+\medskip Dans le même temps, l'objectif de votre méthode récursive est de
+trouver le meilleur nœud de l'arbre visité. D'une certaine façon, c'est assez
+similaire à une recherche de l'élément minimal dans un tableau: on parcours tous
+les éléments, et pour chacun, s'il est préférable au meilleur candidat connu
+jusque là, on décrète qu'il s'agit de notre nouveau meilleur candidat. Mais
+contrairement à l'algorithme d'une recherche d'élément minimum, les valeurs ne
+sont pas de simples entiers. 
+
+\Question Écrivez une fonction qui recopie une structure représentant un sac à
+dos dans une autre. On l'utilisera pour sauvegarder le nouveau meilleur
+candidat.
+
+\begin{Reponse}
+  \begin{Verbatim}
+def dupplique(src:Array[Boolean], dst:Array[Boolean]) {
+  for (i <- 0 to src.length-1) 
+    dst(i) = src(i)
+}    
+  \end{Verbatim}
+\end{Reponse}
+
 \Question Explicitez en français l'algorithme à écrire. Le fonctionnement en
 général (en vous appuyant sur l'arbre d'appels dessiné à la question 3), puis
 l'idée pour chaque étage de la récursion.
@@ -386,59 +408,58 @@ l'idée pour chaque étage de la récursion.
 
 \Exercice\textbf{Implémentation d'une solution au problème du sac à dos}
 
-Vous trouverez dans \url{/home/depot/1A/TOP/knapsack} une classe
-\texttt{Knapsack} contenant des éléments pour vous aider. Elle utilise la
-classe \texttt{KnapsackSolution}, également fournie. 
+Récupérez les fichiers \textbf{knapsack.jar} et \textbf{knapsack.scala} depuis
+la page du cours\footnote{Page du cours:
+  \url{http://www.loria.fr/~quinson/Teaching/TOP}} ou depuis le
+dépôt\footnote{Dépot: \url{/home/depot/1A/TOP/knapsack} sur les serveurs de
+  l'école.}.
 
-\Question Complétez la fonction \texttt{Knapsack.cherche()} afin de résoudre le
-problème du sac à dos. Vous utiliserez la classe \texttt{KnapsackSolution}.
-Vérifiez avec la classe \texttt{Test} fournie la validité de votre travail.
+\Question Expérimentez avec le fichier \textbf{knapsack.jar}. Il s'agit d'une
+version compilée exécutable de la solution. Exécutez-le en lui passant diverses
+instances du problème en paramètre (en ligne de commande) afin de mieux
+comprendre comment fonctionne l'algorithme que vous devez écrire.
 
 \begin{Reponse}
-  Il y a 3 classes:
-  \begin{description}
-  \item[Test.java] contient le main
-  \item[Knapsack.java] fait le parcourt récursif avec retour arrière
-  \item[KnapsackSolution.java] réifie les solutions au problème (on en
-    manipule plusieurs lors du parcours: la courante, la meilleure
-    rencontrée jusque là, etc)
-  \end{description}
+  Pas de correction, faut juste qu'ils fassent mumuse avec le binaire fourni
+  jusqu'à être à l'aise.
+\end{Reponse}
 
+\Question Le fichier \textbf{knapsack.scala} également fourni est un template de
+la solution, c'est-à-dire une sorte de texte à trou de la solution que vous
+devez maintenant compléter. Testez votre travail sur plusieurs instances du problème.
+
+\begin{Reponse}
   \noindent\textbf{Ce sont les corrections du TP suivant, alors c'est pas une
     bonne idée de tout leur donner : faut qu'ils cherchent, un peu,
     aussi.}
     
-  \VerbatimInput[label=Test.java]{src/knap/Test.java}
-  \VerbatimInput[label=Knapsack.java]{src/knap/Knapsack.java}
-  \VerbatimInput[label=KnapsackSolution.java]{src/knap/KnapsackSolution.java}
+  \VerbatimInput{scala/knapsack-solution.scala}
 \end{Reponse}
 
 
 \Question Combien d'appels récursifs effectue votre code?
 
 \begin{Reponse}
-  Y'a des étudiants qui vérifient la validité de leur travail en comptant le
-  nombre d'appels récursifs effectués. Bonne idée. Le bon résultat est 15. Pas
+  Certains étudiants  vérifient la validité de leur travail en comptant le
+  nombre d'appels récursifs effectués. Bonne idée. Le bon résultat pour
+  l'instance \{5,4,3,3\} (capacité 10) est 15. Pas
   le nombre de feuilles de l'arbre, mais le nombre de nœuds internes...
 \end{Reponse}
 
-\Question Généralisez votre solution pour résoudre des problèmes où la valeur
-d'un objet est décorrélée de son poids (on ne suppose donc plus que $v_i=p_i$).
-Il s'agit maintenant de maximiser la valeur du contenu du sac en respectant les
-contraintes de poids. Vous serez pour cela amené à modifier toutes les classes
-fournies.
-
-\Question Vous trouverez dans le répertoire du dépôt un script
-\texttt{cree\_instance.sh} capable de créer une nouvelle instance du problème à
-écrire dans le fichier \texttt{Test.java}. Observez les variations du temps
-d'exécution lorsque la taille du problème augmente.
+\Question Testez votre travail pour des instances plus grandes du problème et
+observez les variations du temps d'exécution lorsque la taille du problème
+augmente.
 
 \begin{Reponse}
   Oui, c'est exponentiel. Un peu mieux que $2^n$, mais ça reste très douloureux
   très vite.
 \end{Reponse}
 
-
+\Question Généralisez votre solution pour résoudre des problèmes où la valeur
+d'un objet est décorrélée de son poids (on ne suppose donc plus que $v_i=p_i$).
+Il s'agit maintenant de maximiser la valeur du contenu du sac en respectant les
+contraintes de poids. Vous serez pour cela amené à modifier toutes les fonctions
+écrites. 
 
 \end{document}
 %%% Local Variables:
