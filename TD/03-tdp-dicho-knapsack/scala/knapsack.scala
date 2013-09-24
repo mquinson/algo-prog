@@ -7,11 +7,11 @@ object knapsack { // KILL
 /* ************************* */
 
 /** Calcule le gain d'un sac à dos donné */
-def valeurTotale(objets:Array[Boolean], valeurs:Array[Int]):Int = {
+def valeurTotale(objets:Array[Boolean], poids:Array[Int]):Int = {
   var total = 0
   for (i <- 0 to objets.length -1)
     if (objets(i)) 
-      total += valeurs(i)
+      total += poids(i)
   return total
 }
 
@@ -45,25 +45,33 @@ def dupplique(src:Array[Boolean], dst:Array[Boolean]) {
 
 /** indique dans le paramètre que l'objet spécifié est maintenant pris
     (cette fonction est juste là pour se simplifier la vie) */
-def prendObjet(objets:Array[Boolean], objet:Int) = objets(objet) = true
+def prendObjet(objets:Array[Boolean], obj:Int) {
+    if (objets(obj)) 
+        println("L'objet "+obj+" est déjà pris; ignore la requete");
+    objets(obj) = true
+}
 /** indique dans le paramètre que l'objet spécifié est maintenant posé */
-def poseObjet (objets:Array[Boolean], objet:Int) = objets(objet) = false
+def poseObjet(objets:Array[Boolean], obj:Int) {
+    if (!objets(obj)) 
+        println("L'objet "+obj+" est déjà posé; ignore la requete");
+     objets(obj) = false
+}
 
 /* ********************** */
 /* La fonction principale */
 /* ********************** */
 
 /** La fonction publique, pour chercher la meilleure solution */
-def cherche(valeurs:Array[Int] , capacite:Int) {
+def cherche(poids:Array[Int] , capacite:Int) {
 
   // on va beaucoup utiliser cette valeur, alors on fait un alias poursimplifier les écritures suivantes
-  val len = valeurs.length
+  val len = poids.length
   
   // Affiche l'instance du problème
-  print("Valeurs explorées:")
-  for (i <- 0 to valeurs.length-1) 
-    print(" "+valeurs(i)+" ")
-  println()
+  print("Poids des objets: ")
+  for (i <- 0 to poids.length-1) 
+    print(" "+poids(i)+" ")
+  println("; Capacite: "+capacite)
   
   // variable locale pour sauvegarder la meilleure solution connue à tout moment
   var meilleure:Array[Boolean] = Array.fill(len)(false)
@@ -79,14 +87,14 @@ def cherche(valeurs:Array[Int] , capacite:Int) {
   println
   print("Meilleure solution trouvée:")
   for (i <- 0 to meilleure.length-1)
-    print(" "+valeurs(i)+":"+(if (meilleure(i)) "O" else "N")+";")
-  println(" Valeur:"+valeurTotale(meilleure,valeurs)+" (la capacité était "+capacite+")")
+    print(" "+poids(i)+":"+(if (meilleure(i)) "O" else "N")+";")
+  println(" Valeur:"+valeurTotale(meilleure,poids)+" (la capacité était "+capacite+")")
   
   
   // Défini l'appel récursif
   def chercheRec(profondeur:Int, courante:Array[Boolean]) {
 
-    val valeur = valeurTotale(courante,valeurs)
+    val valeur = valeurTotale(courante,poids)
     
     print(" (prof="+profondeur+") Explore ")
     affiche(courante,profondeur)
@@ -96,13 +104,13 @@ def cherche(valeurs:Array[Int] , capacite:Int) {
       println(" *** Oups, ca deborde (backtrack!) ***")
       return
     }
-    if (valeurTotale(courante, valeurs) > valeurTotale(meilleure, valeurs)) {
+    if (valeurTotale(courante, poids) > valeurTotale(meilleure, poids)) {
       dupplique(courante,meilleure)
       print(" Nouvelle meilleure solution ");
     } else {
       print("   ")
     }
-    if (profondeur == valeurs.length) {
+    if (profondeur == poids.length) {
       println("(Cas terminal)");
       return;
     } else {       
