@@ -1,0 +1,30 @@
+#! /usr/bin/perl
+
+use strict;
+
+my $kill=0;
+my $nline=0;
+while (<>) {
+  $nline++;
+  die "BEGINKILL in kill section (l$nline)\n" 
+    if ($kill && /BEGINKILL/);
+  die "ENDKILL out of kill section (l$nline)\n" 
+    if (!$kill && /ENDKILL/);
+
+  if (/BEGINKILL/) {
+    print STDERR "enter kill (l$nline)\n";
+    $kill = 1;
+  }
+  if (/ENDKILL/) {
+    print STDERR "leave kill (l$nline)\n";
+    $kill = 0;
+    print "\n\n/*******************/\n/* A VOUS DE JOUER */\n/*******************/\n\n";
+    next;
+  } 
+  last if /Local Variables:/;
+  next if /- coding: utf-8 -/;
+
+  print $_ unless $kill || /KILL/;
+}
+
+die "End of file in kill section\n" if $kill;

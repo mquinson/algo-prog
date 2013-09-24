@@ -4,9 +4,7 @@
 <target name="all" depends="jar, template"/>
 
 <target name="template">
-  <exec executable="grep" output="knapsack.scala">
-    <arg value="-v" />
-    <arg value="KILL" />
+  <exec executable="../../killparts" output="knapsack.scala">
     <arg value="knapsack-solution.scala" />
   </exec>
 </target>
