@@ -1,4 +1,5 @@
-\documentclass[10pt]{article}\usepackage[correction,nu]{esial}%[correction]{esial}
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+%\documentclass[10pt]{article}\usepackage[nu]{esial}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -212,33 +213,100 @@ est déjà plein, rien ne sert de tenter d'ajouter encore des objets.
 La suite de cet exercise vise à vous faire mener une réflexion préliminaire au
 codage, que vous ferez dans l'exercise suivant, lors du prochain TP.
 
-\Question De combien de classes Java avez vous besoin? Dessinez le
-diagramme de classes.
+\Question Comment modéliser ce problème en Scala ? Par quel type de données allez
+vous représenter un sac à dos donné ? 
 
 \begin{Reponse}
-  La première tentation de certain est de répondre ``on a pas fait d'UML à
-  l'ESIAL''. Ceux qui disent ça ont déjà fait de l'UML ailleurs vu qu'ils font
-  le rapprochement avec ``diagramme de classes''; sinon, pour détendre
-  l'atmosphere, j'ai jamais fait d'UML, perso, ni à l'esial ni ailleurs, c'est
-  pas ça qui empêche de réfléchir aux classes à écrire et aux fonctions
-  qu'elles doivent offrir...
-
-  Sinon, il faut couper immédiatement court à l'idée de faire un objet Java
-  pour chaque objet qu'on va mettre (ou non) dans  le sac à dos. Les deux ont
-  le même nom, mais les objets du problème sont passifs là où un objet Java est
-  actif (quelles seraient les méthodes à écrire dans la classe
-  ``KnapsackObjet''?).
-
-  \textbf{Faut bien les faire ramer avant de leur donner le schéma suivant.}
-  Mais faut pas les laisser ramer seuls, faut guider leurs recherches en
-  posant des questions et en écrivant peu à peu interactivement. L'autre piège
-  est qu'il faut subtilement guider cette ``interactivité'' pour s'assurer
-  que le groupe retrouve ce schéma là, puisque c'est celui utilisé dans les 
-  templates fournis lors du TP. Mener le groupe à un autre design serait
-  alors troublant.
-
-  \includegraphics{fig/diagramme-classe.fig}
+  Dans le template qui leur sera donné, j'ai modélisé le sac à dos comme un
+  tableau de boolean, chacun représentant si l'objet correspondant est pris ou
+  non. Il faut donc parvenir à les faire converger vers cette solution ;) 
 \end{Reponse}
+
+% \Question De combien de classes Java avez vous besoin? Dessinez le
+% diagramme de classes.
+
+% \begin{Reponse}
+%   La première tentation de certain est de répondre ``on a pas fait d'UML à
+%   l'ESIAL''. Ceux qui disent ça ont déjà fait de l'UML ailleurs vu qu'ils font
+%   le rapprochement avec ``diagramme de classes''; sinon, pour détendre
+%   l'atmosphere, j'ai jamais fait d'UML, perso, ni à l'esial ni ailleurs, c'est
+%   pas ça qui empêche de réfléchir aux classes à écrire et aux fonctions
+%   qu'elles doivent offrir...
+
+%   Sinon, il faut couper immédiatement court à l'idée de faire un objet Java
+%   pour chaque objet qu'on va mettre (ou non) dans  le sac à dos. Les deux ont
+%   le même nom, mais les objets du problème sont passifs là où un objet Java est
+%   actif (quelles seraient les méthodes à écrire dans la classe
+%   ``KnapsackObjet''?).
+
+%   \textbf{Faut bien les faire ramer avant de leur donner le schéma suivant.}
+%   Mais faut pas les laisser ramer seuls, faut guider leurs recherches en
+%   posant des questions et en écrivant peu à peu interactivement. L'autre piège
+%   est qu'il faut subtilement guider cette ``interactivité'' pour s'assurer
+%   que le groupe retrouve ce schéma là, puisque c'est celui utilisé dans les 
+%   templates fournis lors du TP. Mener le groupe à un autre design serait
+%   alors troublant.
+
+%   \includegraphics{fig/diagramme-classe.fig}
+% \end{Reponse}
+
+\Question Écrivez les méthodes \texttt{prendreObjet()}, \texttt{poseObjet()} et
+\texttt{estPris()} qui simplifient l'usage de votre structure de données.
+
+\begin{Reponse}
+  Ces méthodes sont triviales, et cette question a pour objectif principal que
+  tout le monde comprend bien la modélisation utilisée.
+  \begin{Verbatim}
+/** indique dans le paramètre que l'objet spécifié est maintenant pris
+    (cette fonction est juste là pour se simplifier la vie) */
+def prendObjet(objets:Array[Boolean], obj:Int) {
+    if (objets(obj)) 
+        println("L'objet "+obj+" est déjà pris; ignore la requete");
+    objets(obj) = true
+}
+/** indique dans le paramètre que l'objet spécifié est maintenant posé */
+def poseObjet(objets:Array[Boolean], obj:Int) {
+    if (!objets(obj)) 
+        println("L'objet "+obj+" est déjà posé; ignore la requete");
+     objets(obj) = false
+}
+/** ben oui, c'est juste un acces au tableau, quoi */
+def estPris(objets:Array[Boolean], obj:Int) = objets(obj)
+  \end{Verbatim}
+\end{Reponse}
+
+\Question Écrivez une fonction \texttt{valeurTotale}, prennant un sac à dos et
+un tableau d'entiers \texttt{poids} en paramètre (\texttt{poids} indique le
+poids de chaque objet possible du sac à dos) et renvoyant le poids total de tous
+les objets sélectionnés pour le sac à dos.
+
+\begin{Reponse}
+  \textbf{Il faut bien les laisser ramer avant de leur filer ce code, sinon ils
+    vont s'ennuyer en TP.} Si vous donnez tout le code au tableau en TD, ils
+  vont râler (à juste titre) en réunion pédagogique que le travail en TD est de
+  recopier le tableau sans réfléchir, puis que le travail en TP est de taper le
+  TD sur l'ordi sans réfléchir.
+
+  \textbf{Je ne serais pas choqué si vous ne corrigiez pas cette méthode au
+    tableau}, au fond. Donner l'idée générale suffira. Par exemple: ``Je
+  remarque que les deux tableaux doivent être de même taille pour que ça
+  marche. Pour trouver la valeur, j'initialise une variable \texttt{total }à 0,
+  puis pour tous les indices possibles, si l'objet est pris, j'ajoute son poids
+  au total en cours de calcul. A la fin, la valeur renvoyée est
+  \texttt{total}''.
+\begin{Verbatim}
+/** Calcule le gain d'un sac à dos donné */
+def valeurTotale(objets:Array[Boolean], poids:Array[Int]):Int = {
+  var total = 0
+  for (i <- 0 to objets.length -1)
+    if (objets(i)) 
+      total += poids(i)
+  return total
+}  
+\end{Verbatim}
+\end{Reponse}
+
+\Exercice\textbf{Résolution récursive du problème du sac à dos}
 
 \Question Dessinez l'arbre d'appel que votre fonction doit parcourir lorsqu'il
 y a quatre objets de tailles respectives $\{ 5, 4, 3, 2 \}$ pour une capacité
@@ -251,14 +319,21 @@ de 15.
 
   \includegraphics[width=\linewidth]{fig/arbre-appels.fig}  
 
-  Ouaip, y'a pas de bactraking. Car le sac est trop grand, ca tient tout dedans.
+  Ouaip, il faut explorer tout l'arbre car le sac est trop grand, tout tient
+  dedans -- même pas drôle.
 \end{Reponse}
 
-\Question Même question avec un sac de capacité 10.
+\Question Même question avec un sac de capacité 8.
 
 \begin{Reponse}
-  Là, faut couper des branches. Comme par exemple 5,4,3 (pas besoin de tenter
-  de mettre 2 en plus, ca tient déjà pas à 5,4,3).
+  Là, on peut  couper pas mal de branches. Par exemple, on n'a pas besoin d'aller au
+  delà de 5,4 car le sac éclate déjà avec seulement 5 et 4. Ça ne risque donc
+  pas d'aller mieux en ajoutant plus de choses. Donc pas besoin d'explorer le
+  sous-arbre gauche.
+
+  Attention cependant, nous n'avons pas vu la notion de backtracking en
+  cours. Mais c'est pas grave, car ce problème n'est pas vraiment un
+  backtracking vu qu'il n'y a pas de boucle.
 \end{Reponse}
 
 \medskip Réfléchissez à la structure de votre programme. Il s'agit d'une
@@ -268,14 +343,26 @@ propos des tours de Hanoï. Il est probable que vous ayez à introduire une
 fonction récursive dotée de plus de paramètres que la méthode
 \texttt{cherche()}.
 
-\Question Quel sera le prototype de la fonction d'aide?
+\Question Quel sera le prototype de la fonction d'aide? Quel sera le prototype
+de la fonction récursive?
 
 \begin{Reponse}
-  \noindent\texttt{%
-  void cherche() \{\\
-  \null~~cherche\_helper(int profondeur, KnapsackSolution etat\_courant);\\
-  \}    
+  Le mieux est de faire un prototype qui soit exactement celui de l'énoncé pour
+  la fonction d'aide. Une ruse est de définir la fonction récursive
+  \textbf{dans} la fonction d'aide. Comme ça, on est sûrs que personne ne va
+  l'appeller en initialisant les paramètres n'importe comment, et en plus, ca
+  lui permet de voir les paramètres de \texttt{cherche()}
+  \begin{Verbatim}
+/** La fonction publique, pour chercher la meilleure solution */
+def cherche(poids:Array[Int] , capacite:Int) {
+
+  /* Appel à chercheRec ici, et affichage du résultat */
+  
+  def chercheRec(profondeur:Int, courante:Array[Boolean]) {
+    /* Code récursif ici */
   }
+}    
+  \end{Verbatim}
 \end{Reponse}
 
 \Question Explicitez en français l'algorithme à écrire. Le fonctionnement en
@@ -288,13 +375,13 @@ l'idée pour chaque étage de la récursion.
   droite]. À chaque étage, c'est très similaire une fois qu'on a vu que c'est
   à  l'objet N qu'on s'intéresse à l'étage N.
 
-  Un autre piège à expliciter est qu'on a vu en cours des backtracking avec une
-  boucle, et ici y'a pas de boucle. C'est qu'on parcours l'ensemble \{pris, pas
-  pris\} alors on fait pas une vraie boucle. A la place, on teste les deux cas
-  explicitement.
+  Tâchez de ne pas prononcer le mot backtracking car (1) ils ne savent pas ce
+  que c'est (2) ce n'est pas vraiment un backtracking comme on verra en cours vu
+  qu'on a pas de boucle au sein de la récursion. Au lieu de parcourir l'ensemble
+  \{pris, pas pris\} avec une vraie boucle, on teste les deux cas explicitement.
 
-  Il faut qu'ils comprennent car la semaine prochaine, on refait un autre
-  backtracking.
+  Il faut qu'ils comprennent l'idée de couper des branches dans une recherche
+  exhaustive, car on recommence la semaine prochaine...
 \end{Reponse}
 
 \Exercice\textbf{Implémentation d'une solution au problème du sac à dos}
