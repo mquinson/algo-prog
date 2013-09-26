@@ -852,34 +852,34 @@ res3: Int = 10
         \SetKwFunction{Hanoi}{hanoi}
 
         \SetKwProg{Fn}{Function}{ is}{}
-        \Fn{\Hanoi(n, a, b)}{
+        \Fn{\Hanoi(n, from, to, other)}{
           \uIf{n = 1}{
-            \move(a, b)
+            \move(from, to)
           }
           \Else{
-            \Hanoi(n-1, a, c)\;
-            \move(a, b)\;
-            \Hanoi(n-1, c, a)\;
+            \Hanoi(n-1, from, other)\;
+            \move(from, to)\;
+            \Hanoi(n-1, other, to)\;
           }
         }
       \end{function}
     \end{column}      
-        \begin{column}{.35\textwidth}
+        \begin{column}{.48\textwidth}
           \uncover<3->{
       \begin{boitecode}{}
-def hanoi(n:Int, a:Int, b:Int) = 
+def hanoi(n:Int, from:Int,to:Int,other:Int)=
 
 ~~if (n == 1) \{
 
-~~~~move(a,b)
+~~~~move(from, to)
 
-~~\} else \{
+~~\}~else \{
 
-~~~~hanoi(n-1, a, c)
+~~~~hanoi(n-1, from, other, to)
 
-~~~~move(a,b)
+~~~~move(from, to)
 
-~~~~hanoi(n-1, c, a)    
+~~~~hanoi(n-1, other, to, from)    
 
 ~~\}        
 
@@ -902,27 +902,27 @@ def hanoi(n:Int, a:Int, b:Int) =
           \SetKwFunction{Hanoi}{hanoi}
 
           \SetKwProg{Fn}{Function}{ is}{}
-          \Fn{\Hanoi(n, a, b)}{
+          \Fn{\Hanoi(n, from, to, other)}{
             \uIf{n $\neq$ 0}{
-              \Hanoi(n-1, a, c)\;
-              \move(a, b)\;
-              \Hanoi(n-1, c, a)\;
+              \Hanoi(n-1, from, other, to)\;
+              \move(from, to)\;
+              \Hanoi(n-1, other, to, from)\;
             }
           }
         \end{function}
     \end{column}
-    \begin{column}{.35\textwidth}
+    \begin{column}{.48\textwidth}
       \uncover<3->{
       \begin{boitecode}{}
-def hanoi(n:Int, a:Int, b:Int) = 
+def hanoi(n:Int, from:Int,to:Int,other:Int)= 
 
 ~~if (n != 0) \{
 
-~~~~hanoi(n-1, a, c)
+~~~~hanoi(n-1, from, other, to)
 
-~~~~move(a,b)
+~~~~move(from, to)
 
-~~~~hanoi(n-1, c, a)    
+~~~~hanoi(n-1, other, to, from)    
 
 ~~\}        
 
