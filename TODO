@@ -1,35 +1,6 @@
 Faut prévoir une séance de TD d'une heure pour les dossiers et IUT
 pour les introduire à la PLM et au scala.
 
-Syllabus:
- Semaine 1:
-   CM: intro, complexité, algorithmes de tri
-   TD: Complexité, borne des tris comparatifs et tri par dénombrement
-   TP: Les algorithmes de tri dans la PLM
- Semaine 2:
-   CM: récursivité: principe, recette de cuisine, fonctions classiques
-   TD: Chaines récursives
-   TP: Dessins récursifs en PLM
- Semaine 3:
-   CM: tri récursifs, preuve d'algorithmes récursifs
-   TD: Fin des chaines récursives
-   TP: Fin des exos PLM (tris et dessins récursivité)
- Semaine 4: 
-   (pas de CM)
-   TD: recherche dichotomique, débroussaillage du probleme du sac à dos
-   TP: sac à dos
- Semaine 5: 
-   TDP: Pyramides
- Semaine 6:
-   CM: Dérécursivation
-   TD: dérécursivation
-   TD: Récipients
- Semaine 7: 
-   CM: Algorithmes randomisés ? Glouton ? Dynamique ?
-   TP: 
-   TP:
-
-
 CM1:
  * trop plein, j'ai pas eu le temps de faire bubble sort
    -> Il faut couper les bouts sur la complexité, le programming at
@@ -37,14 +8,31 @@ CM1:
       justifier le scala, et on vire les machines de rudberg.
  * On peut améliorer encore la présentation en intro du SE 
     http://www.lore.ua.ac.be/Teaching/SE3BAC/slides2007/
+CM3 (tris récursifs et preuve) 
+ * Cet amphi, c'est que du blabla. Je justifie les algos de tri, je
+   justifie les preuves, je justife tout. Mais à part ca, je présente
+   2 algos, je montre sans les expliquer les règles de calcul des WP
+   et j'explique rapidement comment montrer des fonctions récursives 
+   triviales. Rien de pratique, au fond.
+ * Il faut raccourcir la justif des tris. C'est amusant, mais ca sert
+   à rien. 2 slides au lieu de 4 semble bien.
+ * Il faut virer le slide qui dit que prouver le code trivial est
+   difficile. C'est une réponse aux cours que j'ai repris en arrivant
+   à l'esial, mais y'a prescription.
+ * La justif des preuves est un peu longue aussi. Je serais plus
+   convainquant en montrant un cas où les preuves saycool plutot qu'en 
+   argumentant comment ca peut être cool.
+ * Il faut virer les règles de réécriture présentées comme un logicien
+   (avec une pseudo fraction). Ca fait bien du plaisir de savoir qu'on
+   peut l'écrire comme ca, mais ca n'avance pas le débat.
+ * Faut commencer la présentatino des preuves (après courte
+   motivation/justif quand meme)  directement sur le calcul des WP, et
+   l'appliquer à un exemple.
  
-CM2: un peu vide. En finissant CM1, j'avais encore 20mn vide
-  Un truc qui manque est la correction et la terminaison. On 
-    reviendra sérieusement dessus plus tard, mais faut en parler 
 CM2: mettre un peu de youtube pour la visu des tris
    http://www.youtube.com/watch?v=vxENKlcs2Tw
    http://www.sorting-algorithms.com/
-CM3: bien balancé, mais j'ai vraiment pris mon temps sur la fin
+CM4: bien balancé, mais j'ai vraiment pris mon temps sur la fin
  * La partie "derecursivation" prend presque visage humain
   * il manque le schéma général "comment dérécursiver un algo"
     Etat initial: algo rec; etat final: algo iterative
@@ -120,8 +108,6 @@ pour éviter que les groupes pas trop rapides ne fassent que les
 questions inintéressantes du début. En fait, le cheminement de ce TD
 n'est pas vraiment linéaire, et il faut l'expliciter.
 
-TD2: il faut le convertir à scala, c'est urgent
-
 TP2 (récursion): il faut insister sur le dessin d'arbre car c'est
 fondamental pour la suite. En particulier:
  * il faut expliciter le fait qu'un étage donné doit remettre la
@@ -141,9 +127,6 @@ fondamental pour la suite. En particulier:
     donné par induction)
 
 TDP3 (knapsack):
-* Le piège est qu'on fait pas vraiment de boucle dans ce backtracking
-là. Enfin, si, mais sur l'ensemble des valeurs booleenes, et du coup
-on l'écrit en éclaté.
 * Renomer les classes en "Sac à dos" pour KSSolution et "Ali Baba"
 pour KS, c'est plus expressif
 * Il faut demander l'arbre d'appel
