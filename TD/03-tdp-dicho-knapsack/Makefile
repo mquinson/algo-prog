@@ -1,10 +1,19 @@
 TARGET=$(shell ls *.tex |grep -v enonce.tex|grep -v correction.tex|sed 's/\.tex$$//')
-DISTDIR=/home/mquinson/public_html/Teaching/TOP/
+DISTDIR=/home/mquinson/wiki/Teaching/TOP/
 
 all: pdf
 
-publish: enonce
-	cp $(TARGET)-enonce.pdf $(DISTDIR)
+publish: $(TARGET)-enonce.pdf $(TARGET)-correction.pdf scala/knapsack.jar scala/knapsack.scala
+	cp $^ $(DISTDIR)
+	chmod +x $(DISTDIR)/knapsack.jar
+	scp $(TARGET)-enonce.pdf scala/knapsack.jar scala/knapsack.scala neptune:/home/depot/1A/TOP/TD3-knapsack
+	ssh neptune "chmod +x /home/depot/1A/TOP/TD3-knapsack/knapsack.jar"
+
+scala/knapsack.jar: scala/knapsack-solution.scala
+	cd scala ; ant jar
+
+scala/knapsack.scala: scala/knapsack-solution.scala
+	cd scala ; ant template
 
 enonce:
 	echo \\documentclass[10pt]{article}\\usepackage{esial} > $(TARGET)-enonce.tex
@@ -38,4 +47,5 @@ correction:
 include /usr/include/LaTeX.mk 
 
 clean:: 
+	cd scala ; ant clean
 	rm -f *.class *~
