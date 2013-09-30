@@ -251,7 +251,7 @@ vous représenter un sac à dos donné ?
 %   \includegraphics{fig/diagramme-classe.fig}
 % \end{Reponse}
 
-\Question Écrivez les méthodes \texttt{prendreObjet()}, \texttt{poseObjet()} et
+\Question Écrivez les méthodes \texttt{mettreDansSac()}, \texttt{retireDuSac()} et
 \texttt{estPris()} qui simplifient l'usage de votre structure de données.
 
 \begin{Reponse}
@@ -260,13 +260,13 @@ vous représenter un sac à dos donné ?
   \begin{Verbatim}
 /** indique dans le paramètre que l'objet spécifié est maintenant pris
     (cette fonction est juste là pour se simplifier la vie) */
-def prendObjet(objets:Array[Boolean], obj:Int) {
+def mettreDansSac(objets:Array[Boolean], obj:Int) {
     if (objets(obj)) 
         println("L'objet "+obj+" est déjà pris; ignore la requete");
     objets(obj) = true
 }
 /** indique dans le paramètre que l'objet spécifié est maintenant posé */
-def poseObjet(objets:Array[Boolean], obj:Int) {
+def retireDuSac(objets:Array[Boolean], obj:Int) {
     if (!objets(obj)) 
         println("L'objet "+obj+" est déjà posé; ignore la requete");
      objets(obj) = false

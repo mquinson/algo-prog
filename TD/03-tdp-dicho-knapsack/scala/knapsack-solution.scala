@@ -43,13 +43,13 @@ def dupplique(src:Array[Boolean], dst:Array[Boolean]) {
 
 /** indique dans le paramètre que l'objet spécifié est maintenant pris
     (cette fonction est juste là pour se simplifier la vie) */
-def prendObjet(objets:Array[Boolean], obj:Int) {
+def mettreDansSac(objets:Array[Boolean], obj:Int) {
     if (objets(obj)) 
         println("L'objet "+obj+" est déjà pris; ignore la requête.");
     objets(obj) = true
 }
 /** indique dans le paramètre que l'objet spécifié est maintenant posé */
-def poseObjet(objets:Array[Boolean], obj:Int) {
+def retireDuSac(objets:Array[Boolean], obj:Int) {
     if (!objets(obj)) 
         println("L'objet "+obj+" est déjà posé; ignore la requête.");
      objets(obj) = false
@@ -120,11 +120,11 @@ def cherche(poids:Array[Int] , capacite:Int) {
 						           
 					
     /* Prend l'objet et récurse */
-    prendObjet(courante,profondeur);
+    mettreDansSac(courante,profondeur);
     chercheRec(profondeur+1, courante);
 	
     /* Pose l'objet et récurse */
-    poseObjet(courante, profondeur);
+    retireDuSac(courante, profondeur);
     chercheRec(profondeur+1, courante);
 				
   }
