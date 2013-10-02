@@ -1,5 +1,5 @@
 \documentclass[10pt]{article}\usepackage[correction,nu]{esial}
-\TOP\1A
+\TOP
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -11,40 +11,46 @@
 \title{TDP4 : Récursivité (pyramide)}
 \maketitle
 
-L'objectif de ce TD et du TP associé est de réaliser un algorithme de
-recherche avec retour arrière pour résoudre ce qu'on appelle le problème de
+L'objectif de ce TD et du TP associé est de découvrir la notion d'algorithme de
+recherche avec retour arrière (backtracking) au travers du problème classique de
 la pyramide.
+
+\begin{Reponse}
+  Pour plus de fun, l'amphi correspondant est la semaine prochaine. On appelle
+  ça de l'enseignement inversé (ou un module mal préparé, aussi).
+\end{Reponse}
+
 
 \paragraph{Présentation du problème}
 
-On considère une pyramide la tête en bas de hauteur $n$ comme celle
+On considère une pyramide la tête en bas de hauteur $h$ comme celle
 représentée plus bas. On cherche à remplir toutes les cases avec chacun des
-entiers compris entre $1$ et $\frac{n(n+1)}{2}$ en respectant les contraintes
+entiers compris entre $1$ et $\frac{h(h+1)}{2}$ en respectant les contraintes
 suivantes:
 
 \begin{minipage}{.8\linewidth}
 \begin{enumerate}
-\item Chaque nombre de $\left[1,\frac{n(n+1)}{2}\right]$ ne figure qu'une fois sur la pyramide
+\item Chaque nombre de $\left[1,\frac{h(h+1)}{2}\right]$ ne figure qu'une fois sur la pyramide
 \item La valeur de chaque case est égale à la différence des deux cases placées
   au dessus d'elle.
   Ainsi sur la figure ci-contre, $n_3=|n_1 - n_2|$
 \end{enumerate}  
 \end{minipage}~\begin{minipage}{.2\linewidth}
   \centering
-  \includegraphics{fig/pyramide.fig} % \vspace{-.5\baselineskip}
-%  \caption{Exemple de pyramide de hauteur 2.}
-%  \label{fig:exemple}
+  \includegraphics{img/pyramide3.pdf} 
 \end{minipage}
 
 
-\noindent Certaines instances du problème (certains $n$) n'admettent pas de
+\noindent Ce problème se pose par exemple lorsque l'on cherche à disposer les
+boules de billards en respectant les contraintes données (dans ce cas,
+$h=5$). Certaines instances du problème (certains $h$) n'admettent pas de
 solution (cf. dernier exercice).
 
 \begin{Exercice}\textbf{Représentation mémoire}
 
   \noindent La première idée pour représenter la pyramide est d'utiliser la
-  moitié d'un tableau à deux dimensions (\texttt{int pyr[ ][ ]}), mais l'autre
-  moitié serait réservée pour rien.
+  moitié d'un tableau à deux dimensions (\texttt{Array[Array[Int]]}), mais une
+  seule moitié serait utilisée et l'autre serait réservée pour rien.
 
   Pour économiser la mémoire, nous allons utiliser un tableau à une dimension
   en rangeant les différentes «tranches de pyramides» les unes à coté des
@@ -88,11 +94,14 @@ solution (cf. dernier exercice).
   \hfill\texttt{indiceLigne(3,2)=4} ; \hfill\texttt{indiceLigne(4,2)=7}. 
 \end{Question}
 \begin{Reponse}
-\begin{verbatim}
-  private int indiceLigne(int lig, int diag){
-    return (lig * (lig - 1 ) / 2 + diag - 1);
-  }
-\end{verbatim}
+  Pas la peine de les laisser bloquer trop longtemps sur ce problème. On peut
+  leur donner assez rapidement, et les laisser chercher la question suivante,
+  plutôt.
+
+\begin{Verbatim}
+def indiceLigne(lig:Int, diag:Int): Int  =  lig * (lig - 1 ) / 2 + diag - 1
+\end{Verbatim}
+(oui, scala permet de définir une fonction sur une ligne sans accolade de la sorte)
 \end{Reponse}
 
 
@@ -104,14 +113,10 @@ solution (cf. dernier exercice).
   \hfill\texttt{indiceColonne(2,3)=4} ; \hfill\texttt{indiceColonne(2,4)=7}.
 \end{Question}
 \begin{Reponse}
-\begin{verbatim}
-  //@requires lig >= 1 && lig <= hauteur() && diag >= lig && diag <= hauteur();
-  private  /*@pure@*/ int indiceColonne(int lig, int diag) {
-    return (diag * (diag - 1 ) / 2 + lig - 1);
-  }\end{verbatim}%
-
-Faut au moins qu'ils trouvent la deuxième depuis la première semble tout à fait
-possible.
+\begin{Verbatim}
+// précondition: lig >= 1 && lig <= hauteur() && diag >= lig && diag <= hauteur();
+def indiceColonne(lig:Int, diag:Int):Int = diag * (diag - 1 ) / 2 + lig - 1
+\end{Verbatim}
 \end{Reponse}
 
 \begin{Exercice}\textbf{Algorithme «générer puis tester« (première approche)}
@@ -128,67 +133,43 @@ possible.
   entiers.
 \end{Question}
 \begin{Reponse}
-  Récursif, et pour chaque position, on prend tous les nombres pas encore
-  pris. Autrement dit, c'est du back-tracking... C'est une bonne version
-  simplifiée de ce qui vient après. Pour faire propre, le mieux est de sortir
-  un itérateur. Mais comme c'est un peu pénible de couper la récursion au
-  milieu et de se souvenir de où on est, le plus simple est de générer
-  brutalement toutes les permutations à parcourir d'abord, puis d'itérer bien
-  gentiment dessus. C'est brutal, ca a des perfs de daube, mais à ce point, on
-  s'en tape. Et en plus, pour l'itération, on fait de la délégation (ie, on
-  réutilise Iterator de ArrayList sans réfléchir).
-
-  \begin{Verbatim}
-public class PermutIter implements Iterator {
-  private ArrayList<int[ ]> elems;
-  private Iterator<int[ ]> it;
-
-  public PermutIter(int taille) {
-    elems = new ArrayList<int[ ]>();
-    genere(new int[taille], 0);
-    it = elms.iterator();
-  }
-  public int[ ] next() {
-    return it.next();
-  }
-  public boolean hasNext() {
-    return it.hasNext();
-  }
-  private genere(int [ ] tab, int rang) {
-    // cas de base 
-    if (rang == tab.length) {
-      elems.add(tab.clone());
-      return;
-    }
-    // cas général
-    for (int n=0; n<tab.length; n++) {
-      if (! contains(tab, n, rang)) {
-        tab[rang] = n;
-        genere(tab, rang+1);
-      }
-    }
-  }
-  private boolean contains(int[ ] tab, int value, int rang) {
-    // trivial, right? On ne regarde que dnas les rang premières cases
-  }
-}
-  \end{Verbatim}
-  Pour leur faire trouver, faut faire à la main ("parametre de récursion", "cas
-  de base", etc). Mais ca suffit pas, faut les convaincre que ca
-  fonctionne. Pour aider, prendre le cas pour 3: ca génère (dans l'ordre)
-  012, 021, 102, 120, 201, 210. Faut faire sentir les appels
-  récursifs. Dessiner un arbre des appels peut aider, si vous en sentez le
-  besoin. 
+  Générer les permutations est un code classique qu'il faut avoir vu une
+  fois. C'est une bonne version simplifiée de ce qui vient après.  Quelques
+  pistes pour les aider à trouver ce code:
+  \begin{itemize}
+  \item Énumérer à la main les permutations pour n=3 (321 312 231 213 132 123)
+  \item Faire l'arbre d'appels comme on avait fait pour le knapsack, sauf qu'il
+    n'y a pas un nombre constant d'éléments à chaque point
+  \item Appliquer la recette de récursion classique:
+    \begin{itemize}
+    \item Paramètre de récursion: position en cours de remplissage (on a une
+      permutation à sauvegarder)
+    \item Cas trivial: quand la position est au delà du tableau
+    \item Aide apportée par le bon génie: remplir correctement les positions suivantes
+    \item Traitement à l'étage courant de récursion: Pour toutes les valeurs
+      possibles, si une valeur n'est pas encore utilisée, la mettre et remplir
+      le reste.
+    \end{itemize}
+  \item (vos idées sont bienvenues pour augmenter la liste)
+  \end{itemize}
+ 
+  \newcommand*\FancyVerbStopString{// Fin génération, début du test}
+  \VerbatimInput{scala/permutations.scala}
 \end{Reponse}
 
 \begin{Question}
-  Écrivez la fonction \texttt{correcte()} qui teste récursivement si la
-  pyramide est valide.
+  Écrivez la fonction \texttt{correcte()} qui teste si une permutation donnée
+  forme une pyramide valide. Il suffit de vérifier que chaque élément est la
+  différence de ceux placés au dessus, puisque toutes les valeurs sont présentes
+  par construction. La fonction \texttt{indiceLigne()} est utile ici.
 \end{Question}
 \begin{Reponse}
-  \noindent\framebox{\vbox{\noindent\textbf{Note}: C'est un bon moment pour
-      rappeler qu'en Java, on peut avoir plusieurs fonctions de même nom, mais
-      de profils différents.}}
+  On peut tout aussi bien utiliser indiceColonne, c'est pareil. On peut faire
+  cette fonction en récursif (sur la ligne), mais c'est compliqué pour pas grand chose.
+
+  \newcommand*\FancyVerbStopString{blablablabla}
+  \newcommand*\FancyVerbStartString{// Fin génération, début du test}
+  \VerbatimInput{scala/permutations.scala}
 
   \noindent\framebox{\vbox{De plus, les tests sur contains sont inutiles ici
     (puisque c'est vrai par construction), mais c'est la fonction qu'il
