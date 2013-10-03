@@ -33,7 +33,7 @@ def genere(rang:Int, tab:Array[Int]) { // Génère les permutations
   }
 }
 
-genere(0, Array.fill(taille)(0)) // Le paramètre qui dit la taille, c'est le paramètre de fill (6 ici)
+genere(0, Array.fill(taille)(0)) 
 
 println("Trouvé "+permutations.size+" permutations")
 for (tab <- permutations) {
@@ -44,22 +44,26 @@ println
 
 // Fin génération, début du test
 
-// précondition: ligne >= 1 && ligne <= hauteur && diag <= ligne && diag <= hauteur
-def indiceLigne(ligne:Int, diag:Int): Int  = {
+// précondition: 1 <= col <= ligne <= hauteur 
+def indiceLigne(ligne:Int, col:Int): Int  =  {
  if (ligne<1 || ligne > hauteur)
    println("ligne "+ligne+" pas définie")
- if (diag>ligne || diag > hauteur)
-   println("diag "+diag+" pas définie à la ligne "+ligne)
- return ligne * (ligne - 1 ) / 2 + diag - 1
+ if (col<1 || col>ligne)
+   println("col "+col+" pas définie à la ligne "+ligne)
+ return ligne * (ligne - 1 ) / 2 + col - 1
 }
+
+println("indiceLigne(1,1): expect 0, got "+indiceLigne(1,1))
+println("indiceLigne(2,2): expect 2, got "+indiceLigne(2,2))
+println("indiceLigne(3,2): expect 4, got "+indiceLigne(3,2))
+println("indiceLigne(4,2): expect 7, got "+indiceLigne(4,2))
 
 def correcte(tab:Array[Int]): Boolean = {
   var permutation = new String()
   for (i <- 0 to tab.length-1) permutation += tab(i)
 
   for (ligne <- 1 to hauteur-1) 
-    for (diag <- 1 to ligne-1) {
-      println(permutation+"("+ligne+","+diag+") ")
+    for (diag <- 1 to ligne) {
       val n1 = tab(  indiceLigne(ligne+1, diag+1)  )
       val n2 = tab(  indiceLigne(ligne+1, diag)    )
       val n3 = tab(  indiceLigne(ligne,   diag)    )

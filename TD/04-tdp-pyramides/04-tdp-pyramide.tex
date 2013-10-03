@@ -1,10 +1,11 @@
 \documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+%\documentclass[10pt]{article}\usepackage[nu]{esial}
 \TOP
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
 \usepackage{amstext,amsmath,amsfonts}
-\usepackage{fancyvrb}
+\usepackage{fancyvrb, wrapfig}
 
 \begin{document}
 \color{black}
@@ -17,7 +18,7 @@ la pyramide.
 
 \begin{Reponse}
   Pour plus de fun, l'amphi correspondant est la semaine prochaine. On appelle
-  ça de l'enseignement inversé (ou un module mal préparé, aussi).
+  ça de l'enseignement inversé (ou un module mal préparé, au choix).
 \end{Reponse}
 
 
@@ -44,82 +45,88 @@ suivantes:
 \noindent Ce problème se pose par exemple lorsque l'on cherche à disposer les
 boules de billards en respectant les contraintes données (dans ce cas,
 $h=5$). Certaines instances du problème (certains $h$) n'admettent pas de
-solution (cf. dernier exercice).
+solution (cf. dernier exercice) tandis que d'autres admettent plusieurs
+solutions (8 solutions pour $h=3$).
 
 \begin{Exercice}\textbf{Représentation mémoire}
-
   \noindent La première idée pour représenter la pyramide est d'utiliser la
-  moitié d'un tableau à deux dimensions (\texttt{Array[Array[Int]]}), mais une
-  seule moitié serait utilisée et l'autre serait réservée pour rien.
-
-  Pour économiser la mémoire, nous allons utiliser un tableau à une dimension
-  en rangeant les différentes «tranches de pyramides» les unes à coté des
-  autres. Selon la façon de couper ces tranches, il existe de nombreuses
-  manières de numéroter les cases. Les figures \ref{fig:numligne} et
-  \ref{fig:numcol} présentent deux numérotations différentes.
+  moitié d'un tableau à deux dimensions de type \texttt{Array[Array[Int]]}, mais
+  une seule moitié serait utilisée et l'autre serait réservée pour rien.
 \end{Exercice}
 
 \begin{figure}[h]
   \centering
   \includegraphics[scale=.9]{fig/ligne.fig}\vspace{-.5\baselineskip}
-  \caption{Représentation mémoire.}
-  \label{fig:mem}\vspace{-1.5\baselineskip}
+  \caption{Représentation mémoire contiguë.}
+  \label{fig:mem}%\vspace{-1.5\baselineskip}
 \end{figure}
 
-\begin{figure}[h]
-  \begin{minipage}{.45\linewidth}
-    \centering
-    \includegraphics[scale=.9]{fig/pyramide-case-ligne.fig}\vspace{-.5\baselineskip}
-    \caption{Une numérotation par lignes.}
-    \label{fig:numligne}
-  \end{minipage}\hfill%
-  \begin{minipage}{.45\linewidth}
-    \centering
-    \includegraphics[scale=.9]{fig/pyramide-case-col.fig}\vspace{-.5\baselineskip}
-    \caption{Une numérotation par colonnes.}
-    \label{fig:numcol}
-  \end{minipage}\vspace{-1\baselineskip}
-\end{figure}
+
+  % \begin{minipage}{.45\linewidth}
+  %   \centering
+  %   \includegraphics[scale=.9]{fig/pyramide-case-col.fig}\vspace{-.5\baselineskip}
+  %   \caption{Une numérotation par colonnes.}
+  %   \label{fig:numcol}
+  % \end{minipage}\vspace{-1\baselineskip}
+
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \vspace{-1.2\baselineskip}
+  \centerline{\includegraphics[scale=.9]{img/numerotation-ligne.pdf}}
+  \vspace{-.5\baselineskip}
+  \caption{Numérotation en ligne.}
+  \label{fig:numligne}
+  \vspace{-1.5\baselineskip}
+  
+\end{wrapfigure}
+
+Pour économiser la mémoire, nous allons utiliser un tableau à une dimension en
+rangeant les différentes «tranches de pyramides» les unes à coté des
+autres. Selon la façon de couper ces tranches, il existe de nombreuses manières
+de numéroter les cases. Nous allons pour instant prendre la plus simple, c'est à
+dire numéroter les cases par lignes comme sur la figure ci-contre.
+
+Il nous faut définir une fonction \texttt{indiceLigne(ligne,colonne)} calculant
+l'indice de la case placée sur la \texttt{ligne} et sur la \texttt{colonne}
+indiquée en suivant cette numérotation. Notez que:\\
+\texttt{indiceLigne(1,1)=0} ; \texttt{indiceLigne(2,2)=2};\\
+\texttt{indiceLigne(3,2)=4} ; \texttt{indiceLigne(4,2)=7}. 
 
 \begin{Question}
-  Écrivez une fonction \texttt{indiceLigne(ligne,colonne)} calculant l'indice de la
-  case placée sur la \texttt{ligne} et sur la \texttt{colonne} indiquée en
-  suivant la numérotation par lignes représentée sur la
-  figure~\ref{fig:numligne}.
-
+  Écrivez cette fonction \texttt{indiceLigne(ligne,colonne)}, et explicitez ses préconditions.
   \noindent\textsc{Indication:} calculez le nombre de case dans la pyramide de
-  taille \texttt{ligne}.
-
-  \noindent\texttt{indiceLigne(1,1)=0} ;\hfill\texttt{indiceLigne(2,2)=2} ;
-  \hfill\texttt{indiceLigne(3,2)=4} ; \hfill\texttt{indiceLigne(4,2)=7}. 
+  hauteur \texttt{ligne}.
 \end{Question}
 \begin{Reponse}
-  Pas la peine de les laisser bloquer trop longtemps sur ce problème. On peut
-  leur donner assez rapidement, et les laisser chercher la question suivante,
-  plutôt.
+  Pas la peine de les laisser bloquer trop longtemps sur ce problème, il n'en
+  vaut pas la peine.
+% On peut
+%   leur donner assez rapidement, et les laisser chercher la question suivante,
+%   plutôt.
 
 \begin{Verbatim}
-def indiceLigne(lig:Int, diag:Int): Int  =  lig * (lig - 1 ) / 2 + diag - 1
+// précondition: 1 <= col <= lig <= hauteur 
+def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
 \end{Verbatim}
 (oui, scala permet de définir une fonction sur une ligne sans accolade de la sorte)
 \end{Reponse}
 
 
-\begin{Question}
-  Écrivez \texttt{indiceColonne(ligne,col)} utilisant la numérotation par
-  colonnes de la figure~\ref{fig:numcol}.
+% \begin{Question}
+%   Écrivez \texttt{indiceColonne(ligne,col)} utilisant la numérotation par
+%   colonnes de la figure~\ref{fig:numcol}.
 
-  \noindent\texttt{indiceColonne(1,1)=0} ; \hfill\texttt{indiceColonne(2,2)=2} ;
-  \hfill\texttt{indiceColonne(2,3)=4} ; \hfill\texttt{indiceColonne(2,4)=7}.
-\end{Question}
-\begin{Reponse}
-\begin{Verbatim}
-// précondition: lig >= 1 && lig <= hauteur() && diag >= lig && diag <= hauteur();
-def indiceColonne(lig:Int, diag:Int):Int = diag * (diag - 1 ) / 2 + lig - 1
-\end{Verbatim}
-\end{Reponse}
+%   \noindent\texttt{indiceColonne(1,1)=0} ; \hfill\texttt{indiceColonne(2,2)=2} ;
+%   \hfill\texttt{indiceColonne(2,3)=4} ; \hfill\texttt{indiceColonne(2,4)=7}.
+% \end{Question}
+% \begin{Reponse}
+% \begin{Verbatim}
+% // précondition: lig >= 1 && lig <= hauteur() && diag >= lig && diag <= hauteur();
+% def indiceColonne(lig:Int, diag:Int):Int = diag * (diag - 1 ) / 2 + lig - 1
+% \end{Verbatim}
+% \end{Reponse}
 
-\begin{Exercice}\textbf{Algorithme «générer puis tester« (première approche)}
+\begin{Exercice}\textbf{Algorithme «générer puis tester» (première approche)}
 
   \noindent La première idée est de générer toutes les pyramides existantes,
   puis de vérifier à postériori si elles vérifient les contraintes ou non. Il
@@ -164,95 +171,24 @@ def indiceColonne(lig:Int, diag:Int):Int = diag * (diag - 1 ) / 2 + lig - 1
   par construction. La fonction \texttt{indiceLigne()} est utile ici.
 \end{Question}
 \begin{Reponse}
-  On peut tout aussi bien utiliser indiceColonne, c'est pareil. On peut faire
-  cette fonction en récursif (sur la ligne), mais c'est compliqué pour pas grand chose.
+  On peut faire cette fonction en récursif (sur la ligne), mais c'est compliqué
+  pour pas grand chose.
 
   \newcommand*\FancyVerbStopString{blablablabla}
   \newcommand*\FancyVerbStartString{// Fin génération, début du test}
   \VerbatimInput{scala/permutations.scala}
-
-  \noindent\framebox{\vbox{De plus, les tests sur contains sont inutiles ici
-    (puisque c'est vrai par construction), mais c'est la fonction qu'il
-    faudra écrire plus tard pour faire fonctionner propage()}}
-
-	
-\begin{verbatim}
-   public /*@ pure @*/ boolean correcte(){
-       return correcte(hauteur);
-   } 
-
-    /* Renvoi vrai si la pyramide est correctement construite jusqu`à la diagonale diag */
-    //@ requires diag >= 0 && diag <= hauteur() ;
-    //@ ensures correcte() ;
-    private  /*@pure@*/ boolean correcte(int diag){
-        // Récursivité portant sur les diagonales de 1 à diag
-
-        if (diag == 0)
-          return true;
-
-        for (int lig=1; lig<=diag; lig++)
-          if (posCorrecte(lig,diag) == false)
-            return false;
-
-        return correcte(diag-1);
-    } // correcte(int)
-
-
-    /* Renvoi vrai si la position pointée est correcte */
-    //@ requires lig >= 1&& lig <= diag+1 
-    //@          && diag >= 1 && diag <= hauteur() ;
-    public  /*@pure@*/  boolean posCorrecte(int lig, int diag) {
-        int nbre = valueAt(lig,diag);
-
-        /* jamais le droit de sortir de [1..count] */
-        if (!nombreAutorise(nbre)) 
-            return false;
-
-        /* Aucune [autre] contrainte sur la premiere case */
-        if (lig == 1 && diag == 1)
-            return true;
-
-        /* il faut toujours être original */
-        if (contains(nbre,lig-1,diag)) 
-            return false;
-
-        /* Il faut être la différence des ancêtres (sauf sur la première ligne) */
-        if (lig > 1) {
-            int n1 = valueAt(lig-1,diag-1);
-            int n2 = valueAt(lig-1,diag);
-
-            if (nbre != Math.abs(n1 - n2) )
-                return false;
-        }
-
-        /* Tous les tests ont été passés avec succès */
-        return true;
-    } // diagonaleCorrecte(int, int)
-
-    /* Renvoie vrai si val est dans la pyramide avant la position (lig,diag) */
-    //@ requires lig >= 1 && lig <= hauteur() 
-    //@          && diag >= 1 && diag <= hauteur();
-    private  /*@pure@*/ boolean contains(int val, int lig, int diag) {
-        /* On tient compte de l'implantation de la pyramide par soucis d'optimisation */
-
-        int fin = indice(lig,diag);
-        for (int i=0; i < fin; i++) {
-
-            if (val == elements[i])
-                return true;
-        }
-
-        return false;
-    }//contains
-
-    /* Renvoi vrai si le nombre val est dans l'intervalle [ 1 .. count] */
-    private  /*@pure@*/ boolean nombreAutorise(int v){
-        return (v >= 1 && v <= count());
-    } 
- }
-
-\end{verbatim}\vspace{-2\baselineskip}~
 \end{Reponse}
+\begin{Question}
+  Sur machine, écrivez le code manquant pour trouver toutes les pyramides
+  convenables de hauteur 3.
+\end{Question}
+\begin{Reponse}
+  352164 341265 325461 314562 253614 235416 143625 134526
+
+  Notez qu'il n'y en a que 4 d'originales, les autres sont symétriquement
+  égales (dessinez-les). 
+\end{Reponse}
+
 \begin{Question}
   Dénombrez le nombre d'opérations que cet algorithme réalise.
 \end{Question}
@@ -263,23 +199,63 @@ def indiceColonne(lig:Int, diag:Int):Int = diag * (diag - 1 ) / 2 + lig - 1
     $n$ cases à tester donc, le gros if au milieu sera appellé $n$ fois sur
     l'ensemble des appels.
   \end{itemize}
-  La complexité est donc en $O(n\times n!)$, ce qui est \textbf{énorme}.
+  La complexité est donc en $O(n\times n!)$, ce qui est \textbf{énorme}. Que
+  ceux qui n'en sont pas convaincus tentent de calculer la hauteur 5 de cette
+  façon. Moi j'ai craqué avant la fin de la génération de la hauteur 4.
 \end{Reponse}
 
 \begin{Exercice}\textbf{Algorithme de construction pas à pas (deuxième approche)}
 
   \noindent La solution de l'exercice précédent est inefficace car elle
-  construit toutes les solutions possibles, même celles ne respectant pas les
-  contraintes du problème. Une amélioration possible consiste à vérifier à
-  chaque étape de la construction que ces contraintes sont respectée, et à
-  s'interrompre dès qu'un choix mène à une situation interdite.
+  construit toutes les solutions possibles, même celles ne respectant pas toutes
+  les contraintes du problème. Une amélioration possible consiste donc à
+  vérifier à chaque étape de la construction que ces contraintes sont respectée,
+  et à s'interrompre dès qu'un choix mène à une situation interdite.
+  On appelle ce genre d'algorithmes des algorithmes récursifs avec retour
+  arrière (\textit{backtracking algorithms} en anglais).
 
-  Il s'agit donc d'un algorithme récursif avec retour arrière.  Pour découvrir
-  le paramètre d'induction, il faut s'interroger sur la façon de couper une
-  pyramide en une pyramide de plus petite taille. La première façon est celle
-  dite «en ligne» (comme sur la figure~\ref{fig:encours:ligne}), on ajoute des
-  lignes plus longues. Le paramètre d'induction est alors le numéro de ligne en
-  cours de remplissage. Une autre façon est d'agir «en colonnes» (comme sur la
+  \begin{Question}
+    Modifiez la fonction correcte précédemment écrite afin qu'elle ne vérifie
+    que le début du tableau, sans considérer les éléments placés après le
+    paramètre \texttt{rang} qui ne sont pas initialisés.
+  \end{Question}
+
+  \begin{Reponse}
+    \newcommand*\FancyVerbStartString{// BEGIN CORRECTE}
+    \newcommand*\FancyVerbStopString{// END CORRECTE}
+    \VerbatimInput{scala/permutations2.scala}    
+  \end{Reponse}
+
+  \Question %
+  Modifiez l'algorithme de génération des permutations écrit plus tôt afin de
+  couper dès que la solution partiellement construite ne respecte pas la seconde
+  contrainte du problème $n_3=\left|n_1-n_2\right|$
+
+  \begin{Reponse}
+    \newcommand*\FancyVerbStartString{// BEGIN GENERE}
+    \newcommand*\FancyVerbStopString{// END GENERE}
+    \VerbatimInput{scala/permutations2.scala}    
+  \end{Reponse}
+
+  \Question %
+  Sur machine, comparez le temps d'exécution de cette version avec celle de la
+  version précédente pour la hauteur 3, et utilisez cette version pour chercher
+  les solutions pour la hauteur 5. 
+
+  Si on mesure (avec la fonction System.nanotime) le temps $t_1$ avant
+  l'opération et le temps $t_2$ après coup, la durée de l'opération en seconde
+  est $\frac{t_2-t_1}{10^9}$.
+
+ qui renvoi
+  l'heure courante en nanoseconde. Le temps pris est
+  $heure_{apres}-heure_{avant}$. Il faut diviser par $10^{9}$ pour convertir en secondes.
+
+Pour découvrir le paramètre d'induction,
+  il faut s'interroger sur la façon de couper une pyramide en une pyramide de
+  plus petite taille. La première façon est celle dite «en ligne» (comme sur la
+  figure~\ref{fig:encours:ligne}), on ajoute des lignes plus longues. Le
+  paramètre d'induction est alors le numéro de ligne en cours de
+  remplissage. Une autre façon est d'agir «en colonnes» (comme sur la
   figure~\ref{fig:encours:col}) on ajoute des «tranches» de la pyramide. Le
   paramètre d'induction est alors la diagonale en cours de traitement.
 \end{Exercice}
