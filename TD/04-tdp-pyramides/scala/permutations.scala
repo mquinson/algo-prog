@@ -64,8 +64,8 @@ def correcte(tab:Array[Int]): Boolean = {
 
   for (ligne <- 1 to hauteur-1) 
     for (diag <- 1 to ligne) {
-      val n1 = tab(  indiceLigne(ligne+1, diag+1)  )
-      val n2 = tab(  indiceLigne(ligne+1, diag)    )
+      val n1 = tab(  indiceLigne(ligne+1, diag)    )
+      val n2 = tab(  indiceLigne(ligne+1, diag+1)  )
       val n3 = tab(  indiceLigne(ligne,   diag)    )
 
 //      println(permutation+"("+ligne+","+diag+"): "+n3+". "+n1+"-"+n2+"="+math.abs(n1-n2))

@@ -61,15 +61,6 @@ solutions (8 solutions pour $h=3$).
   \label{fig:mem}%\vspace{-1.5\baselineskip}
 \end{figure}
 
-
-  % \begin{minipage}{.45\linewidth}
-  %   \centering
-  %   \includegraphics[scale=.9]{fig/pyramide-case-col.fig}\vspace{-.5\baselineskip}
-  %   \caption{Une numérotation par colonnes.}
-  %   \label{fig:numcol}
-  % \end{minipage}\vspace{-1\baselineskip}
-
-
 \begin{wrapfigure}{r}{0.35\textwidth}
   \vspace{-1.2\baselineskip}
   \centerline{\includegraphics[scale=.9]{img/numerotation-ligne.pdf}}
@@ -215,7 +206,9 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
   arrière (\textit{backtracking algorithms} en anglais).
 
   \begin{Question}
-    Modifiez la fonction correcte précédemment écrite afin qu'elle ne vérifie
+    Modifiez la fonction correcte précédemment écrite\footnote{Lors du TP sur
+      machine, vous devriez faire une copie de votre travail précédent afin de
+      pouvoir comparer les versions.} afin qu'elle ne vérifie
     que le début du tableau, sans considérer les éléments placés après le
     paramètre \texttt{rang} qui ne sont pas initialisés.
   \end{Question}
@@ -223,67 +216,148 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
   \begin{Reponse}
     \newcommand*\FancyVerbStartString{// BEGIN CORRECTE}
     \newcommand*\FancyVerbStopString{// END CORRECTE}
-    \VerbatimInput{scala/permutations2.scala}    
+    \VerbatimInput{scala/lignes.scala}    
   \end{Reponse}
 
   \Question %
   Modifiez l'algorithme de génération des permutations écrit plus tôt afin de
   couper dès que la solution partiellement construite ne respecte pas la seconde
-  contrainte du problème $n_3=\left|n_1-n_2\right|$
+  contrainte du problème $n_1=\left|n_2-n_3\right|$
 
   \begin{Reponse}
     \newcommand*\FancyVerbStartString{// BEGIN GENERE}
     \newcommand*\FancyVerbStopString{// END GENERE}
-    \VerbatimInput{scala/permutations2.scala}    
+    \VerbatimInput{scala/lignes.scala}    
   \end{Reponse}
 
   \Question %
   Sur machine, comparez le temps d'exécution de cette version avec celle de la
-  version précédente pour la hauteur 3, et utilisez cette version pour chercher
-  les solutions pour la hauteur 5. 
-
-  Si on mesure (avec la fonction System.nanotime) le temps $t_1$ avant
-  l'opération et le temps $t_2$ après coup, la durée de l'opération en seconde
-  est $\frac{t_2-t_1}{10^9}$.
-
- qui renvoi
-  l'heure courante en nanoseconde. Le temps pris est
-  $heure_{apres}-heure_{avant}$. Il faut diviser par $10^{9}$ pour convertir en secondes.
-
-Pour découvrir le paramètre d'induction,
-  il faut s'interroger sur la façon de couper une pyramide en une pyramide de
-  plus petite taille. La première façon est celle dite «en ligne» (comme sur la
-  figure~\ref{fig:encours:ligne}), on ajoute des lignes plus longues. Le
-  paramètre d'induction est alors le numéro de ligne en cours de
-  remplissage. Une autre façon est d'agir «en colonnes» (comme sur la
-  figure~\ref{fig:encours:col}) on ajoute des «tranches» de la pyramide. Le
-  paramètre d'induction est alors la diagonale en cours de traitement.
+  version précédente pour la hauteur 3.  Si on mesure (avec la fonction
+  System.nanotime) le temps $t_1$ avant l'opération et le temps $t_2$ après
+  coup, la durée de l'opération en secondes est $\frac{t_2-t_1}{10^9}$.
 \end{Exercice}
 
-\vspace{-\baselineskip}
-\begin{figure}[h] 
-  \begin{minipage}{.4\linewidth}
-    \centering
-    \includegraphics[scale=.8]{fig/pyramide-encours-ligne.fig}\vspace{-.5\baselineskip}
-    \caption{Remplissage partiel par lignes.}
-    \label{fig:encours:ligne}
-  \end{minipage}\hfill
-  \begin{minipage}{.4\linewidth} 
-    \centering
-    \includegraphics[scale=.8]{fig/pyramide-encours-col.fig}\vspace{-.5\baselineskip}
-    \caption{Remplissage partiel par colonnes.}
-    \label{fig:encours:col}
-  \end{minipage}
-\end{figure}
-\vspace{-.5\baselineskip}
+\ifcorrection{\newpage}{}
+\begin{Exercice}\textbf{Génération par tranches (amélioration de l'approche)}
+\end{Exercice}
 
-L'approche «en colonnes» est préférable car la seconde contrainte lie un nombre
-aux deux placés au dessus de lui. Il est donc naturel de chercher à traiter le
-nombre du dessous juste après un nombre donné. Cela permet de s'assurer que
-toute solution correcte aux étapes précédentes de la récursion ne gênera pas le
-respect de la seconde contrainte. Au contraire, il est possible que l'approche
-«en ligne» mène à une situation de blocage due à la seconde contrainte à
-l'étage $n$ nécessitant de modifier les étages inférieurs.
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \vspace{-.6\baselineskip}
+  \centerline{\includegraphics[scale=.9]{img/numerotation-diagonales.pdf}}
+  \vspace{-.5\baselineskip}
+  \caption{Numérotation diagonale.}
+  \label{fig:numdiag}
+   \vspace{-1.5\baselineskip}
+\end{wrapfigure}
+
+  Couper les branches menant à des solutions invalides comme dans l'exercice 3
+  s'avère incroyablement plus rapide que la précédente. Cela permet de trouver
+  des pyramides de hauteur 5 en quelques secondes. Mais pour aller plus loin, il
+  faut raffiner cette approche. 
+
+  Pour cela, l'objectif est de générer les contraintes le plus tôt possible,
+  pour s'éviter de d'agrandir des solutions partielles vouées à l'échec. Par
+  exemple, s'il s'avère impossible de placer une valeur dans la case 11 qui
+  respecte les contraintes, des cases comme 8, 9, 4, 5 ou 2 auront été remplies
+  pour rien. L'objectif est donc de changer l'ordre de remplissage pour détecter
+  les blocages le plus tôt possible et trouver les solutions plus vite.
+
+  L'approche «en colonnes» est préférable car la seconde contrainte lie un
+  nombre aux deux placés au dessus de lui. Il est donc naturel de chercher à
+  traiter le nombre du dessous juste après un nombre donné. Cela permet de
+  s'assurer que toute solution correcte aux étapes précédentes de la récursion
+  ne gênera pas le respect de la seconde contrainte. Au contraire, il est
+  possible que l'approche «en ligne» mène à une situation de blocage due à la
+  seconde contrainte à l'étage $n$ nécessitant de modifier les étages
+  inférieurs.
+
+  \begin{Reponse}
+    Avant d'aller plus loin, il faut motiver le travail prévu. Il faut faire
+    sentir cette histoire de contrainte au plus tôt pour économiser des
+    générations inutiles. Pour cela, les deux schémas suivants sont utiles:
+
+    \begin{minipage}{.4\linewidth}
+      \centering
+      \includegraphics[scale=.8]{fig/pyramide-encours-ligne.fig}\vspace{-.5\baselineskip}
+
+      Remplissage partiel par lignes.
+    \end{minipage}\hfill
+    \begin{minipage}{.4\linewidth} 
+      \centering
+      \includegraphics[scale=.8]{fig/pyramide-encours-col.fig}\vspace{-.5\baselineskip}
+
+      Remplissage partiel par colonnes.
+    \end{minipage}
+  \end{Reponse}
+
+  \Question %
+  Plutôt que de réaliser un parcours compliqué, nous allons renuméroter les
+  cases de la pyramide pour que l'ordre naturel expose les contraintes au plus
+  tôt. Écrivez une méthode \texttt{indiceDiag()} semblable à
+  \texttt{indiceLigne()} définie précédemment, mais numérotant les cases comme
+  sur la figure~\ref{fig:numdiag}.
+ 
+  \noindent\texttt{indiceDiag(1,1)=0} ; \hfill\texttt{indiceDiag(2,2)=2} ;
+  \hfill\texttt{indiceDiag(2,3)=4} ; \hfill\texttt{indiceDiag(2,4)=7}.
+\begin{Reponse}
+  Avec le code de indiceLigne , ils devraient parvenir à trouver celle-ci. Mais
+  ce n'est pas la question la plus importante: si le temps manque il est
+  préférable de leur donner pour réfléchir plutôt au reste.
+\begin{Verbatim}
+// précondition: 1 <= ligne <= diag <= hauteur 
+def indiceDiag(ligne:Int, diag:Int):Int = diag * (diag - 1 ) / 2 + ligne - 1
+\end{Verbatim}
+\end{Reponse}
+
+  \Question %
+  Écrivez une nouvelle méthode \textbf{correcte()} vérifiant que la pyramide
+  respecte la seconde contrainte du problème dans le nouveau repère de numérotation.
+
+  \begin{Reponse}
+    En fait, il suffit de changer l'ordre de parcours et les indices dans le calcul de $n_{123}$
+
+    \newcommand*\FancyVerbStartString{// BEGIN CORRECTE}
+    \newcommand*\FancyVerbStopString{// END CORRECTE}
+    \VerbatimInput{scala/diagonales.scala}    
+  \end{Reponse}
+
+  \begin{Question}
+    Sur machine, comparez le temps d'exécution de cette nouvelle version par
+    rapport à la précédente (il n'est pas nécessaire de modifier la fonction de
+    génération des permutations pour cela).
+  \end{Question}
+
+  \begin{Reponse}
+    Il faut discuter un peu de pourquoi générer() reste la même, mais j'espère
+    qu'ils verront vite qu'une permutation est une permutation, peu importe où
+    sont placées les billes correspondantes dans le triangle.
+
+    Voici des benchmarks imprécis réalisés sur ma machine. Ils ne sont pas
+    réalisés avec une rigueur suffisante pour une publication, mais ils sont
+    bien suffisants pour dire que notre nouvelle approche est décevante : on
+    voit pas trop la différence.
+
+    \begin{tabular}{|c|c|c|}\hline
+      hauteur       &5&6\\\hline
+      par lignes    &1.5s&40s\\\hline
+      par diagonales&1.3s&39.5s\\\hline
+    \end{tabular}
+  \end{Reponse}
+
+\begin{Exercice}\textbf{Génération par propagation (amélioration de l'amélioration)}
+\end{Exercice}
+
+\noindent Les résultats pratiques obtenus à l'exercice précédent sont décevants,
+et il faut encore affiner notre approche. Pour cela, on remarque qu'il est
+inutile de tester toutes les valeurs possibles pour $n_3$ puis ne garder que
+celles qui respectent les contraintes, car une fois que $n_1$ et $n_2$ sont
+connus, une seule valeur est possible pour $n_3$. L'idée est alors de placer
+une valeur possible en haut de la diagonale, puis de la propager en vérifiant
+qu'on respecte la première contrainte. La seconde sera respectée par construction.
+
+\medskip %
+\textbf{TBC}
+
 \begin{Question}
   Écrire le corps de la méthode \texttt{void remplir()}. Elle lance une
   fonction récursive dotée de plus de paramètres en initialisant les paramètres
@@ -298,7 +372,6 @@ l'étage $n$ nécessitant de modifier les étages inférieurs.
 \end{verbatim}
 \end{Reponse}
 
-\begin{Exercice}\textbf{Écriture de la fonction récursive}
   
   \noindent Après avoir trouvé le schéma général de la récursion, il nous faut
   écrire la fonction récursive elle-même.
@@ -319,7 +392,7 @@ l'étage $n$ nécessitant de modifier les étages inférieurs.
   position de la diagonale, puis à tenter de le «propager», \textit{i.e.} à
   vérifier que la diagonale induite par ce nombre est valide. On échoue si on
   est amenés à réutiliser un nombre déjà utilisé dans la pyramide.
-\end{Exercice}
+
 \begin{Question}
   Écrire la méthode \texttt{boolean propage(int diag, int val)} qui tente de
   propager une valeur donnée sur une diagonale donnée.

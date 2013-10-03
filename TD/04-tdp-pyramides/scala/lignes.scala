@@ -1,4 +1,4 @@
-val hauteur = 5 // défini l'instance du problème
+val hauteur = 6 // défini l'instance du problème
 val taille = hauteur*(hauteur+1)/2
 
 // précondition: 1 <= col <= ligne <= hauteur 
@@ -17,13 +17,13 @@ def correcte(tab:Array[Int], rang:Int): Boolean = {
 
   for (ligne <- 1 to hauteur-1) 
     for (diag <- 1 to ligne) {
-      // n3 a forcément l'indice max, pas besoin de tester les autres
+      // n2 a forcément l'indice max, pas besoin de tester les autres
       if (indiceLigne(ligne+1, diag+1) <= rang) {
-        val n3 = tab(  indiceLigne(ligne+1, diag+1)  )
-        val n2 = tab(  indiceLigne(ligne+1, diag)    )
-        val n1 = tab(  indiceLigne(ligne,   diag)    )
+        val n1 = tab(  indiceLigne(ligne+1, diag)    )
+        val n2 = tab(  indiceLigne(ligne+1, diag+1)  )
+        val n3 = tab(  indiceLigne(ligne,   diag)    )
 
-        if (math.abs(n2-n3) != n1)
+        if (math.abs(n1-n2) != n3)
           return false
       }
     }
@@ -60,6 +60,6 @@ val before=System.nanoTime()
 genere(0, Array.fill(taille)(0)) 
 val after=System.nanoTime()
 
-println("Took "+(after-before)+"ns")
+println("Took "+((after-before)/1000000000)+"."+((after-before)%1000000000)+"s")
 
 
