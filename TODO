@@ -127,17 +127,6 @@ fondamental pour la suite. En particulier:
     donné par induction)
 
 TDP3 (knapsack):
-* Renomer les classes en "Sac à dos" pour KSSolution et "Ali Baba"
-pour KS, c'est plus expressif
-* Il faut demander l'arbre d'appel
-            / \
-  Obj1     O   N
-          /     \
- 	 * 
-        / \
-  Obj2 O   N
-  
-  etc.
 * il faut donner (au bout d'un moment) le pseudo code:
   Récursion(n)
     si sac déborde STOP // backtracking
@@ -148,20 +137,15 @@ pour KS, c'est plus expressif
     Explorer les solutions où l'obj n n'est pas pris
 * Il faut inclure dans le sujet un output du programme version prof
   (qui explicite bien les étapes prises)
-  -> J'ai fait un .jar avec la version prof pour qu'ils puissent
-     expérimenter par eux-même (et je l'ai mis dans le dépot)
-  -> Faut en parler dans le sujet
-  -> faut faire en sorte que le .jar soit reconstruit automatiquement
 * Faut intégrer les choses mises sur la photo 110126-TOPknapsackTP.jpg
-* J'ai changé le code sur ma machine pour qu'on puisse passer une
-  instance en ligne de commande au lieu de forcément changer le code.
-  -> faut adapter le sujet pour en parler, et tuer cree_instance
-  -> faut faire la meme chose au code avec prix!=poids
-* Il faut corriger le code de cree_instance pour qu'il modifie les poids
+* Il faut faire la meme chose avec prix!=poids
 * Il faut inverser certaines questions entre le sujet de TD et le sujet de TP
   (l'arbre d'appel, ...)
 * Il faut rajouter des tests unitaires pour le sujet de TP.
 
+TD knapsack 2013-2014
+ - on peut commencer par présenter toutes les variantes du pb du
+   knapsack et ensuite on s'intéresse au cas le plus simple.
 
 TDP4 (pyramide), il est embrouillé, surtout sur la correction. J'ai
 tenté de faire un correct() pour toutes les quesitons, mais c'est
