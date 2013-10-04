@@ -20,6 +20,20 @@ la pyramide.
 \begin{Reponse}
   Pour plus de fun, l'amphi correspondant est la semaine prochaine. On appelle
   ça de l'enseignement inversé (ou un module mal préparé, au choix).
+
+  Plus sérieusement, il n'est absolument pas attendu que l'on finisse le TDP
+  avec les élèves. Seuls les plus motivés commenceront le dernier exercice (mais
+  faut bien donner du grain à moudre aux meilleurs, des fois). Il serait
+  vraiment bien que vous fassiez l'exo 1 à fond (en écrivant le code s'il le
+  faut), et que vous meniez les réfléxions jusqu'à l'exercice 4 en TD (sans
+  écrire le code mais du pseudo-code?).
+
+  En TP, il serait bien qu'ils attaquent le codage de l'exo 4. Pensez à leur
+  mettre un peu de stress la séance suivante pour voir qui a fini le
+  TP. D'ailleurs, demandez leur en début de séance qui a avancé sur le knapsack,
+  et discutez \textbf{rapidement} des problèmes rencontrés sur machine avec le
+  TP précédent. Incitez les meilleurs à s'impliquer et à tenter d'aller jusqu'au
+  bout du sujet.
 \end{Reponse}
 
 
@@ -166,8 +180,8 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
   On peut faire cette fonction en récursif (sur la ligne), mais c'est compliqué
   pour pas grand chose.
 
-  \newcommand*\FancyVerbStopString{blablablabla}
-  \newcommand*\FancyVerbStartString{// Fin génération, début du test}
+  \newcommand*\FancyVerbStopString{// END CORRECTE}
+  \newcommand*\FancyVerbStartString{// BEGIN CORRECTE}
   \VerbatimInput{scala/permutations.scala}
 \end{Reponse}
 \begin{Question}
@@ -223,7 +237,7 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
   \Question %
   Modifiez l'algorithme de génération des permutations écrit plus tôt afin de
   couper dès que la solution partiellement construite ne respecte pas la seconde
-  contrainte du problème $n_1=\left|n_2-n_3\right|$
+  contrainte du problème $n_3=\left|n_1-n_2\right|$
 
   \begin{Reponse}
     \newcommand*\FancyVerbStartString{// BEGIN GENERE}
@@ -238,12 +252,11 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
   coup, la durée de l'opération en secondes est $\frac{t_2-t_1}{10^9}$.
 \end{Exercice}
 
-\ifcorrection{\newpage}{}
 \begin{Exercice}\textbf{Génération par tranches (amélioration de l'approche)}
 \end{Exercice}
 
 \begin{wrapfigure}{r}{0.35\textwidth}
-  \vspace{-.6\baselineskip}
+  \vspace{-1.6\baselineskip}
   \centerline{\includegraphics[scale=.9]{img/numerotation-diagonales.pdf}}
   \vspace{-.5\baselineskip}
   \caption{Numérotation diagonale.}
@@ -252,16 +265,16 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
 \end{wrapfigure}
 
 Couper les branches menant à des solutions invalides de la sorte s'avère
-incroyablement plus rapide que la précédente. Cela permet de trouver des
+incroyablement plus rapide que précédemment. Cela permet de trouver des
 pyramides de hauteur 5 en quelques secondes. Mais pour aller plus loin, il faut
 raffiner cette approche.
 
 Pour cela, l'objectif est de générer les contraintes le plus tôt possible, pour
-s'éviter de d'agrandir des solutions partielles vouées à l'échec. Par exemple,
-s'il s'avère impossible de placer une valeur dans la case 11 qui respecte les
-contraintes, des cases comme 8, 9, 4, 5 ou 2 auront été remplies pour
-rien. L'objectif est donc de changer l'ordre de remplissage pour détecter les
-blocages le plus tôt possible et trouver les solutions plus vite.
+éviter d'agrandir des solutions partielles vouées à l'échec. Par exemple, s'il
+s'avère impossible de placer une valeur dans la case 11 à cause des contraintes,
+des cases comme 8, 9, 4, 5 ou 2 auront été remplies pour rien. L'objectif est
+donc de changer l'ordre de remplissage pour détecter les blocages le plus tôt
+possible et trouver les solutions plus vite.
 
 L'approche «en colonnes» est préférable car la seconde contrainte lie un nombre
 aux deux placés au dessus de lui. Il est donc naturel de chercher à traiter le
@@ -293,7 +306,7 @@ $n$ nécessitant de modifier les étages inférieurs.
 \Question %
 Plutôt que de réaliser un parcours compliqué, nous allons renuméroter les cases
 de la pyramide pour que l'ordre naturel expose les contraintes au plus
-tôt. Écrivez une méthode \texttt{indiceDiag()} semblable à
+tôt. Écrivez une fonction \texttt{indiceDiag()} semblable à
 \texttt{indiceLigne()} définie précédemment, mais numérotant les cases comme sur
 la figure~\ref{fig:numdiag}.
  
@@ -310,7 +323,7 @@ def indiceDiag(ligne:Int, diag:Int):Int = diag * (diag - 1 ) / 2 + ligne - 1
 \end{Reponse}
 
 \Question %
-Écrivez une nouvelle méthode \textbf{correcte()} vérifiant que la pyramide
+Écrivez une nouvelle fonction \textbf{correcte()} vérifiant que la pyramide
 respecte la seconde contrainte du problème dans le nouveau repère de numérotation.
 
 \begin{Reponse}
@@ -349,7 +362,7 @@ respecte la seconde contrainte du problème dans le nouveau repère de numérota
 
 \noindent Les résultats pratiques obtenus à l'exercice précédent sont décevants,
 et il faut encore affiner notre approche. Pour cela, on remarque qu'il est
-inutile de tester toutes les valeurs possibles pour $n_3$ puis ne garder que
+inutile de tester toutes les valeurs possibles pour $n_3$ puis de ne garder que
 celles qui respectent les contraintes, car une fois que $n_1$ et $n_2$ sont
 connus, une seule valeur est possible pour $n_3$. L'idée est alors de placer
 une valeur possible en haut de la diagonale, puis de la propager en vérifiant

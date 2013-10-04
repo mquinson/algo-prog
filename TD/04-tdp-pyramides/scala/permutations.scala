@@ -58,6 +58,7 @@ println("indiceLigne(2,2): expect 2, got "+indiceLigne(2,2))
 println("indiceLigne(3,2): expect 4, got "+indiceLigne(3,2))
 println("indiceLigne(4,2): expect 7, got "+indiceLigne(4,2))
 
+// BEGIN CORRECTE
 def correcte(tab:Array[Int]): Boolean = {
   var permutation = new String()
   for (i <- 0 to tab.length-1) permutation += tab(i)
@@ -74,6 +75,7 @@ def correcte(tab:Array[Int]): Boolean = {
     }
   return true
 }
+// END CORRECTE
 
 println("Filtre les pyramides correctes")
 for (permutation <- permutations) 
