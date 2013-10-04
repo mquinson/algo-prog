@@ -1,5 +1,5 @@
-%\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
-\documentclass[10pt]{article}\usepackage[nu]{esial}
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+%\documentclass[10pt]{article}\usepackage[nu]{esial}
 \TOP
 
 \usepackage[utf8]{inputenc}
@@ -388,60 +388,98 @@ pour $h=7$, il est normal que votre code n'en trouve pas.
 
 \begin{Exercice}\textbf{Pour aller plus loin}
 
-\noindent\begin{minipage}{.7\linewidth}
-    
-  La figure ci-contre donne les temps de calcul (en secondes sur un centrino
-  1.5Ghz) et les taux de remplissage obtenus pour des pyramides de différentes
-  tailles. La dernière ligne indique donc que la recherche des pyramides de
-  taille 12 a duré plus de 28h, et que la meilleure solution ne remplit que
-  73\% du tableau.
+  Votre code tel qu'écrit à la fin de l'exercice 5 permet de traiter en un temps
+  raisonnable les instances du problème de hauteur 7 ou 8, mais pas vraiment au delà.
 
-  ~~~ Il semble donc que ce problème n'admette pas de solution pour $n>5$. On
-  peut donc le généraliser de la façon suivante : on s'autorise à laisser de
-  coté des nombres lors du remplissage de la pyramide. Il s'agit alors de
-  minimiser le numéro $M$ de la plus grande valeur utilisée dans une pyramide à
-  $n$ étages n'utilisant que des nombres entiers strictement positifs distincts
-  tels que chaque valeur (sauf celles de la dernière ligne) soit la différence
-  des deux valeurs situées immédiatement au-dessous.
-
-  ~~~ Pour $n=5$, on a alors $M=\frac{n(n+1)}{2}=15$
-
-  ~~~ Si vous trouvez une solution pour $n>5$, merci de la communiquer à
-  l'équipe enseignante (qui n'en connait pas).
-
-    
-  \end{minipage}~~~\begin{minipage}{.3\linewidth}
-%\begin{figure}[h]
-%\centering
-\begin{tabular}{|c|c|c|}
-\hline
-Rang & Remplissage & Temps\\
-\hline
- 2 &  3/3  & 0,002\\
- 3 &  6/6  & 0,002\\
- 4 & 10/10 & 0,003\\
- 5 & 15/15 & 0,006\\
- 6 & 20/21 & 0,12 \\
- 7 & 25/28 & 0,9  \\
- 8 & 31/36 & 6    \\
- 9 & 37/45 & 70   \\
-10 & 43/55 & 948  \\
-11 & 49/66 & 11551\\
-12 & 57/78 & 103671\\
-\hline
-\end{tabular}
-%\caption{Relevé pour les rangs 1 à 12.}
-%\label{tab:releve}
-%\end{figure}
-
-  \end{minipage}
+  \Question %
+  Optimisez votre code autant que possible afin de résoudre l'instance la plus
+  grande possible. Le code le plus efficace connu à ce jour a été proposé par
+  Julien Le Guen, étudiant de la promotion 2008. Il a établi qu'aucune pyramide
+  de hauteur $5<h\leq12$ ne respecte toutes les contraintes du
+  problème. Peut-être qu'une solution existe pour des instances plus grandes?
   
+  \Question %
+  Calculez le taux de remplissage maximal pour chaque hauteur de pyramide,
+  c'est-à-dire la quantité de valeurs bien placées dans la solution partielle la
+  plus grande. Pour vérifier que votre code est correct, comparez aux valeurs du
+  tableau ci-dessous. Les temps ont été obtenus sur une machine de 2006
+  (centrino à 1.5Ghz).
 
+  \noindent
+  \centerline{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+      Rang       &2  &3  &4    &5    &6    &7    &8&9&10&11&12\\\hline
+      Remplissage&$\frac{3}{3}$&$\frac{6}{6}$&$\frac{10}{10}$&
+      $\frac{15}{15}$&$\frac{20}{21}$&$\frac{25}{28}$&
+      $\frac{31}{36}$&$\frac{37}{45}$&$\frac{43}{55}$&
+      $\frac{49}{66}$&$\frac{57}{78}$\\\hline
+      Temps & 2ms& 2ms& 3ms& 6ms& 0,12s&0,9s
+            & 6s    &1m10s  &15m48s & 3h12m &1j 5h\\\hline
+  \end{tabular}}
+
+  \begin{Reponse}
+    Ces chronos sont obtenus avec le code en C ultra optimisé écrit par Julien à
+    l'époque (ce code est dans le git du cours). Mais on peut les laisser se
+    décarcasser un peu :)
+  \end{Reponse}
+
+  \bigskip
+  Il semble donc que ce problème n'admette pas de solution pour $n>5$. Pour
+  rendre la recherche plus intéressante, on peut relaxer la première contrainte
+  du problème. Au lieu d'imposer de prendre toutes les valeurs de
+  $\left[1,\frac{h(h+1)}{2}\right]$, on impose seulement de prendre des valeurs
+  distinctes.
+  
+  Le problème est alors de trouver le remplissage de la pyramide qui minimise
+  l'intervalle dans lequel sont pris les valeurs. Ainsi, la solution recherchée
+  pour $h=6$ est celle qui utilise toutes les valeurs de [1;22] (sauf 15). Pour
+  $h=7$, seules 3 valeurs sont ignorées tandis que 8 valeurs sont ignorées pour
+  $h=8$.
+
+  \Question %
+  Trouvez les pyramides les plus grandes possibles en respectant ces nouvelles contraintes.
 \end{Exercice}
 
 \begin{Reponse}
   Ca, c'est juste pour occuper ceux qui savent déjà programmer. Dites leur de
   m'envoyer leurs solutions par email privé...
+
+  \begin{Verbatim}
+Pyramid of height 6
+  6 20 22 3 21 13
+   14 2 19 18 8
+    12 17 1 10
+     5 16 9
+      11 7
+       4
+  
+Ignored elements:  15; Computation time: 0s
+  
+
+Pyramid of height 7
+14 31 5 33 32 8 19
+ 17 26 28 1 24 11
+   9 2 27 23 13
+    7 25 4 10
+     18 21 6
+       3 15
+        12
+
+Ignored elements: 16 20 22; Computation time: 4s
+
+  
+Pyramid of height 8
+  7 33 42 3 44 43 6 29
+   26 9 39 41 1 37 23
+    17 30 2 40 36 14
+     13 28 38 4 22
+      15 10 34 18
+       5 24 16
+        19 8
+         11
+  
+Ignored elements:  12 20 21 25 27 31 32 35; Computation time: 87s
+    
+  \end{Verbatim}
 \end{Reponse}
 \end{document}
 %%% Local Variables:
