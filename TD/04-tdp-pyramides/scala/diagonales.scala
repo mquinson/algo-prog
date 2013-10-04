@@ -32,6 +32,10 @@ def correcteDiag(tab:Array[Int], rang:Int): Boolean = {
 }
 // END CORRECTE
 
+def propage(tab:Array[Int], val:Int, diag:Int) {
+    tab( indiceDiag(1, diag)  ) = val
+}
+
 // BEGIN GENERE
 def genere(rang:Int, tab:Array[Int]) { // Génère les permutations
   if (rang>=tab.length) {  // On a déjà tout généré, solution correcte!
