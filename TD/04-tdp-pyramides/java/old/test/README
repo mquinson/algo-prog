@@ -1,0 +1,13 @@
+Here are some basic test for this solution.
+In order to make the test compile, you have to:
+- make methods contains/correcte/... as public methods
+- add two new methods:
+
+public int[] getValues() {
+  return this.elements;
+}
+
+public void setValues(int height, int[] values)
+  this.hauteur = height;
+  this.elements = values;
+}
