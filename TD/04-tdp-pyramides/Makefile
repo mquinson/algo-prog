@@ -1,12 +1,12 @@
 TARGET=$(shell ls *.tex |grep -v enonce.tex|grep -v correction.tex|sed 's/\.tex$$//')
-DISTDIR=/home/mquinson/public_html/Teaching/TOP/
+DISTDIR=/home/mquinson/wiki/Teaching/TOP/
 
 all: pdf
 
 ### Publication
 
-publish:: enonce
-	cp $(TARGET)-enonce.pdf $(DISTDIR)
+publish: $(TARGET)-enonce.pdf $(TARGET)-correction.pdf
+	cp $^ $(DISTDIR)
 
 
 ### LaTeX
@@ -52,8 +52,8 @@ enonce-src:
 	cd dist ; tar cvfz pyramide-enonce.tar.gz pyramide
 	mv dist/pyramide-enonce.tar.gz .
 
-publish:: enonce-src
-	cp pyramide-enonce.tar.gz $(DISTDIR)
+#publish:: enonce-src
+#	cp pyramide-enonce.tar.gz $(DISTDIR)
 
 %.class: %.java
 	jmlc -Q $<
