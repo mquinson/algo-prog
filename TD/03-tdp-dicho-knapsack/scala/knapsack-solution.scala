@@ -91,7 +91,7 @@ def cherche(poids:Array[Int] , capacite:Int) {
   println(" Valeur:"+valeurTotale(meilleure,poids)+" (la capacité était "+capacite+")")
   
   
-  // BEGINKILL TODO: Definissez ici l'appel récursif à proprement parler
+  // BEGINKILL TODO: Definissez ici la fonction récursive à proprement parler
   // Défini l'appel récursif
   def chercheRec(profondeur:Int, courante:Array[Boolean]) {
 
