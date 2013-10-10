@@ -25,7 +25,7 @@ la pyramide.
   avec les élèves. Seuls les plus motivés commenceront le dernier exercice (mais
   faut bien donner du grain à moudre aux meilleurs, des fois). Il serait
   vraiment bien que vous fassiez l'exo 1 à fond (en écrivant le code s'il le
-  faut), et que vous meniez les réfléxions jusqu'à l'exercice 4 en TD (sans
+  faut), et que vous meniez les réflexions jusqu'à l'exercice 4 en TD (sans
   écrire le code mais du pseudo-code?).
 
   En TP, il serait bien qu'ils attaquent le codage de l'exo 4. Pensez à leur
@@ -165,9 +165,14 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
     \end{itemize}
   \item (vos idées sont bienvenues pour augmenter la liste)
   \end{itemize}
+
+  Indication temporelle 2013: j'ai écrit la recette de cuisine à l'arrache et
+  demande le code scala à 8h40.
  
   \newcommand*\FancyVerbStopString{// Fin génération, début du test}
   \VerbatimInput{scala/permutations.scala}
+
+  Indication temporelle 2013: Fin de la découverte de la fonction ensemble à 9h
 \end{Reponse}
 
 \begin{Question}
@@ -208,6 +213,8 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
   La complexité est donc en $O(n\times n!)$, ce qui est \textbf{énorme}. Que
   ceux qui n'en sont pas convaincus tentent de calculer la hauteur 5 de cette
   façon. Moi j'ai craqué avant la fin de la génération de la hauteur 4.
+
+  Indication temporelle 2013: Fin de l'exo à 9h07
 \end{Reponse}
 
 \begin{Exercice}\textbf{Algorithme de construction pas à pas (deuxième approche)}
@@ -219,6 +226,10 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
   et à s'interrompre dès qu'un choix mène à une situation interdite.
   On appelle ce genre d'algorithmes des algorithmes récursifs avec retour
   arrière (\textit{backtracking algorithms} en anglais).
+
+  \begin{Reponse}
+      Indication temporelle 2013: exo lancé à exo à 9h10
+  \end{Reponse}
 
   \begin{Question}
     Modifiez la fonction correcte précédemment écrite\footnote{Lors du TP sur
@@ -243,6 +254,9 @@ def indiceLigne(lig:Int, col:Int): Int  =  lig * (lig - 1 ) / 2 + col - 1
     \newcommand*\FancyVerbStartString{// BEGIN GENERE}
     \newcommand*\FancyVerbStopString{// END GENERE}
     \VerbatimInput{scala/lignes.scala}    
+
+    Indication temporelle 2013: on le fait avec les mains, sans rien écrire au
+    tableau. Fin de l'exo à 9h33.
   \end{Reponse}
 
   \Question %
@@ -301,6 +315,12 @@ $n$ nécessitant de modifier les étages inférieurs.
     
     Remplissage partiel par colonnes.
   \end{minipage}
+
+  Indication temporelle 2013: Tout ce que j'ai fait, c'est d'expliquer l'exo, de
+  le lancer. Pour de vrai, je ne leur ai même pas laissé le temps d'écrire le
+  code demandé car j'avais pas le temps. J'avais fini de motiver et expliquer
+  l'exo à 9h42. Du coup, je leur ai dit qu'ils verraient sur machine et/ou chez
+  eux et je suis passé à l'exo suivant.
 \end{Reponse}
 
 \Question %
@@ -359,6 +379,11 @@ respecte la seconde contrainte du problème dans le nouveau repère de numérota
 
 \begin{Exercice}\textbf{Génération par propagation (amélioration de l'amélioration)}
 \end{Exercice}
+
+\begin{Reponse}
+  indication temporelle 2013: J'ai pris 5-10 mn à la fin du TD pour expliquer et
+  motiver cette approche-là.
+\end{Reponse}
 
 \noindent Les résultats pratiques obtenus à l'exercice précédent sont décevants,
 et il faut encore affiner notre approche. Pour cela, on remarque qu'il est
