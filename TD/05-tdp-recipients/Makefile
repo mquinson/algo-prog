@@ -1,19 +1,24 @@
 TARGET=$(shell ls *.tex |grep -v enonce.tex|grep -v correction.tex|sed 's/\.tex$$//')
-DISTDIR=/home/mquinson/public_html/Teaching/TOP/
+DISTDIR=/home/mquinson/wiki/Teaching/TOP/
 
 all: pdf
 
-publish: enonce
-	cp $(TARGET)-enonce.pdf $(DISTDIR)
+### Publication
+
+publish: $(TARGET)-enonce.pdf $(TARGET)-correction.pdf
+	cp $^ $(DISTDIR)
+
+
+### LaTeX
 
 enonce:
-	echo \\documentclass[10pt]{article}\\usepackage{esial} > $(TARGET)-enonce.tex
+	echo \\documentclass[10pt]{article}\\usepackage[nu]{esial} > $(TARGET)-enonce.tex
 	grep -v documentclass $(TARGET).tex >> $(TARGET)-enonce.tex
 	$(MAKE) $(TARGET)-enonce.pdf
 	rm -rf `ls $(TARGET)-enonce.*|grep -v '^$(TARGET)-enonce.pdf$$'`
 
 correction:
-	echo \\documentclass[10pt]{article}\\usepackage[correction]{esial} > $(TARGET)-correction.tex
+	echo \\documentclass[10pt]{article}\\usepackage[correction,nu]{esial} > $(TARGET)-correction.tex
 	grep -v documentclass $(TARGET).tex >> $(TARGET)-correction.tex
 	$(MAKE) $(TARGET)-correction.pdf
 	rm -rf `ls $(TARGET)-correction.*|grep -v '^$(TARGET)-correction.pdf$$'`
