@@ -5,6 +5,7 @@ This material is used at Telecom Nancy since 2008. For now, only the
 lecture is in English while the exercise sheets and exams are in
 French.
 
+This material is released under the CC-BY-SA license.
 
 
 If you are one of the student of this lecture, you will not find any
