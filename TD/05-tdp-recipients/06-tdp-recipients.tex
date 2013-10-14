@@ -1,0 +1,349 @@
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}%[correction]{esial}
+
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{amstext,amsmath,amsfonts}
+\usepackage{fancyvrb}
+
+\TOP\unA
+\title{TP5: Récursivité (récipients)}
+
+\begin{document}
+\maketitle
+
+
+L'objectif de ce nouveau TDP est de résoudre un nouveau problème par
+backtracking. La spécificité de ce problème-ci est que si vous agissez sans
+précaution, votre programme peut entrer en boucle infinie...
+
+\Exercice\textbf{Présentation du problème des récipients.}
+
+On dispose d'un certain nombre de récipients dont on connaît la capacité, et
+d'une fontaine d'eau. On cherche quels sont les transvasements à réaliser pour
+passer faire en sorte que l'un des récipients contienne une quantité d'eau
+donnée. Seules les opérations suivantes sont autorisées:
+\begin{enumerate}
+\item[A.] Remplir complètement un récipient depuis la fontaine;
+\item[B.] Vider complètement un récipient dans la fontaine;
+\item[C.] Transvaser un récipient dans un autre jusqu'à ce que la source soit
+  complètement vide ou que la destination soit complètement pleine.
+\end{enumerate}
+
+\noindent$\triangleright$ \textbf{Exemple.} On suppose avoir deux récipients de
+capacité respective 5 et 3. On veut mesurer un volume de 4. D'après une
+situation initiale où les deux récipients sont vides, notée $(0,0)$, les
+opérations suivantes permettent d'y parvenir.
+
+\noindent\begin{minipage}{.35\linewidth}
+  \begin{itemize}
+  \item Remplir A à la fontaine: (5,0)
+  \item Transvaser A dans B: (2,3)
+  \item Vider le contenu de B: (2,0)
+  \item Transvaser A dans B: (0,2)
+  \item Remplir A à la fontaine: (5,2)
+  \item Transvaser A dans B: (4,3)
+  \item On a bien 4 unités dans A.
+  \end{itemize}  
+\end{minipage}~\begin{minipage}{.6\linewidth}
+  \centerline{\includegraphics[width=\linewidth]{fig/recipients-example.fig}}
+\end{minipage}
+
+\Question Pouvez-vous trouver une instance de ce problème n'admettant pas de
+solution?
+\begin{Reponse}
+  \noindent
+  Ben ca va être plus dur, si, au choix:
+  \begin{itemize}
+  \item Si la cible est plus grande que n'importe quel récipient
+  \item Si toutes les capacités sont égales les unes aux autres, et différentes
+    de la cible cherchée
+  \end{itemize}
+\end{Reponse}
+
+\Exercice\textbf{Réflexions sur le codage.}  Pour simplifier, nous vous
+proposons d'organiser votre code de la façon suivante. Il s'agit d'un schéma
+très classique et relativement proche de ce que nous avons mis en œuvre
+précédement pour le sac à dos ou les pyramides.
+
+\noindent\includegraphics[width=\linewidth]{diagramme-classe.fig}
+
+\Question Donnez le (pseudo-)code de la méthode \texttt{Recipient.transvase(Recipient)}.
+
+\begin{Reponse}
+  \begin{Verbatim}[gobble=4]
+    transvase(src,dst)
+      quantite = Min(src.contenu,dst.capacite-dst.contenu)
+      src.contenu -= quantite
+      dst.contenu += quantite
+  \end{Verbatim}
+\end{Reponse}
+\Question Implémentez ces classes, à l'exception de la méthode solve() du
+solveur, qui constitue le cœur du TP et sera implémenté plus tard. Dans la
+classe de test, utilisez l'instance du problème présentée dans l'exemple
+ci-dessus. L'intéret est que vous avez la garantie qu'une solution existe pour
+cette instance.
+
+\Exercice\textbf{Réflexions algorithmiques.}  En absence de meilleure idée, nous
+allons établir une recherche exaustive des solutions de transvasement jusqu'à
+trouver une situation où l'un des récipients contienne la bonne quantité de
+liquide. Comme vous vous en doutez, nous allons le faire par backtracking.
+
+\Question Quel est le paramètre de récursion? Quels sont les cas triviaux?
+
+\begin{Reponse}
+  Pour le paramètre, on a pas de bonne idée selon les données. La seule
+  possibilité est le nombre de transvasements faits jusqu'à présent. 
+  Pour les cas triviaux, c'est si un récipient contient ce qu'on veut.
+\end{Reponse}
+
+\medskip Comme souvent lors d'une recherche combinatoire, nous allons donc
+utiliser une récursion dont chaque étage est une boucle parcourant toutes les
+possibilités existantes. Le pseudo-code serait quelque chose comme ça:
+\begin{Verbatim}[gobble=2]
+  fonction_recursive(parametres)
+    Si je suis sur un cas trivial, j'arrête
+    Pour chaque décision D que je peux prendre maintenant
+      appliquer D
+      fonction_recursive(paramètres modifiés)
+      annuler les changements dûs à D
+\end{Verbatim}
+
+\Question Relisez le cours à propos du placement des reines, le code que vous
+avez écrit pour le sac à dos et celui pour les pyramides pour voir comment ce
+pseudo-code était mis en pratique dans chaque cas.
+
+\Question Écrire la liste des actions autorisées à chaque étape de la recherche
+exaustive.\\ \textit{Indication:} il y a sans doute deux boucles \texttt{for}
+imbriquées, et un \texttt{if} dedans.
+
+\begin{Reponse}
+  \begin{Verbatim}[gobble=4]
+    for (a=0;a<=NB_RECIPIENTS;a++) { // on choisit un recipient source 
+      for (b=0;b<=NB_RECIPIENTS;b++) { // et un recipient cible ... 
+        // Si a==NB_RECIPIENTS, on remplit depuis la fontaine
+        // Si b==NB_RECIPIENTS, on vide dans la fontaine
+        if (a != b) {
+          // Le corps ici
+        }
+      }
+    }
+  \end{Verbatim}
+\end{Reponse}
+
+\Question Écrivez le pseudo-code de la fonction récursive en combinant les deux
+questions précédentes. Ne cherchez pas encore à résoudre le problème posé par
+la ligne ``annuler les changements dûs à D'' dans le pseudo-code.
+
+\begin{Reponse}
+  \begin{Verbatim}[gobble=4]
+    boolean solve(int n) {
+      for (src=0;src<=NB_RECIPIENTS;src++) { // on choisit un recipient source 
+        for (dst=0;dst<=NB_RECIPIENTS;dst++) { // et un recipient cible ... 
+          if (src != dst) {
+            // Choisi et applique une décision
+            if (src==NB_RECIPIENTS) { // on remplit depuis la fontaine
+              recipients[dst].remplir();
+            } else if (dst==NB_RECIPIENTS) { // on vide dans la fontaine
+              recipients[dst].vider();
+            } else {
+              recipients[src].transvase(recipients[dst]);
+            }
+            
+            solve(n+1);
+
+            // TODO: annule la décision
+          }
+        }
+      }      
+    }
+  \end{Verbatim}
+\end{Reponse}
+
+\medskip
+Il s'agit maintenant de sauvegarder l'état avant les modifications,
+et de le restaurer après la récursion. Le plus simple pour cela est d'ajouter
+un \textit{copy-constructor} à la classe Recipient, c'est à dire un
+constructeur prenant un autre récipient en argument et faisant en sorte que
+l'objet nouvellement créé soit une copie conforme de l'argument. 
+
+\Question Écrivez ce constructeur (sans ajouter d'autre méthode ni rendre les
+champs publiques), et utilisez le pour finir la fonction solve.
+
+\begin{Reponse}
+  Souvent, ca leur pose problème car ils pense qu'un champ privé est privé à
+  une instance d'objet. Et non, la frontière est classe par classe et je peux
+  tout à fait aller taper sur les champs privés d'un autre objet, du moment
+  qu'ils sont de la même classe que moi.
+
+  \begin{Verbatim}[gobble=4]
+    public Recipient(Recipient other) {
+      this.capacite = other.capacite;
+      this.contenu = other.contenu;
+    }
+  \end{Verbatim}
+\end{Reponse}
+
+\medskip
+Codé comme cela, notre code ``fonctionnerait'', mais entrerait en
+boucle infinie. À chaque étage de la récursion, nous déciderions de transvaser
+le premier récipient dans le second (ce qui ne sert à rien vu que les deux sont
+vides), avant de plonger un étage plus bas dans la récursion. À l'infini.
+\Question Pour résoudre ce problème, modifiez votre pseudo-code pour arrêter la
+recherche après un nombre donné de transvasements.
+
+\begin{Reponse}
+  On fait tjs une recherche en profondeur, mais bornée cette fois, donc ca va
+  aller: le code va faire n'imp sur N étapes, puis tester des choses un peu
+  plus variées en remontant.
+
+  Il faut ajouter la profondeur max pour \texttt{new Solveur()} dans la classe
+  de tests, ou bien passer à \texttt{solve()} le nombre d'étapes qu'il a encore
+  le droit de faire. Et ca nous fait un nouveau cas trivial: si la profondeur
+  courante dépasse la profondeur autorisée (ou si le nb d'étapes restantes
+  arrive à 0), on coupe.
+\end{Reponse}
+
+\Exercice\textbf{Première implémentation (bounded depth first).}  
+\Question Vous ne devriez pas être loin d'une solution fonctionnelle, et
+implémenter votre pseudo-code ne devrait pas poser beaucoup de problème.
+
+La seule chose manquante est une idée pour afficher le transvasement ayant mené
+à la solution lorsque vous en trouvez une. Pour cela, on peut construire lors
+de la descente une chaînes de caractères décrivant les opérations
+effectuées. Une autre idée est d'ajouter à la fonction récursive un paramètre
+une liste d'opérations de transvasement et l'afficher quand on trouve, mais
+cela demande de définir une classe représentant ces opérations.
+
+\Question Retrouvez la solution à l'instance du problème donnée en exemple
+ci-dessus. 
+
+\Question Trouvez une solution si les capacités valent \{8,5,3\} et
+que l'on cherche à obtenir 6 volumes en moins de 3 transvasements. Si
+c'est impossible, augmentez progressivement le nombre de
+transvasements autorisés au maximum jusqu'à trouver une solution.
+Répondez aux questions suivantes le temps que votre programme trouve
+une réponse.
+
+\begin{Reponse}
+  Je l'ai pas codé, j'ai pas la solution. J'espère que cette instance est pas
+  triviale sinon, c'est dommage. Voici ce que j'ai trouvé sur internet
+  (attention, ca semble juste, mais j'ai lu rapidement)
+
+  \VerbatimInput{idee_solution}
+\end{Reponse}
+
+\Question Même question si les capacités valent \{100, 25,24\} et que
+l'on cherche à obtenir 42 volumes\footnote{D'après une instance
+trouvée par Oswald Hounkonnou, promo 2012.}. Il est probable que votre
+programme ne parvienne pas à la solution tant que vous n'aurez pas
+implémenté les améliorations de l'exercice suivant.
+
+
+\smallskip\noindent\setcounter{Question}{0}\hspace{-1.3em}$\bigstar$
+\textbf{Plus de contraintes pour plus de backtracking.} Notre approche
+``recherche en profondeur, avec profondeur maximale'' est intéressante en ceci
+qu'elle permet d'éviter la boucle infinie consistant à réaliser la première
+action autorisée à chaque étage de récursion, même si cela ne mene nul part
+(cf. question 6 ci-dessus).
+
+En revanche, son gros défaut est qu'il est difficile de déterminer la valeur à
+utiliser comme profondeur maximale. S'il est trop petit, on ne trouvera pas la
+solution. S'il est trop grand, l'espace grandit très (trop) vite. De plus, si
+on relance le programme avec une valeur plus grande, tous les calculs effectués
+avec une profondeur inférieure sont refaits. Cette situation est clairement
+sous-optimale\ldots
+
+On peut constater que notre programme effectue certes une quantité infinie
+d'opérations, mais qu'il n'existe qu'un nombre fini de situations. En effet,
+pour $n$ récipients de capacité $c_i$ chacun, nous savons que le premier
+récipient contient 0 unité ou bien 1 unité ou bien 2 \ldots ou bien $c_1$. De
+même, le nombre de façon de remplir chacun des autres récipients est borné. On
+en déduit que le nombre de plateaux (de remplissage de l'ensemble des
+récipients) n'est pas infini. Notre code fait donc des choses inutiles.
+
+Pour changer cela, nous allons faire en sorte de ne parcourir que des solutions
+originales (jamais rencontrées auparavent), et couper par backtracking si on
+rencontre à nouveau une solution déjà vue. Pour déterminer si la situation
+actuelle a déjà été rencontrée auparavent, constatons tout d'abord qu'une
+situation est un vecteur de nombres, indiquant le remplissage de chaque
+récipients.
+
+\Exercice\textbf{Stockage par liste de vecteurs.} Une première approche
+consiste à faire une liste de tous les vecteurs de valeur rencontrés. À chaque
+fois que l'on rencontre une nouvelle situation (au début de notre fonction
+récursive), on parcourt la liste pour voir si le vecteur courant est original,
+et on coupe court à la recherche si non.
+
+\Question Vous pouvez implémenter cette solution, ou constater sa mauvaise
+efficacité (tant en temps de calcul qu'en consomation mémoire).
+
+\Exercice \textbf{Stockage par hachage.} Avec un peu plus de connaissances en
+Java que ce qui est demandé en TOP, une autre approche est d'utiliser une
+structure de données classique pour profiter des bonnes propriétés des tables
+de hachage (qui sont au programme du module de SD). Il suffit créer une
+variable de type \texttt{HashTree<String,Boolean>}, et d'utiliser ensuite les
+fonctions permettant de d'insérer un élément, et chercher si un élément donné
+existe dans la table. La clé des éléments sera le résultat de la méthode
+\texttt{toString()} appliquée à la solution courante. 
+
+\Question Implémentez cette solution en vous appuyant sur la documentation des
+\texttt{HashTree}.
+
+\Question Discutez l'efficacité de cette solution (en particulier en terme de
+mémoire).
+\begin{Reponse}
+  Ben c'est pas bon : on crée des chaines à tout bout de champs et on les
+  stoque. On va faire sauter la mémoire. 
+
+  En plus, on hache les chaines de représentation. On risque d'avoir pleins de
+  conflits vu que les chaines se ressemblent toutes. Mais ca, vu qu'ils ont pas
+  vu ce qu'est une table de hachage, on peut pas leur demander.
+\end{Reponse}
+
+\Exercice\textbf{Stockage par tableau booléen.} Avec un minimum de connaissances
+mathématiques, une autre approche est de coder chaque vecteur de remplissage
+sous forme d'un entier unique. Il faut pour cela trouver une fonction allant de
+l'ensemble des vecteurs possibles dans l'ensemble des entiers. On utilisera la
+fonction \texttt{int hashCode()} pour cela.
+
+\Question Quelle propriété doit avoir cette fonction?
+\begin{Reponse}
+  Injective (il me semble, je me goure tjs). Il faut que $\forall x,y, (x\neq y)
+  \Rightarrow (code(x)\neq code(y))$
+\end{Reponse}
+
+Pour construire une telle fonction, on peut par exemple multiplier chaque
+élément du vecteur par un nombre premier différent.  Par exemple, si le vecteur
+est de longueur 3, on peut utiliser les nombres premiers suivants:
+\{3,5,7\}. Ainsi, le vecteur [1,14,4] sera représenté par l'entier $3\times
+1+14\times 5+7\times 4=101$. Il suffit alors de disposer d'un tableau booléen
+nommé par exemple \texttt{dejaVu}, et de stocker sous \texttt{dejaVu[101]} si
+l'on a déjà vu le vecteur [1,14,4].
+
+\Question Implémenter cette solution.
+
+\Question Discutez l'efficacité de cette solution. Comment peut-on améliorer
+les choses?
+\begin{Reponse}
+  Le hachage va mieux se passer, et on a beaucoup moins de chaines
+  construites. C'est bien mieux. Mais on se trimbale maintenant avec un tableau
+  de booléens de dimension de folie.
+
+  On peut améliorer en stockant l'information sous forme d'une liste (chainée)
+  triée des valeurs déjà rencontrées. Le stockage sera plus efficace, la
+  recherche est en $O(\log(n))$, et l'insertion en $0(1)$.
+
+  Le mieux est de faire un stockage creux du vecteur (c'est comme ca qu'on dit
+  en calcul scientifique, rien de grave). On économise des pointeurs dans la
+  liste ci-dessus en stockant des vecteurs dans chaque case du tableau, et en
+  fusionnant les cellules adjacentes dans le meme vecteur.
+
+  $(1) \leftrightarrow (2) \leftrightarrow (3) \leftrightarrow (76)
+  \leftrightarrow (77) \leftrightarrow 205$ devient $(1,2,3) \leftrightarrow
+  (76,77) \leftrightarrow 205$, ce qui sauve une poignée de vecteurs. Ca risque
+  d'être précieux si la structure grandit.
+\end{Reponse}
+
+\end{document}
+%%% Local Variables:
+%%% coding: utf-8

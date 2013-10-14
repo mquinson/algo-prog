@@ -1,5 +1,5 @@
-\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
-%\documentclass[10pt]{article}\usepackage[nu]{esial}
+%\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+\documentclass[10pt]{article}\usepackage[nu]{esial}
 \TOP
 
 \usepackage[utf8]{inputenc}
@@ -460,22 +460,28 @@ pour $h=7$, il est normal que votre code n'en trouve pas.
     décarcasser un peu :)
   \end{Reponse}
 
-  \bigskip
+  \bigskip %
   Il semble donc que ce problème n'admette pas de solution pour $n>5$. Pour
-  rendre la recherche plus intéressante, on peut relaxer la première contrainte
-  du problème. Au lieu d'imposer de prendre toutes les valeurs de
-  $\left[1,\frac{h(h+1)}{2}\right]$, on impose seulement de prendre des valeurs
-  distinctes.
-  
-  Le problème est alors de trouver le remplissage de la pyramide qui minimise
-  l'intervalle dans lequel sont pris les valeurs. Ainsi, la solution recherchée
-  pour $h=6$ est celle qui utilise toutes les valeurs de [1;22] (sauf 15). Pour
-  $h=7$, seules 3 valeurs sont ignorées tandis que 8 valeurs sont ignorées pour
-  $h=8$.
+  rendre la recherche plus intéressante, il faut relaxer des contraintes pour
+  assurer que le problème admet des solutions même dans les instances plus
+  grandes.  Pour chaque question ci-dessous, trouvez les pyramides les plus
+  grandes possibles en respectant les nouvelles contraintes. Si vous trouvez une
+  solution meilleure que celle indiquée, ou une variante intéressante du
+  problème, n'hésitez pas à nous l'envoyer: nous l'ajouterons au sujet pour les
+  générations futures.
 
   \Question %
-  Trouvez les pyramides les plus grandes possibles en respectant ces nouvelles contraintes.
-\end{Exercice}
+  Une première idée est de relaxer la première contrainte du problème. Au lieu
+  d'imposer de prendre toutes les valeurs de $\left[1,\frac{h(h+1)}{2}\right]$,
+  on impose seulement de prendre des valeurs distinctes.
+  %
+  Le problème est alors de trouver le remplissage de la pyramide qui minimise
+  l'intervalle dans lequel sont pris les valeurs. Ainsi, la solution recherchée
+  pour $h=6$ est celle qui utilise toutes les valeurs de [1;22] (sauf
+  15). Julien Le Guen a également étudié cette variante du problème en 2006. Il
+  a trouvé des solutions pour $h\in{6,7,8}$ qui ignorent respectivement une
+  seule valeur, 3 valeurs et 8 valeurs.
+
 
 \begin{Reponse}
   Ca, c'est juste pour occuper ceux qui savent déjà programmer. Dites leur de
@@ -519,6 +525,13 @@ Ignored elements:  12 20 21 25 27 31 32 35; Computation time: 87s
     
   \end{Verbatim}
 \end{Reponse}
+\Question %
+Une autre variante possible est de ne plus mettre de valeur absolue dans le
+calcul de la seconde contrainte, mais d'autoriser le placement de nombres
+négatifs. Cette variante n'a jamais été étudiée en détail (à notre
+connaissance).
+\end{Exercice}
+
 \end{document}
 %%% Local Variables:
 %%% coding: utf-8
