@@ -63,17 +63,25 @@
       \includegraphics<5,6| handout:1>[subfig=5]{fig/rec_pgcd_exemple.fig}%    
     \end{column}%
     \begin{column}{.8\linewidth}
+      \begin{minipage}{.6\linewidth}
+        \begin{itemize}
+        \item $gcd(420,75) =\uncover<2->{gcd(75,45)
+            \visible<11->{\boldsymbol{=15}}$
+          \item $gcd(75,45) = }\uncover<3->{gcd(45,30)
+            \visible<10->{\boldsymbol{=15}}$
+          \item $gcd(45,30) = }\uncover<4->{gcd(30,15)
+            \visible<9->{\boldsymbol{=15}}$
+          \item $gcd(30,15) = }\uncover<5->{gcd(15,0)
+            \visible<8->{\boldsymbol{=15}}$
+          \item $gcd(15,0)  = }$\uncover<6->{15 \\
+            \alert{this is the Base Case}}
+        \end{itemize}
+      \end{minipage}\begin{minipage}{.4\linewidth}
+        \centerline{\visible<12->{\includegraphics[width=.7\linewidth]{img/xkcd-functional.png}%
+          {\tiny~}%
+          \rotatebox{90}{\tiny\url{http://xkcd.com/1270/}}}}
+      \end{minipage}
       \begin{itemize}
-      \item $gcd(420,75) =\uncover<2->{gcd(75,45)
-          \visible<11->{\boldsymbol{=15}}$
-      \item $gcd(75,45) = }\uncover<3->{gcd(45,30)
-        \visible<10->{\boldsymbol{=15}}$
-      \item $gcd(45,30) = }\uncover<4->{gcd(30,15)
-        \visible<9->{\boldsymbol{=15}}$
-      \item $gcd(30,15) = }\uncover<5->{gcd(15,0)
-        \visible<8->{\boldsymbol{=15}}$
-      \item $gcd(15,0)  = }$\uncover<6->{15 \\
-        \alert{this is the Base Case}}
       \uncover<7->{
         \item Let's pop parameters
         \item $r\leftarrow r_{int}$ (no other computation:
@@ -627,7 +635,12 @@
 
   \medskip
   \uncover<12->{\structure{Rq:} simpler iterative algorithms exist 
-    (they are not automatic transformations)}
+    (they are not automatic transformations)\\
+    {\footnotesize J.C. Fournier. 
+      \textit{Pour en finir avec la dérécursivation du problème des tours de  Hanoï.}
+    1990.}\\[-.5\baselineskip]
+    {\tiny\url{http://archive.numdam.org/article/ITA_1990__24_1_17_0.pdf}}
+}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Back-tracking}
@@ -864,13 +877,13 @@
  }
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Java implementation of n queens puzzle}
+\begin{frame}[fragile]{Scala implementation of n queens puzzle}
   \begin{boitecode}{}
-  boolean Solution(boolean board[][], int line) \{
+  def Solution(board:Array[Array[Boolean]], line:Int) \{
     if (line >= board.length) \alert{// Base Case}
        return true; 
 
-    for (int col = 0; col < board.length; col++) \{  \alert{// loop on possibilities}
+    for (col <- 0 to board.length - 1) \{  \alert{// loop on possibilities}
        if (validPlacement(board, line, col)) \{
          putQueen(board, line, col);
          if (Solution(plateau, line + 1)) \alert{// Recursive Call}
