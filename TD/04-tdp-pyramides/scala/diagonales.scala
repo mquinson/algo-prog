@@ -1,4 +1,4 @@
-val hauteur = 6 // défini l'instance du problème
+val hauteur = 3 // défini l'instance du problème
 val taille = hauteur*(hauteur+1)/2
 
 // précondition: 1 <= ligne <= diag <= hauteur 
@@ -32,8 +32,8 @@ def correcteDiag(tab:Array[Int], rang:Int): Boolean = {
 }
 // END CORRECTE
 
-def propage(tab:Array[Int], val:Int, diag:Int) {
-    tab( indiceDiag(1, diag)  ) = val
+def propage(tab:Array[Int], value:Int, diag:Int) {
+    tab( indiceDiag(1, diag)  ) = value
 }
 
 // BEGIN GENERE

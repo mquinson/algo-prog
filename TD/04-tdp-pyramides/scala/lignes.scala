@@ -1,4 +1,4 @@
-val hauteur = 6 // défini l'instance du problème
+val hauteur = 3 // défini l'instance du problème
 val taille = hauteur*(hauteur+1)/2
 
 // précondition: 1 <= col <= ligne <= hauteur 
