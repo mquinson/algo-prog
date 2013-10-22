@@ -39,7 +39,7 @@
     \centerline{\fbox{\vbox{\vspace{-\baselineskip}%
         \begin{tabbing}%
           \textbf{if} $b = 0$ \=\textbf{then} \=$r\leftarrow a$\\
-          \>\textbf{else}\>$r\leftarrow pgcd(b, a\text{ mod }b)$
+          \>\textbf{else}\>$r\leftarrow gcd(b, a\text{ mod }b)$
         \end{tabbing}\vspace{-\baselineskip}%
     }}}
   \end{block}
@@ -248,7 +248,7 @@
       \begin{column}{.48\linewidth}
         \centerline{\fbox{\vbox{\vspace{-\baselineskip}%
               \begin{tabbing}%
-                $pgcd(a,b)$:\\
+                $gcd(a,b)$:\\
                 ~~\textbf{if} $b = 0$ \=\textbf{then} \=$r\leftarrow a$\\
                 \>\textbf{else}\>$r\leftarrow gcd(b, a\text{ mod }b)$
               \end{tabbing}\vspace{-\baselineskip}%
@@ -269,7 +269,7 @@
 
       \fbox{\begin{column}{.3\linewidth}\vspace{-\baselineskip}
         \begin{tabbing}%
-          $pgcd'(a,b)$:\\
+          $gcd'(a,b)$:\\
           ~~\= $u\leftarrow a$; $v\leftarrow b$\\
           \>\textbf{until} v=0 \=\textbf{do}\\
           \>~~\=$temp\leftarrow v$\\
