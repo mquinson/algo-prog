@@ -142,28 +142,16 @@ TDP3 (knapsack):
 * Il faut inverser certaines questions entre le sujet de TD et le sujet de TP
   (l'arbre d'appel, ...)
 * Il faut rajouter des tests unitaires pour le sujet de TP.
+* ajouter "object knapsack{ ... def main = cherche(Array(5,4,3,2),10)) } "
+
 
 TD knapsack 2013-2014
  - on peut commencer par présenter toutes les variantes du pb du
    knapsack et ensuite on s'intéresse au cas le plus simple.
 
-TDP4 (pyramide), il est embrouillé, surtout sur la correction. J'ai
-tenté de faire un correct() pour toutes les quesitons, mais c'est
-stupide car dans le 2ieme exo (là où est la correction), le critère
-sur "ce nombre est original" est bête. Et quand elle devient utile,
-exo4, on a intéret à utiliser un tab de boolean pour générer valide
-direct au lieu de poser des billes bêtes. 
-Il faut mieux faire ressortir le plan : 
- - une recherche exaustive pour faire une boucle dans un appel 
-   récursif
- - une première idée de backtracking (remplissage par ligne), qui 
-   s'avère pas super car les contraintes arrivent trop tard
- - une méthode qui gagne (remplissage par colonne) car y'a un max de
-   contraintes ASAP.
-* Pour la partie TP, il serait judicieux de fournir les tests unitaire 
-  pour remplir(), correcte(), etc.
-* Passer le codage diagonal à la fin: c'est une optim de "est présente"
-* Et suivre les photos, plus explicative que le sujet
+TDP4 (pyramide):
+ - il doit exister des vieilles photos de tableaux à réintégrer
+ - Il faudrait faire quelques tests unitaires ?
 
 TD5 : Dérécursivation :
  Q1) il manque un x* dans le dernier return..
