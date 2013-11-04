@@ -1,0 +1,671 @@
+\documentclass[10pt]{article}\usepackage[correction]{esial}
+%\documentclass[10pt]{article}\usepackage{esial}
+\TOP
+
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{amstext,amsmath,amsfonts}
+\usepackage{fancyvrb}
+
+\begin{document}
+\color{black}
+\title{TD6 : Dérécursivation}
+\maketitle
+
+
+
+\Exercice \textbf{Dérécursivation de fonctions sur les chaînes de caractères.}
+
+L'objectif de cet exercice est de revenir sur les fonctions sur les chaînes
+vues lors du TD2 afin de les dérécursiver. On rappelle les opérateurs de
+base du type chaîne:
+$$\left\{
+\begin{array}{l}
+  \mathtt{Nil}  \mapsto \text{La liste vide}\\
+  list\mathtt{.head} \mapsto \text{Premier caractère de la liste } list
+    \;\;\;\;\;\;\text{(défini ssi } list \text{ n'est pas vide)}\\
+  list\mathtt{.tail} \mapsto list \text{ privée du premier élément}
+    \text{\hspace{9mm}(défini ssi } list \text{ n'est pas vide)}\\
+  entier \;\mathtt{::}\; list \mapsto \text{Concaténation de l'entier } entier 
+    \text{ et de la liste } list
+\end{array}\right.
+$$
+
+%%%%%%%% est_membre %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{Question}
+  $est\_membre: \left\{
+    \begin{array}{l}
+      List\times Int \mapsto Bool\\
+      \text{retourne VRAI ssi l'entier fait partie de la liste}
+    \end{array}\right.$  
+\end{Question}
+\begin{Reponse}
+  \begin{Verbatim}[label=est\_membre(ch\quotesinglbase c)]
+si list = Nil alors FAUX
+              sinon si list.head == i alors VRAI
+                                      sinon est_membre(list.tail ,i)    
+  \end{Verbatim}
+  \textbf{Attention}, il ne faut pas trouver un algorithme itératif répondant à
+  la question (ce qui est possible vu comment la question est dure), mais bien
+  appliquer la méthode du cours sur un cas simple pour se faire la main avant
+  plus compliqué.
+
+  Ici, tout va bien, c'est récursif terminal.
+
+  \begin{Verbatim}[label=est\_membre(ch\quotesinglbase c)]
+    list_tmp = list
+    while (list_tmp != Nil) {
+      si ch.head = i alors return VRAI
+                     sinon ch_tmp = ch.tail
+    }
+    return FAUX
+  \end{Verbatim}
+\end{Reponse}
+
+%%%%%%%% occurence %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{Question}
+  $occurence: \left\{
+    \begin{array}{l}
+      List\times Int\mapsto \mathbb{N}\\
+      \text{retourne le nombre d'occurences de la valeur dans la liste}
+    \end{array}\right.$  
+\end{Question}
+\begin{Reponse}
+  \begin{Verbatim}[label=occurences(list\quotesinglbase c)]
+si list = Nil alors 0
+              sinon si list.head = i alors 1 + occurence(list.tail,i)
+                                     sinon     occurence(list.tail,i)    
+  \end{Verbatim}
+  Pour dérécursiver, il faut passer sous forme terminale. Encore une fois, on
+  peut aller tout droit, mais ce n'est pas l'objectif du TD. Donc, on prend le
+  temps de faire une fonction avec plus d'arguments, très exactement un
+  argument supplémentaire par opération réalisée lors de la remontée. Ici,
+  juste une addition, donc juste un arg supplémentaire.
+
+  Il faut également rappeller qu'on a le droit de le faire car l'addition est
+  associative et commutative. On initialise l'arg supplémentaire avec l'élément
+  neutre de l'opération, j'ai nommé 0.
+  \begin{Verbatim}[label=occurences(list\quotesinglbase c) terminale]
+occurences(list, c) = occurences_terminale(list, c, 0)
+
+occurences_terminale(list, c, n)
+  si list==Nil alors n
+               sinon si list.head == c alors occurences_terminale(reste(list),c,n+1)
+                                       sinon occurences_terminale(reste(list),c,n)
+  \end{Verbatim}
+
+  Si on déplie une séquence d'appel, on voit bien que les additions qui avaient
+  lieu à la remontée ont maintenant lieu lors de la descente. 
+
+  On est prets pour appliquer la recette de cuisine pour dérécursiver, qui est:
+  \begin{itemize}
+  \item Copie locale des arguments portant la récursion
+  \item Tant que la condition du cas terminal n'est pas atteinte
+    \begin{itemize}
+    \item Faire les opérations réalisées dans le cas général à la descente
+    \item Modifier l'argument portant la récursion
+    \end{itemize}
+  \item Faire le traitement du cas terminal
+
+  \end{itemize}
+  
+  \begin{Verbatim}[label=occurences(list\quotesinglbase c) itérative]
+  occurences(list, c) = 
+    list_tmp = list // c'est lui qui porte la récursion => on copie
+    n = 0 // pas besoin de copier ca, mais faut le créer pour émuler
+          //  l'initialisation faite lors du lancement de helper
+    while (list!=Nil ) // while (!cond_finale) 
+       si premier(list) = c alors n=n+1
+       list_tmp = reste(list_tmp)
+    // y'a rien a faire dans le cas terminal pour occurence
+  \end{Verbatim}
+\end{Reponse}
+
+%%%%%%%% retourne %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{Question}
+  $retourne: \left\{
+    \begin{array}{l}
+      List\mapsto List\\
+      \text{retourne la liste lue en sens inverse}
+    \end{array}\right.$  
+\end{Question}
+\begin{Reponse}
+  Là, à première vue, c'est encore plus compliquée car la version de base est
+  assez difficile à dérécursiver car l'opération à la remontée est la
+  concaténation ($::$), qui
+  n'est pas commutative (ca veut dire A$::$B != B$::$A ;).
+  \begin{Verbatim}[label=retourne(list) -- version bourinne]
+si list = Nil alors Nil
+            sinon dernier(list) :: retourne1(saufdernier(list))
+  \end{Verbatim}
+
+  L'idée est de changer l'algorithme, ne serait-ce que pour passer de $O(n^2)$
+  à $O(n)$. \textbf{Comment leur faire trouver mieux:} Demandez leur de
+  réfléchir à comment ils inversent l'ordre d'une pile de cartes : on prend une
+  pile supplémentaire, on passe le premier de la pile de départ sur l'autre, et
+  on recommence avec la deuxieme de la pile de départ. Si ca aide pas, faut
+  détailler un exemple:
+
+  A trier ABC $\leadsto$ \begin{tabular}{|l l|}\hline
+    ABC&$\emptyset$\\
+    BC&A\\
+    C&BA\\
+    $\emptyset$&CBA\\\hline
+  \end{tabular}$\leadsto$ résulat = CBA
+
+  \begin{Verbatim}[label=retourne(list) -- avec helper]
+retourne2(list):
+  retourne2_helper(list,Nil)
+
+retourne2_helper(list_todo,list_done):
+  si list_todo = Nil alors list_done
+                   sinon retourne2_helper(suite(list_todo),
+                                          premier(list_todo) :: list_done)
+  \end{Verbatim}
+  La concaténation ($::$) n'est pas commutative, mais on a remplacé les
+  dernier() en premier() en meme temps qu'on changait l'ordre, alors ca va.
+  L'idée est de prendre un accumulateur initialisé à ce que la récursion trouve
+  au début de la remontée (la chaine vide), et faire les opérations dans l'ordre
+  que la remontée l'aurait faite.  Je saurais pas vous dire ca en terme
+  technique (dernier() n'est pas l'inverse de premier(), ni l'opposé, et pas
+  vraiment l'opération symétrique non plus), mais ca marche bien.
+
+  Ce qui est bô, c'est que du coup c'est récursive terminal, et on va donc
+  pouvoir appliquer notre recette de cuisine.
+
+  \begin{Verbatim}[label=retourne(list) -- itérative]
+retourne_iter(list):
+  list_tmp = list
+  res = Nil // ce qui était l'accumulateur de la remontée
+  while (list_tmp != Nil)
+    premier(list_tmp) :: res
+    list_tmp=suite(list_tmp)
+  // tjs rien à faire au moment du cas terminal
+  return res
+  \end{Verbatim}
+
+\end{Reponse}
+
+%%%%%%%% concat %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{Question}
+  $concat: \left\{
+    \begin{array}{l}
+      List\times List\mapsto List\\
+      \text{le résultat est la concaténation des deux listes}
+    \end{array}\right.$  
+\end{Question}
+\begin{Reponse}
+  \begin{Verbatim}[label=version brutale: $O(n^2)$]
+concat1(list1,list2):
+  si list1 = Nil alors list2
+               sinon concat1(saufdernier(list1),
+                             dernier(list1) :: list2)
+  \end{Verbatim}
+
+  Celle-ci est rigolote puisque la version inefficace est terminale, et donc on
+  peut faire une version itérative toute pourrie: 
+
+  \begin{Verbatim}[label=version brutale: $O(n^2)$]
+concat_brute_iter(list1,list2):
+  list1_tmp = list1
+  while (! list1_tmp = Nil)
+    dernier(list1_tmp) :: list2
+    list1_tmp = saufdernier(list1)
+  return list2
+  \end{Verbatim}
+
+  Pour aller plus vite ($O(n^2) \rightarrow O(n)$), il faut mettre list1 à
+  l'envers une bonne fois pour toute au lieu d'aller piocher le dernier à tout
+  bout de champ. Exemple à donner pour qu'ils trouvent:
+
+  \begin{tabular}{|l l l|}\hline
+    ABC&DEF& en donnée\\
+    CBA&DEF& on inverse list1 avant d'appeller helper\\
+    BA&CDEF& récursion dans helper\\
+    A&BCDEF& récursion dans helper\\
+    $\emptyset$&ABCFED& Cas terminal de la récursion dans helper\\\hline
+  \end{tabular}$\leadsto$ résultat = ABCDEF
+
+  \begin{Verbatim}[label=version récursive avec helper: $O(n)$]
+concat2_helper(list1,list2): 
+  si list1 = Nil alors list2
+               sinon concat2_helper(list1.tail,
+                                    list1.head :: list2)
+
+concat2(list1,list2):
+  concat2_helper(retourne(list1),list2)    
+  \end{Verbatim}
+
+  c'est encore terminal, on peut y aller.
+  \begin{Verbatim}[label=version itérative efficace: $O(n)$]
+concat_iter_good(list1,list2):
+  list1_tmp = retourne(list1)
+  while(list1_tmp != Nil)
+     list1_tmp.head :: list2
+     list1_tmp = list1_tmp.tail
+  // tjs rien au cas terminal
+  retourne list2
+  \end{Verbatim}
+\end{Reponse}
+
+%%%%%%%% difference %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{Question}
+  $difference: \left\{
+    \begin{array}{l}
+      List\times List\mapsto List\\
+      \text{Le résultat est la liste de tous les éléments de list1 ne faisant
+        pas partie de list2}
+    \end{array}\right.$    
+\end{Question}
+\begin{Reponse}
+  Normalement, vous avez pas eu le temps de la faire, celle là, lors du TD2 vu
+  qu'elle était en dernière position. C'est l'occasion ;)
+  \begin{Verbatim}[label=difference(list1\quotesinglbase list2)]
+si list2 = Nil alors
+  list1
+sinon 
+  si list1 = Nil alors
+    Nil
+  sinon
+    si est_membre(list1.head,list2) alors
+      difference(list1.tail,list2)
+    sinon
+      list1.head :: difference(list1.tail, list2)
+    finsi
+  finsi
+finsi    
+  \end{Verbatim}
+
+  Ce n'est pas terminal, il faut modifier. Mais si on applique la méthode de
+  retourne(), ie si on introduit un accumulateur, il faut changer les premier()
+  en dernier() pour faire les opérations dans le même ordre. 
+
+  \begin{Verbatim}[label=version terminale]
+difference_term(list1, list2)=
+ si list2=Nil alors list1 // comme ca, plus besoin de tester à chaque coup
+            sinon difference_term_help(list1,list2,Nil)
+
+difference_term_help(list1,list2,acc):
+  si list1 = Nil alors
+    acc
+  sinon
+    si est_membre(dernier(list1),list2) alors
+      difference_term_help(saufdernier(list1),list2,acc)
+    sinon
+      difference_term_help(saufdernier(list1),list2,dernier(list1) :: acc)
+    finsi
+  finsi
+finsi    
+  \end{Verbatim}
+
+  On peut dérécursiver ça, mais c'est dommage de dégrader ainsi les perfs (on
+  vient de passer $O(n)$ à $O(n^2)$).  On peut avoir l'idée de mettre list1 à
+  l'envers avant de commencer afin d'obtenir facilement les derniers, qui se
+  retrouvent devant.
+
+  \begin{Verbatim}[label=version terminale efficace]
+difference_term_good(list1, list2)=
+ si list2=Nil alors list1 // comme ca, plus besoin de tester à chaque coup
+            sinon difference_term_help(retourne(list1),list2,Nil)
+
+difference_term_good_help(list1,list2,acc):
+  si list1 = Nil alors
+    acc
+  sinon
+    si est_membre(list1.head, list2) alors
+      difference_term_help(list1.tail, list2,acc)
+    sinon
+      difference_term_help(list1.tail,list2,  list1.head :: acc)
+    finsi
+  finsi
+finsi    
+  \end{Verbatim}
+
+  Voilà qui est mieux. On peut dérécursiver.
+
+  \begin{Verbatim}[label=version terminale efficace]
+difference_iter(list1, list2)=
+ si list2=Nil alors retourne list1
+ list1_tmp = retourne(list1)
+ accu = Nil
+ while(list1_tmp != Nil)
+    si ! est_membre(list1_tmp.head, list2) alors
+      list1_tmp.head :: accu
+      list1_tmp = list1_tmp.tail
+ // je n'arrive pas à trouver de fonction récursive faisant qqch de non trivial
+ // au cas terminal.. Tant pis
+ retourne accu
+  \end{Verbatim}
+
+  Une autre idée est de se dire simplement que l'énoncé n'impose pas d'ordre
+  sur les lettres qu'on retourne. Peut-être bien qu'on peut alors se permettre
+  de renvoyer les lettres dans le desordre (càd, utiliser list1.head sans
+  prendre la peine de mettre list1 à l'envers). Dans la vraie vie, il faudrait
+  vérifier, renégocier le cahier des charges avec le client, mais là, on va pas
+  s'embetter.
+
+
+\end{Reponse}
+
+%%%%%%%% nnaturels %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{Question}
+  $nnaturels: \left\{
+    \begin{array}{l}
+      \mathbb{N}\mapsto List\\
+      \text{résultat: une liste formée des n premiers entiers naturels}
+    \end{array}\right.$  
+\end{Question}
+\begin{Reponse}
+  \fbox{\large\textbf{Question optionnelle}} a faire si vous avez décidément
+  pas envie de dérécursiver Hanoi. Ce qui suit est juste la correction du
+  TD2. Elle est amusante à dérécursiver, car avant, on avait du mal à faire la
+  liste à l'endroit. Ici, elle va se construire tout naturellement dans
+  l'accumulateur, pile comme il faut.
+  
+  \begin{Verbatim}[label=Version simple qui donne la liste à l'envers]
+nnaturels1(n):
+  si n = 0 alors Nil
+           sinon n :: nnaturels1(n-1)
+  \end{Verbatim}
+
+  \begin{Verbatim}[label=Version trichée qui donne la chaine à l'endroit:]
+nnaturels2(n):
+  retourne(nnaturels1(list))
+  \end{Verbatim}
+  
+  Pour faire la série dans l'ordre sans tricher, il faut une fonction
+  d'aide. Pour le faire trouver, on peut écrire au tableau les différents
+  arguments pris par cette fonction d'aide.
+  \begin{Verbatim}[label=Version avec helper:]
+nnaturels3(n):
+  nnaturels3_helper(1,n-1)    
+
+nnaturels3_helper(n, todo):
+  si todo = 0 alors Nil
+              sinon n :: nnaturels3_helper(n+1,todo-1)
+  \end{Verbatim}
+\end{Reponse}
+
+\Exercice \textbf{Dérécursivation de l'exponentiation rapide.}
+
+\begin{Reponse}
+  Le principal intéret de cet exo est d'avoir un traitement sur le cas
+  terminal. Il faudrait le retoucher (et surtout refaire la correction) pour
+  expliciter ca. Peut-etre l'an prochain.
+\end{Reponse}
+
+On souhaite calculer (rapidement) $x^n$ ($x$ et $n$ étant entiers).
+\begin{itemize}
+\item Si $n$ est pair alors $x^n=\left(x^2\right)^{\frac{n}{2}}$. Il suffit
+  alors de calculer $y^{n/2}$ avec $y=x^2$.
+\item Si $n$ est impair et $n>1$, alors
+  $x^n=x\times\left(x^2\right)^{\frac{n-1}{2}}$. Il suffit de calculer
+  $y^{\frac{n-1}{2}}$ avec $y=x^2$ et de multiplier le résultat par $x$.
+\end{itemize}
+
+Cela nous amène à l'algorithme récursif suivant qui calcule $x^n$ pour un
+entier strictement positif $n$:
+
+$$puissance(x,n)=\left\{
+\begin{array}{c l}
+  x, & \text{si }n=1\\
+  puissance(x^2,\frac{n}{2}), &\text{si $n$ pair}\\
+  x\times puissance(x^2,\frac{n-1}{2}), &\text{si $n$ impair ($n\neq 1$)}
+\end{array}\right.$$
+
+
+\begin{Question}
+  Écrivez une fonction récursive calculant l'exponentiel d'un entier avec cet
+  algorithme.
+\end{Question}
+\begin{Reponse}
+  \VerbatimInput{implem.java}
+\end{Reponse}
+
+\begin{Question}
+  Quelle est la complexité de cet algorithme?
+\end{Question}
+\begin{Reponse}
+  On divise le travail restant par  deux à chaque étape. La complexité est donc
+  $O(log_2n)$.
+\end{Reponse}
+
+\begin{Question}
+  Transformez cette fonction en une fonction récursive terminale.
+\end{Question}
+\begin{Reponse}
+  \begin{itemize}
+  \item[$\bullet$] On l'écrit sous forme fonctionnelle:
+  \end{itemize}
+
+  \begin{tabbing}
+    puiss(x, n)=\\
+    ~~\=\textbf{si} $n=0$ \=\textbf{alors} 1\\
+    \>\>\textbf{sinon} \=\textbf{si} pair(n)\\
+    \>\>\>\textbf{alors} ~~~~~puiss($x\times x$, n div 2)\\
+    \>\>\>\textbf{sinon} $x\times $puiss($x\times x$, n div 2)\\
+  \end{tabbing}
+
+  \begin{itemize}
+  \item[$\bullet$] Pour passer en récursivité terminale, il faut créer une
+    autre fonction avec plus de paramètres. Les paramètres supplémentaires
+    servent d'accumulateurs pour faire lors de la descente les calculs qui
+    auraient du avoir lieu lors de la remontée.
+  \item[$\bullet$] Ici, lors de la remontée, on multiplie par un nombre (pas
+    toujous le même).
+  \item[$\bullet$] On pose donc $puissTerm(x, n, s) = s\times puiss(x, n)$
+  \item[$\bullet$] On transforme: 
+    \begin{tabbing}
+      $puissTerm(x, n ,s)=s\times puiss(x, n)$\\
+      ~~~~~~~\=$=s\times$ (\=\textbf{si} $n=0$ \=\textbf{alors} 1\\
+      \>\>\>\textbf{sinon} \=\textbf{si} pair(n)\\
+      \>\>\>\>\textbf{alors} ~~~~~puiss($x\times x$, n div 2)\\
+      \>\>\>\>\textbf{sinon} $x\times $puiss($x\times x$, n div 2)\\
+      \>\>)
+    \end{tabbing}
+  \begin{itemize}
+  \item[$\bullet$] On rentre le $s\times$
+  \end{itemize}
+    \begin{tabbing}
+      ~~~~~~~=\= ~\textbf{si} $n=0$ \=\textbf{alors} $s\times 1$\\
+      \>\>\textbf{sinon} \=\textbf{si} pair(n)\\
+      \>\>\>\textbf{alors} ~$s\times$~~~~~puiss($x\times x$, n div 2)\\
+      \>\>\>\textbf{sinon} $s\times x\times $puiss($x\times x$, n div 2)
+  \end{tabbing}
+  \begin{itemize}
+  \item[$\bullet$] On replie (utilisant en chemin l'associativité du
+    $\times$). Ca donne la définition de $puissTerm$.
+  \end{itemize}
+    \begin{tabbing}
+      ~~~~~~~=\= ~\textbf{si} $n=0$ \=\textbf{alors} $s$\\
+      \>\>\textbf{sinon} \=\textbf{si} pair(n)\\
+      \>\>\>\textbf{alors} ~$puissTerm(x\times x, n\text{ div }2, s)$\\
+      \>\>\>\textbf{sinon} $puissTerm(x\times x, n\text{ div }2, s\times x)$
+  \end{tabbing}
+
+  \begin{itemize}
+  \item[$\bullet$] Il suffit bien entendu d'initialiser $s=1$ au démarrage de
+    la récursion.
+  \end{itemize}
+
+\end{itemize}
+\end{Reponse}
+
+
+\begin{Question}
+  Transformez la fonction obtenue en fonction itérative.
+\end{Question}
+\begin{Reponse}
+  \VerbatimInput{expoInter.java}
+\end{Reponse}
+
+\Exercice \textbf{Dérécursivation des tours de Hanoï.}
+
+\begin{minipage}{.4\linewidth}
+\centerline{\fbox{\vbox{\large %
+    \begin{tabbing}%
+    \textsc{hanoi}(n,a,b):\\
+      ~~\=\textbf{si} n = 1 \=\textbf{sinon} \= deplacer(a,b) \kill
+      \>\textbf{si} n = 1 \>\textbf{alors} \> deplacer(a,b) \\
+      \>\> \textbf{sinon} \>hanoi(n-1, a, c)\\
+      \>\>                \>deplacer(a, b)\\
+      \>\>                \>hanoi(n-1, c, b)\\
+      \>\textbf{finsi}%
+    \end{tabbing}\vspace{-.8\baselineskip}%
+  }}}\medskip
+  
+\end{minipage}~\begin{minipage}{.55\linewidth}
+  \begin{Question}
+    Dérécursivez cet algorithme. Comme cet algorithme n'est pas récursif
+  terminal, il faut utiliser une pile. On y conservera l'état courant du
+  programme, constitué des paramètres de la fonction récursive auxquels on
+  ajoute un marqueur entier indiquant le numéro de l'appel récursif simulé
+  (puisqu'il y en a 2).
+\end{Question}
+\end{minipage}
+
+\begin{Reponse}
+  \begin{itemize}
+  \item[$\bullet$] Cette dérécursivation a été vue en cours, mais c'est pas
+    simple à comprendre sans écouter ;) Je vous invite à re-regarder les
+    transparents 87 et 88 du cours pour voir ce qu'ils ont vu (et ce qu'il faut
+    leur expliquer, donc).
+  \item[$\bullet$] Pour guider les élèves pour qu'ils le trouvent, je pense
+    qu'il faut tourner la version récursive à la main et leur montrer ce que
+    fait l'ordinateur. Il utilise une pile pour se souvenir? Ben on va faire
+    pareil. 
+  \item[$\bullet$] Remarquons que cet algo est dans le cours, hein.
+  \end{itemize}\begin{tabbing}
+    hanoiIter(int n, int dep, int arr, int aux) \{\\
+    ~~~~~\=int appel; // le numéro de l'appel récursif\\
+    \>empiler(n,dep,arr,aux,1)\\
+    \>while (pile non vide) \{\\
+    \>~~~~~\=(n, dep, arr, aux, appel) $\leftarrow$ depiler()\\
+    \>\>if ($n>0$) \{\\
+    \>\>~~~~~\=if (appel == 1) \{\\
+    \>\>\>~~~~~\=empiler(n, dep, arr, aux, 2)\\
+    \>\>\>\>empiler(n-1, dep, aux, arr, 1)\\
+    \>\>\>\} else \{ // deux valeurs possibles seulement\\
+    \>\>\>\>deplace(dep, arr)\\
+    \>\>\>\>empiler(n-1, aux, arr, dep, 1)\\
+    \>\>\>\}\\
+    \>\>\}\\
+    \>\}\\
+    \}
+  \end{tabbing}
+
+\end{Reponse}
+
+\Question Dessinez les états successifs de la pile lors de Hanoi(3,a,b)
+
+\begin{Reponse}
+  Il est impossible de comprendre l'algo si on le fait pas
+  tourner une fois à la main.  
+\end{Reponse}
+
+% \section{Retour sur la recherche dichotomique}
+% On rappelle l'algorithme de  la recherche dichotomique dans un tableau
+% trié:\medskip 
+
+% \begin{minipage}{.5\linewidth}
+
+% %  \centerline{\fbox{\vbox{\large %
+%     \begin{verbatim}
+% int dichoRec(tab,elem,inf,sup) {
+%   if (sup - inf <= 1) {
+%     if (tab[inf] == elem) {
+%       return inf;
+%     } else if (tab[sup] == elem) {
+%       return sup;
+%     } else {
+%       return -1;
+%     }
+%   } else {
+%     int milieu = (inf + sup) / 2;
+    
+%     if (elem < tab[milieu]) {
+%        return dichoRec(tab,inf,milieu,elem);
+%     } else {
+%        return dichoRec(tab,milieu,sup,elem);
+%     }
+%   }
+% }
+% \end{verbatim}
+% %}}}
+% \end{minipage}~
+% \begin{minipage}{.5\linewidth}
+% \begin{Question}
+%   Écrire la spécification pré/post.
+% \end{Question}
+
+% \begin{Question}
+%   Démontrer la correction partielle de \texttt{dichoRec()} par rapport à sa
+%   spécification.
+% \end{Question}
+% \begin{Question}
+%   Démontrer que \texttt{dichoRec()} termine.
+% \end{Question}
+
+% \begin{Question}
+%   Dérécursivez cette fonction.
+% \end{Question}
+% \end{minipage}
+
+% \begin{Reponse}
+%   \textbf{Précondition:} Soit elem n'est pas dans le tableau, soit son indice
+%   est entre inf et sup. (et aussi que le tableau est trié, mais bon)
+
+%   \textbf{Post-condition:} la même chose  
+% \end{Reponse}
+
+% \begin{Reponse}
+%   \textbf{Correction partielle:} Il faut montrer que si la précondition est
+%   bonne, la postcondition l'est aussi. C'est trivial avec les trois lignes de
+%   la fin.
+% \end{Reponse}
+
+
+% \begin{Reponse}
+%   \textbf{Terminaison:} On s'arrête quand $min-max<=1$. Il faut montrer que la
+%   taille de la partie étudiée du tableau décroit strictement jusque là. Ce
+%   n'est pas aussi trivial qu'il y parait, et il est facile de faire une boucle
+%   infini en se gourant dans le calcul de milieu. Cela vient d'histoires de
+%   partie entière. Mais c'est bon, là (désolé, du flou de cette réponse, c'est
+%   mieux que l'an passé où y'avait pas de correction du tout pour cette
+%   question, et moins bien que l'an prochain).
+% \end{Reponse}
+
+
+% \begin{Reponse}
+%   \textbf{Dérécursivation.} Ca va tout seul, c'est à récursivité terminale,
+%   faut juste l'écrire.
+
+% \begin{verbatim}
+% int dichotomie(tab, elem) {
+%   sup=taille de tab
+%   inf=0
+%   tant que (sup-inf <=1) {
+%     milieu= (inf + sup) / 2;
+ 
+%     si (elem < tab[milieu]) {
+%       sup = milieu
+%     } sinon {
+%       inf = milieu
+%     }
+%   }
+%   si (tab[inf] == elem) {
+%     renvoie inf
+%   } sinon si (tab[sup] == elem) {
+%     renvoie sup
+%   } sinon {
+%     renvoie -1
+%   }
+% }
+% \end{verbatim}
+% \end{Reponse}
+% \url{http://www.info.univ-angers.fr/pub/stephan/LICENCE_INFO/DERECURSIVATION/derecursivation.html}
+
+%\url{http://www-local.essi.fr/asd101/}
+\end{document}
+%%% Local Variables:
+%%% coding: utf-8
