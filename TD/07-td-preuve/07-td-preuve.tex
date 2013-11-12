@@ -1,0 +1,430 @@
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+%\documentclass[10pt]{article}\usepackage{esial}
+\TOP\unA
+
+\usepackage[latin1]{inputenc}
+\usepackage{url}
+\usepackage{amstext,amsmath,amsfonts}
+\usepackage{fancyvrb}
+
+\begin{document}
+\color{black}
+\title{TD6 : Logique de Hoare et Preuve de programmes}
+\maketitle
+
+\noindent On rappelle les règles d'inférence de la logique de Hoare:
+
+
+$$\frac{}{\{P\} skip \{P\}} ~~~~~~~~~~  \frac{}{\{P[x/E]\} x:=E \{P\}} ~~~~~~~~~~
+\frac{P\Rightarrow P', \{P\} ~C~ \{Q\}, Q\Rightarrow Q'}{\{P'\} ~C~ \{Q'\}}$$
+
+$$\hspace{-14mm}\frac{\{P\} C_1 \{Q\},~~ \{Q\} C_2 \{R\}}{\{P\} C_1;C_2 \{R\}}
+ ~~~~~~~
+\frac{\{P\wedge Cond\} ~T~ \{Q\},~~ \{P\wedge\neg Cond\} ~E~
+      \{Q\}}{\{P\} \mathbf{~if~} Cond \mathbf{~then~} T \mathbf{~else~} E \mathbf{~endif~} \{Q\}}
+~~~~~~~
+\frac{\{I\wedge Cond\wedge V=z\} ~L~ \{I\wedge V<z\}~,~I\Rightarrow V\geq0}
+            {\{I\} \mathbf{~while~} Cond \mathbf{~do~} 
+                   L \mathbf{~endif~} \{I\wedge\neg Cond\}}$$    
+
+$P$, $Q$, $I$ et $Cond$ sont des assertions sans effet de bord. $C$, $C_1$,
+$C_2$, $T$ et $L$ sont des instructions. V est un variant, c'est à dire une
+variable entière du pseudo-code. Ce que la règle de la boucle indique, c'est
+que le variant est initialement égal à une valeur arbitraire $z$, et que sa
+valeur décroit strictement à chaque itération de la boucle. Ce point est
+indispensable pour montrer la terminaison de l'algorithme.
+
+\Exercice \textbf{Calcul de la racine carrée} (d'après Hayssam Soueidan).
+
+\noindent\begin{minipage}{.65\linewidth}
+  ~~~On considère le programme ci-contre. Nous allons montrer avec le calcul de
+  Hoare qu'il calcule la racine carrée. Plus précisément, qu'il est
+  partiellement correct par rapport à la précondition $(x\geq0)$ et à la
+  post-condition $(y_1\times y_1\leq x)\wedge((y_1+1)\times (y_1+1)> x)$
+
+  
+  ~~Appelons $S_0$ le sous-programme constitué des 3 premières instructions, et S
+  le sous-programme qui forme le corps de la boucle.
+\end{minipage}\hfill%
+\begin{minipage}{.3\linewidth}
+\begin{Verbatim}
+  y1:=0
+  y2:=1
+  y3:=1
+  while y3<=x do
+    y1 := y1 + 1
+    y2 := y2 + 2
+    y3 := y3 + y2
+  done
+\end{Verbatim}  
+\end{minipage}
+
+\Question Calculez les valeurs que prennent les variables $y_1$, $y_2$, $y_3$
+pour les premières itérations de la boucle while. Conjecturer les valeurs de
+$y_2$ et $y_3$ en fonction de $y_1$. On note $P$ la conjonction de ces deux
+égalités et de $(y_1\times y_1 \leq x)$
+
+\begin{Reponse}
+  $y_2=2\times y_1 + 1$ et $y_3=(y_1+1)^2$. On a donc:
+  $\underbrace{(y_2=2\times y_1 +
+    1)}\wedge\underbrace{(y_3=(y_1+1)^2)}\wedge\underbrace{(y_1\times y_1 \leq
+    x)}$
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$p_1$
+  ~~~~~~~~~~~~~~~~~~~~~$p_2$
+  ~~~~~~~~~~~~~~~~~~$p_3$
+\end{Reponse}
+
+\Question $P$ va être l'invariant de la boucle. C'est ce que l'on va montrer en
+utilisant la règle d'inférence du while.
+
+Écrire la prémise que l'on doit utiliser, et montrer qu'elle est valide.
+Indication: partir de la post-condition pour trouver les conditions
+intermédiaires. 
+
+\begin{Reponse}
+  On part de la fin de $S$. C'est une séquence, cela nous donne:
+
+  \begin{center}
+    \begin{tabular}{ccc}
+      $\{p'\}$&$y_3:=y_3+y_2$&$\{p\}$\\
+      $\{p''\}$&$y_2:=y_2+2$&$\{p'\}$\\
+      $\{p'''\}$&$y_1:=y_1+1$&$\{p''\}$\\
+    \end{tabular}
+  \end{center}
+
+  En appliquant la règle d'affectation, et en effectuant les réécritures
+  qu'elle impose, on trouve:
+
+  \begin{center}
+    \begin{tabular}{c@{~$\equiv$~}c@{~$\wedge$~}c@{~$\wedge$~}c}
+      $P$   &$(y_2=2\times y_1 + 1)$&$(y_3=(y_1+1)^2)$&$(y_1\times y_1 \leq x)$\\
+      $P$   &$p_1$&$p_2$&$p_3$\\
+      $p'$  &$p_1$&$(y_3+y_2=(y_1+1)^2$&$p_3$\\
+      $p''$ &$(y_2+2=2\times y_1+1)$&$(y_3+y_2+2=(y_1+1)^2$&$p_3$\\
+      $p'''$&$(y_2+2=2\times (y_1+1)+1)$&$(y_3+y_2+2=(y_1+2)^2$&$((y_1+1)^2 \leq x)$\\
+    \end{tabular}
+  \end{center}
+  
+  Par composition, on a donc: $\{p'''\} S \{P\}$. 
+  Un peu d'arithmétique sur la définition de $p'''$ nous donne:
+  $p'''\equiv (y_2=2\times y_1+1)\wedge(y_3+2\times y_1+1+2=y_1^2+4y_1+4)\wedge((y_1+1)^2 \leq x)$\\
+  $p'''\equiv (p_1)\wedge(y_3=y_1^2+2y_1+1)\wedge((y_1+1)^2 \leq x)$ \\
+  $p'''\equiv (p_1)\wedge(y_3=(y_1+1)^2)\wedge(y_3 \leq x)$ \\
+  $p'''\equiv (p_1)\wedge(p_2)\wedge(y_3 \leq x)$. Mais cette formule est une
+  conséquence de $\{P\wedge(y_3 \leq x)\}$ \\
+
+  Avec la règle de la conséquence, on trouve donc la prémisse $\{P\wedge(y_3 \leq x)\}$ 
+\end{Reponse}
+
+\Question Montrez que $P$ est vérifiée après les 3 premières instructions du
+programme, sous la condition $(x\geq0)$. On veut donc montrer que $\{x\geq0\}
+S_0 \{P\}$ est valide.
+\begin{Reponse}
+  En remontant, on obtient facilement (à lire de bas en haut, donc):
+
+  \begin{tabular}{rcl}
+    $\{(1=1)\wedge(1=1)\wedge(0\leq x)\}$&$y_1:=0$&
+    $\{(1=2\times y_1+1)\wedge(1=(y_1+1)^2)\wedge p_3\}$\\
+
+    $\{(1=2\times y_1+1)\wedge(1=(y_1+1)^2)\wedge p_3\}$&$y_2:=1$&
+    $\{p_1\wedge(1=(y_1+1)^2)\wedge p_3\}$\\
+
+    $\{p_1\wedge(1=(y_1+1)^2)\wedge p_3\}$&$y_3:=1$&$\{P\}$\\
+  \end{tabular}
+
+  La première condition étant équivalente à $r\geq0$, on en conclut par les
+  règles de conséquence et de composition que $\{x\geq0\}S_0\{P\}$ est valide.
+\end{Reponse}
+
+\Question Concluez.
+\begin{Reponse}
+  En composant les deux morceaux, on obtient la validité de:
+
+  \begin{tabular}{rcl}
+    $\{x\geq0\}$&$Code$&$\{P\wedge y_3>x\}$\\    
+    $\{x\geq0\}$&$Code$&$\{(y_2=2\times y_1 +
+    1)\wedge(y_3=(y_1+1)^2)\wedge(y_1\times y_1 \leq x)\wedge (y_3>x)\}$\\     
+    $\{x\geq0\}$&$Code$&$\{(y_2=2\times y_1 + 1)\wedge(y_1^2 \leq x)\wedge ((y_1+1)^2>x)\}$\\     
+    $\{x\geq0\}$&$Code$&$\{(y_1^2 \leq x)\wedge ((y_1+1)^2>x)\}$\\     
+  \end{tabular}
+
+  Ouf.
+\end{Reponse}
+
+
+\Exercice \textbf{Fibonnacci} (d'après Ralf Treinen).
+
+\newcommand{\WP}[1]{\textbf{WP}($#1$)}
+
+Nous allons maintenant utiliser une autre méthode pour démontrer la validité
+d'un calcul de Fibonacci. Des règles d'inférence d'Hoare se déduit un
+algorithme très simple permettant de calculer la précondition la plus faible
+(\textit{weakest precondition}) à partir d'une instruction $C$ et d'une
+post-condition $Q$. On notera que le calcul de cette précondition \WP{C,Q}
+nécessite d'annoter chaque boucle \texttt{while} par un invariant et un variant
+(syntaxe: $\{inv ~I~ var ~V\}$), et que ce calcul est susceptible de produire
+des obligations de preuves. Il s'agit d'expression qu'il faudra démontrer par
+ailleurs pour que l'ensemble soit vrai.
+\begin{enumerate}
+\item \WP{nop, Q}  $\equiv Q$
+\item \WP{x:=E, Q} $\equiv Q[x:=E]$
+\item \WP{C;D, Q}  $\equiv$ \WP{C, \WP{D,Q}}
+\item \textbf{WP}(\texttt{if} $Cond$ \texttt{then} $C$ \texttt{else} $D$)
+  $\equiv (Cond=\mathtt{true}\Rightarrow \mathbf{WP}(C,Q))~\wedge~
+          (Cond=\mathtt{false}\Rightarrow \mathbf{WP}(D,Q))$
+\item \textbf{WP}(\texttt{while} $E$ \texttt{do} $C$ \texttt{done} \{inv I var V\},Q)
+  $\equiv I$\\
+  Plus les obligations de preuves suivantes:
+  \begin{itemize}
+  \item[$\bullet$] $(E=\mathtt{true}\wedge I\wedge V=z) \Rightarrow
+    \mathbf{WP}(C,I\wedge V<z))$
+    (preuve que chaque passage décrémente le variant)
+  \item[$\bullet$] $I\Rightarrow V\geq 0$
+    % 
+    \hfill (preuve que le variant reste valide lors les passages successifs)
+  \item[$\bullet$] $(E=\mathtt{false}\wedge I) \Rightarrow Q$
+    %
+    \hfill (preuve qu'après le dernier passage, Q est bien atteint)
+  \end{itemize}
+\end{enumerate}
+
+\bigskip
+
+Pour montrer le triplet de Hoare \fbox{\{P\} C \{Q\}}, il suffit alors de
+montrer la proposition \fbox{$P\Rightarrow \WP{C,Q}$} ainsi que toutes les
+obligations de preuves engendrées lors du calcul de \WP{C,Q}.
+
+\begin{minipage}{.63\linewidth}
+  Calculez la plus faible précondition pour que code donné ci-contre admette
+  comme post-condition que $a=fib(n)$ (ie, que l'algorithme calcule Fibonacci
+  de n dans $a$).  
+\end{minipage}\hfill%
+\begin{minipage}{.3\linewidth}
+\begin{Verbatim}[label=FIB]
+  i:=1
+  a:=1
+  b:=1
+  while i<n do
+    i:=i+1
+    u:=a
+    a:=a+b
+    b:=u
+  done
+\end{Verbatim}  
+\end{minipage}
+
+\begin{Reponse}
+  On note $Q\equiv a=f_n$.  
+
+  On applique la règle 3 pour la séquence l1 d'une part, et tout le reste
+  d'autre part:\\
+  \centerline{\WP{FIB,Q}=\WP{l1,\WP{reste,Q}}}
+
+  Puisque l1 est une affectation, on applique la règle 2, et on vire gentiment
+  le WP englobant.\\
+  \centerline{\WP{FIB,Q}=\WP{reste,Q} [i:=1]}
+
+  En recommençant 3 fois, on trouve:\\
+  \centerline{\WP{FIB,Q}=\WP{while,Q} [i:=1;a:=1;b:=1]}
+  
+  Il faut maintenant chercher l'invariant et le variant de la boucle. Le
+  variant est $n-i$, de façon à varier entre z=n et 0($<z$)
+  L'invariant est $I\equiv 0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}$
+
+  Donc, en appliquant la règle 5, on a:
+  \WP{FIB,Q}=I [i:=1;a:=1;b:=1], plus les obligations de preuve suivantes:
+  \begin{enumerate}
+  \item $i<n \wedge I \wedge n-i=z\Rightarrow \mathbf{WP}(loopBody, I\wedge n-i<z)$
+  \item $I\Rightarrow n-i\geq0$
+  \item $(i\geq n \wedge I)\Rightarrow Q$
+  \end{enumerate}
+
+  Pour le premier, on a que des affectations dedans, donc ca se réécrit
+  facilement. Pour les deux autres, remplacer I par sa valeur aide beaucoup:
+  \begin{enumerate}
+  \item $i<n \wedge I \wedge n-i=z\Rightarrow (I\wedge n-i<z) [i:=i+1,a:=a+b,b:=a]$
+  \item $0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}\Rightarrow n-i\geq0$
+  \item $(i\geq n \wedge 0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1})\Rightarrow a=f_i$
+  \end{enumerate}
+
+  L'obligation de preuve 2 est triviale puisqu'on a bien $0\leq i\leq
+  n\Rightarrow n-i\geq0$ (on peut oublier 2 éléments à gauche de $\Rightarrow$,
+  ce qui était $I$ suffit à prouver ce qui est à droite.
+
+  Pareil pour l'obligation de preuve 3: on ne garde que l'élément au milieu des
+  $\wedge$, et on a ce qu'il fallait démontrer.
+
+  Pour la première, il faut également remplacer I par sa valeur, puis remplacer
+  les résultats d'affectation.
+%  On note $a'$ le a après affectation, et $a$ celui avant (pour s'y retrouver).
+
+   $i<n  \wedge n-i=z \wedge I\Rightarrow (I\wedge n-i<z)
+    [i:=i+1,a:=a+b,b:=a]$
+
+  \noindent On remplace I par sa valeur
+
+   $(i<n)  \wedge (n-i=z) \wedge (0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1})$\\
+   ~~~~~~~~$\Rightarrow (0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}\wedge n-i<z)
+    [i:=i+1,a:=a+b,b:=a]$
+
+  \noindent On fait les réécritures imposées par les trucs entre crochets. Sans
+  réfléchir comme un cherche/remplace.
+   $(i<n)  \wedge (n-i=z) \wedge (0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1})
+   \Rightarrow (0\leq i+1\leq n\wedge a=f_{i-1}+f_{i-2} \wedge
+   b=f_{i-1}\wedge n-(i+1)<z)$
+
+   $a$ prend cette valeur, car il est l'ancien $a$ plus l'ancien $b$. L'ancien
+   $a$ est $f_{i-1}$ (vu que $i$ a été mis à jour), et l'ancien $b$ est
+   $f_{(i-1)-1}$ pour la même raison. le nouveau $b$ est l'ancien $a$
+
+   \noindent On simplifie l'écriture de part et d'autre du $\Rightarrow$ (drt:
+   $f_i=f_{i-1}+f_{i-2}$; gch, range les éléments sur $i$)\\
+   $(n-i=z) \wedge (0\leq i< n)\wedge (a=f_i) \wedge (b=f_{i-1})
+   \Rightarrow (0\leq i+1\leq n)\wedge (a=f_i) \wedge
+   (b=f_{i-1})\wedge (n-(i+1)<z)$
+
+   On a quatre éléments dans la partie droite de cette première obligation de
+   preuve:
+   \begin{itemize}
+   \item $0\leq i+1\leq n$: on a ça trivialement depuis le $(0\leq i< n)$
+     présent à gauche.
+   \item $a=f_i$: présent à l'identique à gauche
+   \item $b=f_{i-1}$: présent à l'identique à gauche
+   \item $n-(i+1)<z$: À gauche, on a $n-i=z$ donc trivialement $n-i-1<z$
+   \end{itemize}
+
+   \medskip
+   Et voila, on a démontré les 3 obligations de preuves. Il ne reste plus qu'à
+   démontrer $P\Rightarrow WP(FIB,Q)$, càd $P\Rightarrow I [i:=1;a:=1;b:=1]$
+   càd $P\Rightarrow 0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}
+   [i:=1;a:=1;b:=1]$ càd $P\Rightarrow 0\leq 1\leq n\wedge 1=f_1 \wedge 1=f_0$
+
+   En virant les éléments trivialement vrais, on trouve qu'il faut démontrer: $P\Rightarrow 1\leq n$
+
+   Mais quelle est donc la proposition P qui fait en sorte que l'expression
+   ci-dessus soit vraie ? Ben $n>0$ marche très bien, hein. Et voila, par magie
+   de la logique, on vient de montrer que notre fonction calcule bien fibonacci(n)
+   dans sa variable $a$ sous la précondition que $n>0$
+\end{Reponse}
+
+\ifcorrection{\newpage}{}
+\Exercice \textbf{Calcul du minimum} (d'après Alexandre Miquel).
+
+\noindent\begin{minipage}{.63\linewidth}
+  On considère le code ci-contre, qui calcule le minimum d'une fonction entre 1
+  et $n$.
+
+  \Question Quelle est la spécification formelle de ce programme? Spécifiez en
+  particulier la post-condition.
+
+  \Question Trouvez l'invariant et le variant de la boucle while.
+\end{minipage}\hfill%
+\begin{minipage}{.35\linewidth}
+\begin{Verbatim}[label=MIN]
+  m:=f(1)
+  i:=2
+  while i<n do
+    if (f(i)<m) then m:=f(i)
+    i++
+  done
+\end{Verbatim}  
+\end{minipage}
+
+\begin{Reponse}
+  Il faut donc tout d'abord spécifier la post-condition de façon un peu carré
+  de façon à pouvoir le démontrer par la suite.
+
+  \fbox{\textbf{Post} $\equiv (\exists u\in[1,n] tq~ m=f(u)) \wedge (\forall
+  v\in[1,n], m\leq f(v))$}
+
+On peut également donner la précondition révée (\fbox{\textbf{Pré} $\equiv
+  n>0$}), mais le principe de la preuve avec les WP, c'est justement de
+calculer la précondition nécessaire pour que ce code donne la
+post-condition. Donc, en général, la précondition est un résultat de la preuve,
+pas un truc à deviner.
+
+  Ensuite, il faut donner le variant. On regarde comment bouge l'indice $i$, et
+  on tripatouille pour que le variant bouge depuis un nombre non nul au début
+  jusqu'à 0 à la fin. On va donc prendre \fbox{$V=n-i$}
+
+  Reste maintenant à deviner l'invariant. Pour cela, et bien y'a rien de
+  mécanique, il faut comprendre l'algorithme et voir pourquoi il fonctionne.
+  D'ailleurs, il est important d'insister auprès des élèves sur le fait que
+  l'art de trouver l'invariant est sans doute le bout de ce module qu'ils
+  réutiliseront le plus dans leur vie professionnelle. Quand l'algo est
+  complexe (pas forcément long, mais complexe), il est courant de mettre
+  l'invariant de boucle dans la documentation, pour aider les lecteurs à
+  comprendre ce qui se passe, pourquoi ca fonctionne.
+
+  Un autre indice pour deviner l'invariant ici, c'est qu'on va se retrouver à
+  faire la preuve suivante:
+  $$
+  \begin{array}{c c c}
+    \{Pre\}&Init&\{P_{intermediaire}\}\\
+    \{P_{intermediaire}\}&While&\{Post\}
+  \end{array}$$
+
+  Pour cela, ça serait plus simple si notre invariant ressemblait fortement à
+  la post-condition. Ca tombe bien, car si on regarde l'algo, il est construit
+  pour faire en sorte qu'à n'importe quelle étape $i$ de la boucle, on ait dans
+  $m$ l'élément minimum de la partie du tableau à gauche de $i$. Un dessin
+  aide:
+
+  \centerline{\includegraphics{fig/invariant-minimum.fig}}
+
+  Avec ces infos, écrire l'invariant devrait plus poser problème.
+
+  \fbox{\textbf{Invariant} $\equiv(2\leq i\leq n)\wedge(\exists u\in[1,i] tq~
+    m=f(u)) \wedge (\forall v\in[1,i], m\leq f(v))$}
+\end{Reponse}
+
+\Question Calculez les obligations de preuve correspondantes, et vérifier
+qu'elles sont satisfaites.
+
+\begin{Reponse}
+  Ben j'ai rien à proposer cette année, mais avec les \textbf{WP}, c'est assez
+  mécanique (par opposition au premier exo, qui est guidé et heureusement car
+  il faut deviner où on va).
+\end{Reponse}
+
+\Exercice \textbf{Tri par sélection} (d'après Alexandre Miquel).
+
+\noindent\begin{minipage}{.63\linewidth}
+  On considère le code ci-contre, qui trie un tableau d'entier.
+
+  Dans la logique de Hoare, t[i] ne peut être accédé que si la condition
+  suivante est satisfaite: $O\leq i<taille(t)$.
+
+
+  \Question Réécrivez ce programme en changeant les boucles \texttt{for} en
+  boucles \texttt{while} équivalentes.
+
+\end{minipage}\hfill%
+\begin{minipage}{.3\linewidth}
+\begin{Verbatim}[label=SEL]
+for i := 0 to n-2 do
+  for j := i+1 to n-1 do
+    if t[j] < t[i] then 
+      tmp := t[i]
+      t[i] := t[j]
+      t[j] := tmp
+    end
+  done
+done
+\end{Verbatim}  
+\end{minipage}
+
+\Question Montrez la correction du code de la permutation circulaire:\\
+\centerline{$\{t[i]=x\wedge t[j]=y\} 
+      ~tmp := t[i];
+      t[i] := t[j];
+      t[j] := tmp~ 
+   \{t[i]=y\wedge t[j]=x\}$}
+
+  \Question Montrez à l'aide de ce qui précède la correction de l'algorithme du
+  tri par sélection.
+
+\end{document}
+%%% Local Variables:
+%%% coding: latin-1
