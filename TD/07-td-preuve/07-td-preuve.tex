@@ -9,165 +9,170 @@
 
 \begin{document}
 \color{black}
-\title{TD6 : Logique de Hoare et Preuve de programmes}
+\title{TD6 : Preuve de programmes}
 \maketitle
 
-\noindent On rappelle les règles d'inférence de la logique de Hoare:
+\begin{Reponse}
+  Le plus intéressant à faire est l'exercice 2, puisque l'algorithme à démontrer
+  est faux. On en a pour une grosse heure de calcul à le montrer, mais en
+  général, le résultat tombe comme un coup de tonnerre. Ceux qui se moquait de
+  la pénibilité de la preuve formelle ``pour un code aussi simple que ça'' sont
+  bien étonnés quand on montre qu'il est faux. \textbf{Il ne faut pas leur dire
+    à l'avance: ne spoilez pas le TD!}
+\end{Reponse}
+
+% \noindent On rappelle les règles d'inférence de la logique de Hoare:
 
 
-$$\frac{}{\{P\} skip \{P\}} ~~~~~~~~~~  \frac{}{\{P[x/E]\} x:=E \{P\}} ~~~~~~~~~~
-\frac{P\Rightarrow P', \{P\} ~C~ \{Q\}, Q\Rightarrow Q'}{\{P'\} ~C~ \{Q'\}}$$
+% $$\frac{}{\{P\} skip \{P\}} ~~~~~~~~~~  \frac{}{\{P[x/E]\} x:=E \{P\}} ~~~~~~~~~~
+% \frac{P\Rightarrow P', \{P\} ~C~ \{Q\}, Q\Rightarrow Q'}{\{P'\} ~C~ \{Q'\}}$$
 
-$$\hspace{-14mm}\frac{\{P\} C_1 \{Q\},~~ \{Q\} C_2 \{R\}}{\{P\} C_1;C_2 \{R\}}
- ~~~~~~~
-\frac{\{P\wedge Cond\} ~T~ \{Q\},~~ \{P\wedge\neg Cond\} ~E~
-      \{Q\}}{\{P\} \mathbf{~if~} Cond \mathbf{~then~} T \mathbf{~else~} E \mathbf{~endif~} \{Q\}}
-~~~~~~~
-\frac{\{I\wedge Cond\wedge V=z\} ~L~ \{I\wedge V<z\}~,~I\Rightarrow V\geq0}
-            {\{I\} \mathbf{~while~} Cond \mathbf{~do~} 
-                   L \mathbf{~endif~} \{I\wedge\neg Cond\}}$$    
+% $$\hspace{-14mm}\frac{\{P\} C_1 \{Q\},~~ \{Q\} C_2 \{R\}}{\{P\} C_1;C_2 \{R\}}
+%  ~~~~~~~
+% \frac{\{P\wedge Cond\} ~T~ \{Q\},~~ \{P\wedge\neg Cond\} ~E~
+%       \{Q\}}{\{P\} \mathbf{~if~} Cond \mathbf{~then~} T \mathbf{~else~} E \mathbf{~endif~} \{Q\}}
+% ~~~~~~~
+% \frac{\{I\wedge Cond\wedge V=z\} ~L~ \{I\wedge V<z\}~,~I\Rightarrow V\geq0}
+%             {\{I\} \mathbf{~while~} Cond \mathbf{~do~} 
+%                    L \mathbf{~endif~} \{I\wedge\neg Cond\}}$$    
 
-$P$, $Q$, $I$ et $Cond$ sont des assertions sans effet de bord. $C$, $C_1$,
-$C_2$, $T$ et $L$ sont des instructions. V est un variant, c'est à dire une
-variable entière du pseudo-code. Ce que la règle de la boucle indique, c'est
-que le variant est initialement égal à une valeur arbitraire $z$, et que sa
-valeur décroit strictement à chaque itération de la boucle. Ce point est
-indispensable pour montrer la terminaison de l'algorithme.
+% $P$, $Q$, $I$ et $Cond$ sont des assertions sans effet de bord. $C$, $C_1$,
+% $C_2$, $T$ et $L$ sont des instructions. V est un variant, c'est à dire une
+% variable entière du pseudo-code. Ce que la règle de la boucle indique, c'est
+% que le variant est initialement égal à une valeur arbitraire $z$, et que sa
+% valeur décroit strictement à chaque itération de la boucle. Ce point est
+% indispensable pour montrer la terminaison de l'algorithme.
 
-\Exercice \textbf{Calcul de la racine carrée} (d'après Hayssam Soueidan).
+% \Exercice \textbf{Calcul de la racine carrée} (d'après Hayssam Soueidan).
 
-\noindent\begin{minipage}{.65\linewidth}
-  ~~~On considère le programme ci-contre. Nous allons montrer avec le calcul de
-  Hoare qu'il calcule la racine carrée. Plus précisément, qu'il est
-  partiellement correct par rapport à la précondition $(x\geq0)$ et à la
-  post-condition $(y_1\times y_1\leq x)\wedge((y_1+1)\times (y_1+1)> x)$
+% \noindent\begin{minipage}{.65\linewidth}
+%   ~~~On considère le programme ci-contre. Nous allons montrer avec le calcul de
+%   Hoare qu'il calcule la racine carrée. Plus précisément, qu'il est
+%   partiellement correct par rapport à la précondition $(x\geq0)$ et à la
+%   post-condition $(y_1\times y_1\leq x)\wedge((y_1+1)\times (y_1+1)> x)$
 
   
-  ~~Appelons $S_0$ le sous-programme constitué des 3 premières instructions, et S
-  le sous-programme qui forme le corps de la boucle.
-\end{minipage}\hfill%
-\begin{minipage}{.3\linewidth}
-\begin{Verbatim}
-  y1:=0
-  y2:=1
-  y3:=1
-  while y3<=x do
-    y1 := y1 + 1
-    y2 := y2 + 2
-    y3 := y3 + y2
-  done
-\end{Verbatim}  
-\end{minipage}
+%   ~~Appelons $S_0$ le sous-programme constitué des 3 premières instructions, et S
+%   le sous-programme qui forme le corps de la boucle.
+% \end{minipage}\hfill%
+% \begin{minipage}{.3\linewidth}
+% \begin{Verbatim}
+%   y1:=0
+%   y2:=1
+%   y3:=1
+%   while y3<=x do
+%     y1 := y1 + 1
+%     y2 := y2 + 2
+%     y3 := y3 + y2
+%   done
+% \end{Verbatim}  
+% \end{minipage}
 
-\Question Calculez les valeurs que prennent les variables $y_1$, $y_2$, $y_3$
-pour les premières itérations de la boucle while. Conjecturer les valeurs de
-$y_2$ et $y_3$ en fonction de $y_1$. On note $P$ la conjonction de ces deux
-égalités et de $(y_1\times y_1 \leq x)$
+% \Question Calculez les valeurs que prennent les variables $y_1$, $y_2$, $y_3$
+% pour les premières itérations de la boucle while. Conjecturer les valeurs de
+% $y_2$ et $y_3$ en fonction de $y_1$. On note $P$ la conjonction de ces deux
+% égalités et de $(y_1\times y_1 \leq x)$
 
-\begin{Reponse}
-  $y_2=2\times y_1 + 1$ et $y_3=(y_1+1)^2$. On a donc:
-  $\underbrace{(y_2=2\times y_1 +
-    1)}\wedge\underbrace{(y_3=(y_1+1)^2)}\wedge\underbrace{(y_1\times y_1 \leq
-    x)}$
+% \begin{Reponse}
+%   $y_2=2\times y_1 + 1$ et $y_3=(y_1+1)^2$. On a donc:
+%   $\underbrace{(y_2=2\times y_1 +
+%     1)}\wedge\underbrace{(y_3=(y_1+1)^2)}\wedge\underbrace{(y_1\times y_1 \leq
+%     x)}$
 
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$p_1$
-  ~~~~~~~~~~~~~~~~~~~~~$p_2$
-  ~~~~~~~~~~~~~~~~~~$p_3$
-\end{Reponse}
+%   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$p_1$
+%   ~~~~~~~~~~~~~~~~~~~~~$p_2$
+%   ~~~~~~~~~~~~~~~~~~$p_3$
+% \end{Reponse}
 
-\Question $P$ va être l'invariant de la boucle. C'est ce que l'on va montrer en
-utilisant la règle d'inférence du while.
+% \Question $P$ va être l'invariant de la boucle. C'est ce que l'on va montrer en
+% utilisant la règle d'inférence du while.
 
-Écrire la prémise que l'on doit utiliser, et montrer qu'elle est valide.
-Indication: partir de la post-condition pour trouver les conditions
-intermédiaires. 
+% Écrire la prémise que l'on doit utiliser, et montrer qu'elle est valide.
+% Indication: partir de la post-condition pour trouver les conditions
+% intermédiaires. 
 
-\begin{Reponse}
-  On part de la fin de $S$. C'est une séquence, cela nous donne:
+% \begin{Reponse}
+%   On part de la fin de $S$. C'est une séquence, cela nous donne:
 
-  \begin{center}
-    \begin{tabular}{ccc}
-      $\{p'\}$&$y_3:=y_3+y_2$&$\{p\}$\\
-      $\{p''\}$&$y_2:=y_2+2$&$\{p'\}$\\
-      $\{p'''\}$&$y_1:=y_1+1$&$\{p''\}$\\
-    \end{tabular}
-  \end{center}
+%   \begin{center}
+%     \begin{tabular}{ccc}
+%       $\{p'\}$&$y_3:=y_3+y_2$&$\{p\}$\\
+%       $\{p''\}$&$y_2:=y_2+2$&$\{p'\}$\\
+%       $\{p'''\}$&$y_1:=y_1+1$&$\{p''\}$\\
+%     \end{tabular}
+%   \end{center}
 
-  En appliquant la règle d'affectation, et en effectuant les réécritures
-  qu'elle impose, on trouve:
+%   En appliquant la règle d'affectation, et en effectuant les réécritures
+%   qu'elle impose, on trouve:
 
-  \begin{center}
-    \begin{tabular}{c@{~$\equiv$~}c@{~$\wedge$~}c@{~$\wedge$~}c}
-      $P$   &$(y_2=2\times y_1 + 1)$&$(y_3=(y_1+1)^2)$&$(y_1\times y_1 \leq x)$\\
-      $P$   &$p_1$&$p_2$&$p_3$\\
-      $p'$  &$p_1$&$(y_3+y_2=(y_1+1)^2$&$p_3$\\
-      $p''$ &$(y_2+2=2\times y_1+1)$&$(y_3+y_2+2=(y_1+1)^2$&$p_3$\\
-      $p'''$&$(y_2+2=2\times (y_1+1)+1)$&$(y_3+y_2+2=(y_1+2)^2$&$((y_1+1)^2 \leq x)$\\
-    \end{tabular}
-  \end{center}
+%   \begin{center}
+%     \begin{tabular}{c@{~$\equiv$~}c@{~$\wedge$~}c@{~$\wedge$~}c}
+%       $P$   &$(y_2=2\times y_1 + 1)$&$(y_3=(y_1+1)^2)$&$(y_1\times y_1 \leq x)$\\
+%       $P$   &$p_1$&$p_2$&$p_3$\\
+%       $p'$  &$p_1$&$(y_3+y_2=(y_1+1)^2$&$p_3$\\
+%       $p''$ &$(y_2+2=2\times y_1+1)$&$(y_3+y_2+2=(y_1+1)^2$&$p_3$\\
+%       $p'''$&$(y_2+2=2\times (y_1+1)+1)$&$(y_3+y_2+2=(y_1+2)^2$&$((y_1+1)^2 \leq x)$\\
+%     \end{tabular}
+%   \end{center}
   
-  Par composition, on a donc: $\{p'''\} S \{P\}$. 
-  Un peu d'arithmétique sur la définition de $p'''$ nous donne:
-  $p'''\equiv (y_2=2\times y_1+1)\wedge(y_3+2\times y_1+1+2=y_1^2+4y_1+4)\wedge((y_1+1)^2 \leq x)$\\
-  $p'''\equiv (p_1)\wedge(y_3=y_1^2+2y_1+1)\wedge((y_1+1)^2 \leq x)$ \\
-  $p'''\equiv (p_1)\wedge(y_3=(y_1+1)^2)\wedge(y_3 \leq x)$ \\
-  $p'''\equiv (p_1)\wedge(p_2)\wedge(y_3 \leq x)$. Mais cette formule est une
-  conséquence de $\{P\wedge(y_3 \leq x)\}$ \\
+%   Par composition, on a donc: $\{p'''\} S \{P\}$. 
+%   Un peu d'arithmétique sur la définition de $p'''$ nous donne:
+%   $p'''\equiv (y_2=2\times y_1+1)\wedge(y_3+2\times y_1+1+2=y_1^2+4y_1+4)\wedge((y_1+1)^2 \leq x)$\\
+%   $p'''\equiv (p_1)\wedge(y_3=y_1^2+2y_1+1)\wedge((y_1+1)^2 \leq x)$ \\
+%   $p'''\equiv (p_1)\wedge(y_3=(y_1+1)^2)\wedge(y_3 \leq x)$ \\
+%   $p'''\equiv (p_1)\wedge(p_2)\wedge(y_3 \leq x)$. Mais cette formule est une
+%   conséquence de $\{P\wedge(y_3 \leq x)\}$ \\
 
-  Avec la règle de la conséquence, on trouve donc la prémisse $\{P\wedge(y_3 \leq x)\}$ 
-\end{Reponse}
+%   Avec la règle de la conséquence, on trouve donc la prémisse $\{P\wedge(y_3 \leq x)\}$ 
+% \end{Reponse}
 
-\Question Montrez que $P$ est vérifiée après les 3 premières instructions du
-programme, sous la condition $(x\geq0)$. On veut donc montrer que $\{x\geq0\}
-S_0 \{P\}$ est valide.
-\begin{Reponse}
-  En remontant, on obtient facilement (à lire de bas en haut, donc):
+% \Question Montrez que $P$ est vérifiée après les 3 premières instructions du
+% programme, sous la condition $(x\geq0)$. On veut donc montrer que $\{x\geq0\}
+% S_0 \{P\}$ est valide.
+% \begin{Reponse}
+%   En remontant, on obtient facilement (à lire de bas en haut, donc):
 
-  \begin{tabular}{rcl}
-    $\{(1=1)\wedge(1=1)\wedge(0\leq x)\}$&$y_1:=0$&
-    $\{(1=2\times y_1+1)\wedge(1=(y_1+1)^2)\wedge p_3\}$\\
+%   \begin{tabular}{rcl}
+%     $\{(1=1)\wedge(1=1)\wedge(0\leq x)\}$&$y_1:=0$&
+%     $\{(1=2\times y_1+1)\wedge(1=(y_1+1)^2)\wedge p_3\}$\\
 
-    $\{(1=2\times y_1+1)\wedge(1=(y_1+1)^2)\wedge p_3\}$&$y_2:=1$&
-    $\{p_1\wedge(1=(y_1+1)^2)\wedge p_3\}$\\
+%     $\{(1=2\times y_1+1)\wedge(1=(y_1+1)^2)\wedge p_3\}$&$y_2:=1$&
+%     $\{p_1\wedge(1=(y_1+1)^2)\wedge p_3\}$\\
 
-    $\{p_1\wedge(1=(y_1+1)^2)\wedge p_3\}$&$y_3:=1$&$\{P\}$\\
-  \end{tabular}
+%     $\{p_1\wedge(1=(y_1+1)^2)\wedge p_3\}$&$y_3:=1$&$\{P\}$\\
+%   \end{tabular}
 
-  La première condition étant équivalente à $r\geq0$, on en conclut par les
-  règles de conséquence et de composition que $\{x\geq0\}S_0\{P\}$ est valide.
-\end{Reponse}
+%   La première condition étant équivalente à $r\geq0$, on en conclut par les
+%   règles de conséquence et de composition que $\{x\geq0\}S_0\{P\}$ est valide.
+% \end{Reponse}
 
-\Question Concluez.
-\begin{Reponse}
-  En composant les deux morceaux, on obtient la validité de:
+% \Question Concluez.
+% \begin{Reponse}
+%   En composant les deux morceaux, on obtient la validité de:
 
-  \begin{tabular}{rcl}
-    $\{x\geq0\}$&$Code$&$\{P\wedge y_3>x\}$\\    
-    $\{x\geq0\}$&$Code$&$\{(y_2=2\times y_1 +
-    1)\wedge(y_3=(y_1+1)^2)\wedge(y_1\times y_1 \leq x)\wedge (y_3>x)\}$\\     
-    $\{x\geq0\}$&$Code$&$\{(y_2=2\times y_1 + 1)\wedge(y_1^2 \leq x)\wedge ((y_1+1)^2>x)\}$\\     
-    $\{x\geq0\}$&$Code$&$\{(y_1^2 \leq x)\wedge ((y_1+1)^2>x)\}$\\     
-  \end{tabular}
+%   \begin{tabular}{rcl}
+%     $\{x\geq0\}$&$Code$&$\{P\wedge y_3>x\}$\\    
+%     $\{x\geq0\}$&$Code$&$\{(y_2=2\times y_1 +
+%     1)\wedge(y_3=(y_1+1)^2)\wedge(y_1\times y_1 \leq x)\wedge (y_3>x)\}$\\     
+%     $\{x\geq0\}$&$Code$&$\{(y_2=2\times y_1 + 1)\wedge(y_1^2 \leq x)\wedge ((y_1+1)^2>x)\}$\\     
+%     $\{x\geq0\}$&$Code$&$\{(y_1^2 \leq x)\wedge ((y_1+1)^2>x)\}$\\     
+%   \end{tabular}
 
-  Ouf.
-\end{Reponse}
+%   Ouf.
+% \end{Reponse}
 
-
-\Exercice \textbf{Fibonnacci} (d'après Ralf Treinen).
-
+\medskip
 \newcommand{\WP}[1]{\textbf{WP}($#1$)}
 
-Nous allons maintenant utiliser une autre méthode pour démontrer la validité
-d'un calcul de Fibonacci. Des règles d'inférence d'Hoare se déduit un
-algorithme très simple permettant de calculer la précondition la plus faible
-(\textit{weakest precondition}) à partir d'une instruction $C$ et d'une
-post-condition $Q$. On notera que le calcul de cette précondition \WP{C,Q}
-nécessite d'annoter chaque boucle \texttt{while} par un invariant et un variant
-(syntaxe: $\{inv ~I~ var ~V\}$), et que ce calcul est susceptible de produire
-des obligations de preuves. Il s'agit d'expression qu'il faudra démontrer par
-ailleurs pour que l'ensemble soit vrai.
-\begin{enumerate}
-\item \WP{nop, Q}  $\equiv Q$
+Dans ce TD, nous allons démontrer que les algorithmes étudiés sont corrects en
+calculant la plus faible précondition nécessaire (\textit{weakest precondition})
+pour que l'algorithme donne bien dans la post-condition souhaitée (le résultat
+est celui attendu). Cette méthode est l'une des plus simples et mécaniques pour
+démontrer formellement la correction d'algorithmes. Pour cela, il faut appliquer
+les cinq règles suivante.
+
+\medskip\noindent\framebox{\vbox{\begin{enumerate}
+\item \WP{no-op, Q}  $\equiv Q$
 \item \WP{x:=E, Q} $\equiv Q[x:=E]$
 \item \WP{C;D, Q}  $\equiv$ \WP{C, \WP{D,Q}}
 \item \textbf{WP}(\texttt{if} $Cond$ \texttt{then} $C$ \texttt{else} $D$)
@@ -188,20 +193,46 @@ ailleurs pour que l'ensemble soit vrai.
     \hfill (preuve qu'après le dernier passage, Q est bien atteint)
   \end{itemize}
 \end{enumerate}
+}}
 
-\bigskip
+La première règle signifie que la plus faible précondition à assurer pour que $Q$
+soit vraie après l'exécution de \texttt{no-op} (après l'exécution de rien du
+tout) est $Q$ elle-même.
 
-Pour montrer le triplet de Hoare \fbox{\{P\} C \{Q\}}, il suffit alors de
-montrer la proposition \fbox{$P\Rightarrow \WP{C,Q}$} ainsi que toutes les
-obligations de preuves engendrées lors du calcul de \WP{C,Q}.
+La seconde règle explicite les affectations de variable: Pour que $Q$ soit vraie
+après une affectation, il faut que $Q$ soit vraie au préalable avec une
+réécriture.
 
-\begin{minipage}{.63\linewidth}
+La troisième règle indique que la plus faible précondition permettant que $Q$
+soit vraie après l'exécution de \texttt{C} puis \texttt{D}, c'est la
+précondition à \texttt{C} pour \WP{D,Q} soit vrai, c'est à dire pour que soit
+vérifiée la précondition de D permettant à $Q$ d'être vraie.
+
+La quatrième règle est plus facile à écrire avec l'écriture mathématique qu'avec
+une paraphrase.
+
+La cinquième règle, au sujet des boucles, n'est pas très compliquée non plus,
+mais elle impose d'annoter chaque boucle \texttt{while} par un invariant et un
+variant (syntaxe: $\{inv ~I~ var ~V\}$). Par ailleurs, l'application de cette
+règle produit trois obligations de preuves supplémentaires. Il s'agit
+d'expression qu'il faudra démontrer par ailleurs pour avoir le droit d'appliquer
+la règle de calcul du \textbf{WP}.
+
+\smallskip
+\noindent\begin{minipage}{.83\linewidth}
+Ensemble, ces cinq règles permettent de démontrer le triplet de Hoare
+\fbox{\{P\} C \{Q\}} en montrant la proposition \fbox{$P\Rightarrow \WP{C,Q}$}
+ainsi que toutes les obligations de preuves engendrées lors du calcul de
+\WP{C,Q}.
+
+\Exercice \textbf{Fibonnacci} (d'après Ralf Treinen).
+
   Calculez la plus faible précondition pour que code donné ci-contre admette
   comme post-condition que $a=fib(n)$ (ie, que l'algorithme calcule Fibonacci
   de n dans $a$).  
 \end{minipage}\hfill%
-\begin{minipage}{.3\linewidth}
-\begin{Verbatim}[label=FIB]
+\begin{minipage}{.16\linewidth}
+\begin{Verbatim}[gobble=2,label=FIB,numbers=right]
   i:=1
   a:=1
   b:=1
@@ -308,10 +339,11 @@ obligations de preuves engendrées lors du calcul de \WP{C,Q}.
    dans sa variable $a$ sous la précondition que $n>0$
 \end{Reponse}
 
-\ifcorrection{\newpage}{}
+\ifcorrection{\newpage}{\medskip}
 \Exercice \textbf{Calcul du minimum} (d'après Alexandre Miquel).
 
-\noindent\begin{minipage}{.63\linewidth}
+\smallskip
+\noindent\begin{minipage}{.67\linewidth}
   On considère le code ci-contre, qui calcule le minimum d'une fonction entre 1
   et $n$.
 
@@ -320,8 +352,8 @@ obligations de preuves engendrées lors du calcul de \WP{C,Q}.
 
   \Question Trouvez l'invariant et le variant de la boucle while.
 \end{minipage}\hfill%
-\begin{minipage}{.35\linewidth}
-\begin{Verbatim}[label=MIN]
+\begin{minipage}{.31\linewidth}
+\begin{Verbatim}[gobble=2,label=MIN,numbers=right]
   m:=f(1)
   i:=2
   while i<n do
@@ -333,64 +365,126 @@ obligations de preuves engendrées lors du calcul de \WP{C,Q}.
 
 \begin{Reponse}
   Il faut donc tout d'abord spécifier la post-condition de façon un peu carré
-  de façon à pouvoir le démontrer par la suite.
+  de façon à pouvoir le démontrer par la suite. On veut exprimer que $m$ est la 
+  plus petite valeur de f sur l'intervale.
 
-  \fbox{\textbf{Post} $\equiv (\exists u\in[1,n] tq~ m=f(u)) \wedge (\forall
+  \fbox{\textbf{Post} $\equiv (\exists u\in[1,n] ~tq~ m=f(u)) \wedge (\forall
   v\in[1,n], m\leq f(v))$}
 
 On peut également donner la précondition révée (\fbox{\textbf{Pré} $\equiv
-  n>0$}), mais le principe de la preuve avec les WP, c'est justement de
-calculer la précondition nécessaire pour que ce code donne la
-post-condition. Donc, en général, la précondition est un résultat de la preuve,
-pas un truc à deviner.
+  n>0$}), mais le principe de la preuve avec les WP, c'est justement de calculer
+la précondition nécessaire pour que ce code donne la post-condition. Donc, en
+général, la précondition est un résultat de la preuve, pas un truc à
+deviner. C'est d'ailleurs l'intérêt de la méthode.
 
-  Ensuite, il faut donner le variant. On regarde comment bouge l'indice $i$, et
-  on tripatouille pour que le variant bouge depuis un nombre non nul au début
-  jusqu'à 0 à la fin. On va donc prendre \fbox{$V=n-i$}
+Ensuite, il faut donner le variant. On regarde comment bouge l'indice $i$, et on
+tripatouille pour que le variant bouge depuis un nombre non nul au début jusqu'à
+0 à la fin. On va donc prendre \fbox{$V=n-i$}
 
-  Reste maintenant à deviner l'invariant. Pour cela, et bien y'a rien de
-  mécanique, il faut comprendre l'algorithme et voir pourquoi il fonctionne.
-  D'ailleurs, il est important d'insister auprès des élèves sur le fait que
-  l'art de trouver l'invariant est sans doute le bout de ce module qu'ils
-  réutiliseront le plus dans leur vie professionnelle. Quand l'algo est
-  complexe (pas forcément long, mais complexe), il est courant de mettre
-  l'invariant de boucle dans la documentation, pour aider les lecteurs à
-  comprendre ce qui se passe, pourquoi ca fonctionne.
+Reste maintenant à deviner l'invariant. Il n'y a pas de méthode mécanique pour
+cela. Il faut comprendre l'algorithme et voir pourquoi il fonctionne.
+D'ailleurs, il est important d'insister auprès des élèves sur le fait que l'art
+de trouver l'invariant est sans doute le bout de ce module qu'ils réutiliseront
+le plus dans leur vie professionnelle. Quand l'algo est complexe (pas forcément
+long, mais complexe), il est courant de mettre l'invariant de boucle dans la
+documentation, pour aider les lecteurs à comprendre ce qui se passe, pourquoi ca
+fonctionne.
 
-  Un autre indice pour deviner l'invariant ici, c'est qu'on va se retrouver à
-  faire la preuve suivante:
-  $$
-  \begin{array}{c c c}
-    \{Pre\}&Init&\{P_{intermediaire}\}\\
-    \{P_{intermediaire}\}&While&\{Post\}
-  \end{array}$$
+Un indice pour deviner l'invariant ici, c'est qu'on va se retrouver à faire la
+preuve suivante:
+$$\{Pre\} \;\;Init\;\; \{P_{intermediaire}\} \;\;While\;\; \{Post\}$$
 
-  Pour cela, ça serait plus simple si notre invariant ressemblait fortement à
-  la post-condition. Ca tombe bien, car si on regarde l'algo, il est construit
-  pour faire en sorte qu'à n'importe quelle étape $i$ de la boucle, on ait dans
-  $m$ l'élément minimum de la partie du tableau à gauche de $i$. Un dessin
-  aide:
+Pour cela, il serait plus simple si notre invariant ressemblait fortement à la
+post-condition. Ca tombe bien, car si on regarde l'algo, il est construit pour
+faire en sorte qu'à n'importe quelle étape $i$ de la boucle, on ait dans $m$
+l'élément minimum de la partie du tableau à gauche de $i$, comme sur le dessin
+suivant:
 
-  \centerline{\includegraphics{fig/invariant-minimum.fig}}
+\centerline{\includegraphics{fig/invariant-minimum.fig}}
 
-  Avec ces infos, écrire l'invariant devrait plus poser problème.
+L'invariant à prendre pour que ca se passe bien est le suivant. C'est juste la
+post-condition vérifiée sur les bouts au début du tableau.
 
-  \fbox{\textbf{Invariant} $\equiv(2\leq i\leq n)\wedge(\exists u\in[1,i] tq~
-    m=f(u)) \wedge (\forall v\in[1,i], m\leq f(v))$}
+\bigskip
+\fbox{\textbf{Invariant} $\equiv(2\leq i\leq n)\wedge(\exists u\in[1,i] ~tq~
+  m=f(u)) \wedge (\forall v\in[1,i], m\leq f(v))$}
 \end{Reponse}
 
-\Question Calculez les obligations de preuve correspondantes, et vérifier
+\Question Calculez les obligations de preuve correspondantes, et vérifiez
 qu'elles sont satisfaites.
 
 \begin{Reponse}
-  Ben j'ai rien à proposer cette année, mais avec les \textbf{WP}, c'est assez
-  mécanique (par opposition au premier exo, qui est guidé et heureusement car
-  il faut deviner où on va).
+  C'est assez mécanique et un peu répétitif, mais le calcul des \textbf{WP}
+  n'est pas très méchant au fond. Ce qui est drôle, c'est qu'ici, on va
+  démontrer que ce code est faux. Encore plus fort: en ne parvenant pas à
+  démontrer la correction du code, on va trouver un cas où il ne fonctionne pas,
+  et on va même en déduire un correctif. 
+
+  \textbf{Ne spoilez pas les étudiants, laissez leur la surprise}. Le calcul est
+  assez pénible, autant qu'ils aient le choc de son intérêt à plein.
+
+  \noindent
+  \begin{minipage}{.7\linewidth}
+    \includegraphics[width=\linewidth,angle=270]{TOP-seance6-preuve-1.JPG}    
+  \end{minipage}\hspace{-2cm}
+  \begin{minipage}{.4\linewidth}
+    La preuve se déroule comme prévu, j'ai une post-condition, et je remonte
+    mon code pour calculer la précondition nécessaire. Le code fini par une
+    boucle while, et donc j'applique la règle 5 pour calculer les
+    obligations de preuves avant de pouvoir affirmer que
+    WP(while,post)=inv. 
+
+    \bigskip
+    Comme d'habitude, les obligations 2 et 3 sont très simples à monter, et la 1
+    est bien plus dure. D'ailleurs, y'a un ptit bug au tableau puisque pour s'en
+    sortir, il faut considérer que "if (cond) then { instr1 }" est en fait un
+    "if (cond) then { instr1 } else {rien}". Ca semble pas important, mais ca
+    change les éléments de preuves. Mais bon, après quelques réécritures, la
+    partie droite de la première obligation de preuve (ie, la WP du corps de
+    boucle) est l'expression K, en bas du tableau.
+  \end{minipage}
+
+  \noindent
+  \begin{minipage}{.7\linewidth}
+    \includegraphics[width=\linewidth,angle=270]{TOP-seance6-preuve-2.JPG}    
+  \end{minipage}\hspace{-2cm}
+  \begin{minipage}{.4\linewidth}
+    Le haut de ce tableau-ci porte sur comment montrer que la première
+    obligation de preuve tient, donc. On prend les bouts de K les uns après les
+    autres, et à chaque fois qu'on en a un, on le raye. C'est gros, mais y'a
+    rien de bien sorcier, en fait.
+    
+    \bigskip %
+    Et sous le trait, maintenant que la dernière obligation est tombée, il ne
+    nous reste plus qu'à finir de calculer les WP en remontant. Mais là, c'est
+    l'échec: On ne peut pas propager le calcul des WP. Avec l'invariant qu'on a
+    choisi (nécessaire pour la post-condition voulue), on se retrouve à dire que
+    pour tout k dans [1,2], f(k)>=m alors que l'on a testé dans l'initialisation
+    que pour k=1, et pas pour k=2...
+
+    \bigskip
+    Le tableau porte déjà les séquelles d'une tentative de correction : on a
+    transformé [1;2] en [1;2[, mais du coup, l'invariant de boucle change en
+    conséquence, ce qui change également la post-condition que l'on
+    trouve. Donc, on a bien montré que si l'élément minimal est dans la
+    dernière position, cet algorithme ne le trouve pas.
+  \end{minipage}
+
+\smallskip %
+En reregardant l'algo, on voit tout de suite que la condition du while
+est fausse: il faut utiliser i$<$=n au lieu de i$<$n. Avec cette
+modification, on peut remodifier dans l'autre sens: on reprend la
+post-condition qui nous intéresse, ca remet le premier invariant
+trouvé, et on arrive cette fois à propager le calcul des WP jusqu'au
+début de l'algo, sans anicroche. Dommage, il était 17h59 un vendredi,
+les étudiants n'ont pas voulu qu'on le fasse proprement pour faire une
+photo du tableau :) 
 \end{Reponse}
 
-\Exercice \textbf{Tri par sélection} (d'après Alexandre Miquel).
-
+\medskip
 \noindent\begin{minipage}{.63\linewidth}
+  \Exercice \textbf{Tri par sélection} (d'après Alexandre Miquel).
+
   On considère le code ci-contre, qui trie un tableau d'entier.
 
   Dans la logique de Hoare, t[i] ne peut être accédé que si la condition
@@ -422,8 +516,12 @@ done
       t[j] := tmp~ 
    \{t[i]=y\wedge t[j]=x\}$}
 
-  \Question Montrez à l'aide de ce qui précède la correction de l'algorithme du
-  tri par sélection.
+\Question Montrez à l'aide de ce qui précède la correction de l'algorithme du
+tri par sélection.
+
+\begin{Reponse}
+  Pour de vrai, je n'ai jamais calculé le WP de cet algorithme-ci.
+\end{Reponse}
 
 \end{document}
 %%% Local Variables:

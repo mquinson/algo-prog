@@ -1,13 +1,12 @@
 TARGET=$(shell ls *.tex |grep -v enonce.tex|grep -v correction.tex|sed 's/\.tex$$//')
-DISTDIR=/home/mquinson/public_html/Teaching/TOP
+DISTDIR=/home/mquinson/wiki/Teaching/TOP
 
 all: pdf
 
 ### Publication
 
-publish:: enonce
-	cp $(TARGET)-enonce.pdf $(DISTDIR)
-	make -C ~/public_html publish
+publish: $(TARGET)-enonce.pdf $(TARGET)-correction.pdf
+	cp $^ $(DISTDIR)
 
 
 ### LaTeX
