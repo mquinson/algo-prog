@@ -1174,7 +1174,7 @@ def fib(n:Int):Int =
   \begin{block}{Element uniqueness}
     \begin{itemize}
     \item Given a list of $n$ items, are they all unique or are there
-      dupplicates? 
+      duplicates? 
     \item Sort them, and do a linear scan of adjacent pairs
     \item (special case of closest pair, actually)
     \end{itemize}
@@ -1439,7 +1439,7 @@ def quicksort(lst:List[Int]):List[Int] = \{
   \}
 
   \structure{// return sorted list appending chunks}
-  sort(lows) ::: mids ::: sort(highs) 
+  quicksort(lows) ::: mids ::: quicksort(highs) 
 \}      
     \end{boitecode}      
     \end{column}
@@ -1448,7 +1448,7 @@ def quicksort(lst:List[Int]):List[Int] = \{
   \begin{block}{Problem}
     \begin{itemize}
     \item Space complexity is about $2n+\log(n))$...\\
-      {\small (2n for array dupplication, log(n) for the recursion stack)}
+      {\small (2n for array duplication, log(n) for the recursion stack)}
     \end{itemize}
   \end{block}
 \end{frame}
@@ -1521,7 +1521,7 @@ def partition(array:Array[Int], left:Int, right:Int, pivotIndex:Int) \{
 \begin{frame}{In-place QuickSort Complexity (2/2)}
   \begin{block}{What if we have a fixed amount on one side?}
     \begin{itemize}
-    \item (happens when every values are dupplicated, or with the wrong pivot)
+    \item (happens when every values are duplicated, or with the wrong pivot)
 
     \centerline{
       \includegraphics[width=.6\linewidth]{fig/algo_quick_worstcase.fig}
