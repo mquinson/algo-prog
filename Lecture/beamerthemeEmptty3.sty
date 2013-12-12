@@ -409,21 +409,12 @@
 %%%
 \newcommand{\chapname}{{\ifcase\value{part}\or First\or Second\or
    Third\or Fourth\or Fifth\or Sixth\fi}\space Chapter}%
-\newcommand{\chapnamelow}{{\ifcase\value{part}\or premier\or deuxi\`eme\or
-   troisi\`eme\or quatri\`eme\or cinqui\`eme\or sixi\`eme\or
-   depti\`eme\or huiti\`eme\or neuvi\`eme\or dixi\`eme\or onzi\`eme\or
-   douzi\`eme\or treizi\`eme\or quatorzi\`eme\or quinzi\`eme\or
-   seizi\`eme\or dix-septi\`eme\or dix-huiti\`eme\or dix-neuvi\`eme\or
-   vingti\`eme\fi}\space chapitre}%
+\newcommand{\chapnamelow}{{\ifcase\value{part}\or first\or second\or
+   third\or fourth\or fifth\or sixth\fi}\space chapter}%
 
 %%% Mon slicing manuel
 \let\Coupe=\comment \let\endCoupe=\endcomment
 %\renewenvironment{Coupe}{   }{   }
-
-%%% Corrige un bug dans beamer: faut mettre ca avant chaque frame[fragile] 
-%%% pour corriger le numéro de page
-% \newcommand{\fixfr}{\advance\c@framenumber by -1}
-% Plus besoin: le bug a ete corrige dans beamer.
 
 %%%
 %%% Des logos
