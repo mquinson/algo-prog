@@ -1,0 +1,331 @@
+%\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+\documentclass[10pt]{article}\usepackage[nu]{esial}
+\usepackage{amstext,amsmath,amsfonts}
+\TOP\unA
+\newcommand{\WP}[1]{\textbf{WP}($#1$)}
+
+\usepackage{amsthm,pifont,textcomp}
+\usepackage{amsmath,amssymb}
+
+\usepackage[utf8]{inputenc}
+\graphicspath{{fig/}}
+
+\begin{document}
+\title{Examen du 03/12/2013 (2h)}
+\fvset{fontsize=\footnotesize}
+\maketitle
+
+\begin{centering}
+  \textbf{\large Documents interdits, à l'exception d'une feuille A4 à rendre
+    avec votre copie.}
+
+\end{centering}
+\centerline{La notation tiendra compte de la présentation et de la clarté de
+  la rédaction.}
+\bigskip
+
+
+
+\QuestionCours~\textbf{(3pt)}
+
+\Question(\textonehalf pt) Définissez en français (sans équation) les notations
+$O$, $\Omega$ et $\Theta$ utilisées pour dénoter la complexité algorithmique en
+insistant sur leurs relations les unes avec les autres.
+
+\Question(\textonehalf pt) Quel est le rapport entre les notations que vous venez de définir et
+les temps de calcul dans le meilleur des cas, le pire des cas et le cas moyen? 
+
+\Question(1pt) Définissez le principe des tris (1) par insertion (2) par
+sélection en explicitant leurs invariants (en français ou avec des écritures
+mathématiques que vous introduirez).
+
+\Question(\textonehalf pt) Définissez le principe général de deux tris récursifs
+vu en cours.
+
+\Question(\textonehalf pt) Pourquoi est-il parfois difficile de trouver
+l'invariant d'une boucle? Quel est l'intérêt d'exprimer un tel invariant?
+
+\Exercice\textbf{Des îles dans la mer de données {\rm(}5pt} -- ACM Programming Contest 2013).
+
+Étant donnée une séquence d'entiers $\{a1, a2, a3 ... an\}$, une île dans cette
+séquence est une sous-séquence continue dans laquelle tout élément est supérieur
+aux éléments immédiatement avant et après la sous-séquence.  Dans les 3 exemples
+ci-dessous, chaque île est délimitée par des parenthèses.
+
+\begin{itemize}
+\item Exemple 1:  \texttt{0 0 1 1 2 2 1 1 0 1 2 2 1 1 0}.
+  Il y a 4 îles: 1 1 2 2 1 1 ; 2 2  ; 1 2 2 1 1 ; 2 2. \\
+  Cela donne \hspace{3pt}\texttt{0 0(1 1(2 2)1 1)0(1(2 2)1 1)0}.
+\item Exemple 2: \texttt{0 1 2 3 4 3 2 1 2 3 4 3 2 1 0} $\leadsto$ 7 îles:
+  \texttt{0(1(2(3(4)3)2)1(2(3(4)3)2)1)0}.
+\item Exemple 3: \texttt{0 1 0 1 0 1 0 1 0 1 0 1 0 1 0}. Il y a également 7
+  îles, mais toutes de taille 1.\\
+  Cela donne \hspace{3pt}\texttt{0(1)0(1)0(1)0(1)0(1)0(1)0(1)0}
+\end{itemize}
+
+Notez que dans le premier exemple, 1122 n'est pas une île valide car
+elle n'est pas maximale à une altitude donnée : on peut l'agrandir
+sans changer son altitude minimale (en ajoutant les 11 placés après).
+
+On suppose que tout entier de la liste est positif ou nul et aussi que toutes
+les îles sont valides, c'est à dire que chaque valeur ne diffère de celle qui la
+précède que de 1 au plus.
+
+\Question(2pt)
+On se donne dans un premier temps l'opération \fbox{\texttt{head(List):Int}} qui
+permet de retrouver la valeur du premier élément d'une liste (ou -1 si la liste
+est vide), ainsi que \fbox{\texttt{tail(List):List}} qui retourne la liste
+amputée de sa tête (ou la liste vide). La taille de la liste est inaccessible à
+priori.
+
+Écrire une fonction récursive \fbox{\texttt{islands(List):Int}}, retournant le
+nombre d'îles dans la séquence passée en paramètre.\\
+\textsc{Indication:} Le problème est grandement simplifié par le fait que toutes
+les îles sont supposées correctes.
+
+\Question(2pt)
+Dérécursivez l'algorithme développé dans la question précédente en utilisant les
+techniques vues en cours. Expliquez ce que vous faites, et argumentez pourquoi
+vous pouvez le faire.
+
+\Question(1pt).  On suppose maintenant que les données sont rangées dans un
+tableau scala. On peut donc retrouver la valeur de la $i$ieme case du tableau
+\fbox{\texttt{tab}} avec \fbox{\texttt{tab(i)}} et la taille du tableau avec
+\fbox{\texttt{tab.size()}}.
+%
+Proposez un algorithme itératif en $O(n)$ comptant les îles dans une séquence
+donnée.
+
+\medskip
+\Exercice\textbf{Un code mystère {\rm(}4pt} -- d'après Maylis Delest).\smallskip
+
+\noindent\begin{minipage}{.54\linewidth}
+On considère la fonction ci-contre, avec
+\texttt{swap(tab,a,b)}, qui inverse les valeurs des cases \texttt{tab(a)} et
+\texttt{tab(b)}, et le tableau A de dimension 8 contenant la séquence \{2,8,7,4,3,6,5,1\}.
+
+\Question(2pt) Représentez graphiquement l'effet de l'appel \texttt{mystere(A,
+  6)} sur le tableau A en détaillant les différentes étapes et indiquez la
+valeur retournée par la fonction.
+
+\Question(1pt) Quelle est la valeur retournée par la fonction si tous les
+nombres contenus dans le tableau sont strictement inférieurs à la clé? Même
+question si tous les nombres sont strictement supérieurs à la clé.
+\end{minipage}\hfill\begin{minipage}{.44\linewidth}
+\begin{Verbatim}[numbers=right]
+def mystere(tab:Array[Int], cle:Int): Int {
+  val d=0
+  val f=tab.length-1
+  do {
+    while (d<tab.length && tab(d) <= cle) {
+      d++;
+    }
+    while (f>=0 && tab(f)>cle) {
+      f--;
+    }
+    if (d<f) {
+      swap(tab,d,f);
+      d++;
+      f--;
+    }
+  } while (d<f);
+  return f;
+}
+\end{Verbatim}
+\end{minipage}
+
+\begin{Reponse}
+\noindent\textbf{Question 1:} 
+\begin{Verbatim}[numbers=none]
+étape 1:  [2, 8, 7, 4, 3, 6, 5, 1]
+           d                    f
+
+étape 2:  [2, 8, 7, 4, 3, 6, 5, 1] (boucle ligne 6-7)
+              d                 f
+
+étape 3:  [2, 8, 7, 4, 3, 6, 5, 1] (boucle ligne 9-10)
+              d                 f
+
+étape 4:  [2, 1, 7, 4, 3, 6, 5, 8] (swap)
+                 d           f    
+
+étape 5:  [2, 1, 7, 4, 3, 6, 5, 8] (les deux boucles: ne font rien)
+                 d           f
+
+étape 6:  [2, 1, 5, 4, 3, 6, 7, 8] (swap)
+                    d     f   
+
+étape 7:  [2, 1, 5, 4, 3, 6, 7, 8] (les deux boucles)
+                          f  d 
+
+retourne 5
+\end{Verbatim}
+
+
+La fonction range au début du tableau toutes les valeurs inférieures ou égales à
+la clé, et dans une seconde zone à la fin du tableau les valeurs supérieures à
+la clé. La valeur retournée est l'indice de fin de la première zone.
+
+
+\noindent\textbf{Question 2:} 
+Si tous les nombres sont inférieurs à la clé, la valeur retournée est N-1. Si tous les nombres sont
+supérieurs à la clé, la valeur retournée est -1,
+\end{Reponse}
+
+\Question(1pt) Donnez la complexité maximale de cette fonction en nombre de tests, et
+justifiez votre réponse.
+\begin{Reponse}
+  La complexité maximale est O(n). En effet, il y a bien deux boucles
+  imbriquées mais d (resp. f) est croissant (resp. décroissant). La boucle
+  externe contrôle d et f, plus précisément si d>f la boucle s'arrête donc le
+  nombre de test de cette boucle ne peut dépasser N. Au total, il y aura donc
+  2*N tests d'où la complexité annoncée.
+\end{Reponse}
+
+\Exercice \textbf{Calcul de la racine carrée (5pt -- } d'après Hayssam Soueidan).
+
+\noindent\begin{minipage}{.78\linewidth}
+  ~~~On souhaite montrer que le programme ci-contre calcule l'approximation
+  entière de la racine carrée du paramètre $x$ dans la variable $y_1$. Plus
+  formellement, la post-condition souhaitée est la suivante:
+  $Q\equiv\left(\left(y_1\right)^2\leq x\right) \wedge
+  \left(\left(y_1+1\right)^2 > x\right)$
+
+  \Question Explicitez l'invariant de la boucle présente dans ce programme. La
+  difficulté est de lier la valeur des différentes variables de l'algorithme
+  entre elle. Il est probablement utile de dérouler l'algorithme sur quelques
+  cas et quelques étapes pour deviner ces liens entre les variables.
+\end{minipage}\hfill%
+\begin{minipage}{.19\linewidth}
+\begin{Verbatim}[gobble=2]
+  def f(x:Int):Int= {
+    val y1=0
+    val y2=1
+    val y3=1
+    
+    while (y3 <= x) {
+      y1 = y1 + 1
+      y2 = y2 + 2
+      y3 = y3 + y2
+    }
+    return y1
+  }
+\end{Verbatim}  
+\end{minipage}
+
+\begin{Reponse}
+  $I\equiv \left(\left(y_1\right)^2\leq x\right) \wedge
+           \left(y_2=2\times y_1 + 1\right) \wedge 
+           \left(y_3=\left(y_1+1\right)^2\right)$
+%     \wedge \left(y_1\times y_1 \leq x\right)$
+\end{Reponse}
+
+\Question Calculez la plus faible pré-condition nécessaire pour que cette boucle
+mène au respect de la post-condition souhaitée. Explicitez vos étapes, et
+justifiez vos actions. La qualité de la rédaction est aussi importante que la
+justesse des écritures mathématiques.
+
+\Question Concluez en calculant la plus faible pré-condition nécessaire pour que
+l'algorithme entier réponde à la post-condition souhaitée.
+
+
+\begin{Reponse}
+  TODO: remettre cette section de correction au gout du jour avec les WP. Ce qui
+  suit donne l'idée, mais ne suit pas ce qu'on fait en ce moment dans le module.
+
+  On part de la fin de $S$. C'est une séquence, cela nous donne:
+  \begin{center}
+    \begin{tabular}{ccc}
+      $\{p'\}$&$y_3:=y_3+y_2$&$\{p\}$\\
+      $\{p''\}$&$y_2:=y_2+2$&$\{p'\}$\\
+      $\{p'''\}$&$y_1:=y_1+1$&$\{p''\}$\\
+    \end{tabular}
+  \end{center}
+
+  En appliquant la règle d'affectation, et en effectuant les réécritures
+  qu'elle impose, on trouve:
+
+  \begin{center}
+    \begin{tabular}{c@{~$\equiv$~}c@{~$\wedge$~}c@{~$\wedge$~}c}
+      $P$   &$(y_2=2\times y_1 + 1)$&$(y_3=(y_1+1)^2)$&$(y_1\times y_1 \leq x)$\\
+      $P$   &$p_1$&$p_2$&$p_3$\\
+      $p'$  &$p_1$&$(y_3+y_2=(y_1+1)^2$&$p_3$\\
+      $p''$ &$(y_2+2=2\times y_1+1)$&$(y_3+y_2+2=(y_1+1)^2$&$p_3$\\
+      $p'''$&$(y_2+2=2\times (y_1+1)+1)$&$(y_3+y_2+2=(y_1+2)^2$&$((y_1+1)^2 \leq x)$\\
+    \end{tabular}
+  \end{center}
+  
+  Par composition, on a donc: $\{p'''\} S \{P\}$. 
+  Un peu d'arithmétique sur la définition de $p'''$ nous donne:
+  $p'''\equiv (y_2=2\times y_1+1)\wedge(y_3+2\times y_1+1+2=y_1^2+4y_1+4)\wedge((y_1+1)^2 \leq x)$\\
+  $p'''\equiv (p_1)\wedge(y_3=y_1^2+2y_1+1)\wedge((y_1+1)^2 \leq x)$ \\
+  $p'''\equiv (p_1)\wedge(y_3=(y_1+1)^2)\wedge(y_3 \leq x)$ \\
+  $p'''\equiv (p_1)\wedge(p_2)\wedge(y_3 \leq x)$. Mais cette formule est une
+  conséquence de $\{P\wedge(y_3 \leq x)\}$ \\
+
+  Avec la règle de la conséquence, on trouve donc la prémisse $\{P\wedge(y_3 \leq x)\}$ 
+\end{Reponse}
+
+\medskip\noindent\textbf{Rappel:} Règles de calcul des pré-conditions.
+
+\begin{itemize}
+\item \WP{nop, Q}  $\equiv Q$
+\item \WP{x:=E, Q} $\equiv Q[x:=E]$
+\item \WP{C;D, Q}  $\equiv$ \WP{C, \WP{D,Q}}
+\item \textbf{WP}(\texttt{if} $Cond$ \texttt{then} $C$ \texttt{else} $D$,$Q$)
+  $\equiv (Cond=\mathtt{true}\Rightarrow \mathbf{WP}(C,Q))~\wedge~
+          (Cond=\mathtt{false}\Rightarrow \mathbf{WP}(D,Q))$
+\item \textbf{WP}(\texttt{while} $E$ \texttt{do} $C$ \texttt{done} \{inv I var
+  V\},Q)  $\equiv I$ ~~;~~  Obligations de preuve:
+  \begin{enumerate}
+  \item[$\bullet$] $(E=\mathtt{true}\wedge I\wedge V=z) \Rightarrow
+    \mathbf{WP}(C,I\wedge V<z))$
+  \item[$\bullet$] $I\Rightarrow V\geq 0$
+  \item[$\bullet$] $(E=\mathtt{false}\wedge I) \Rightarrow Q$
+  \end{enumerate}
+\end{itemize}
+
+\bigskip
+\Exercice \textbf{Fonctions récursives sur les listes d'entiers (3pt).}
+
+On rappelle les opérateurs de base du type liste d'entiers:
+$$\left\{
+\begin{array}{l}
+  \mathtt{Nil}  \mapsto \text{La liste vide}\\
+  liste\mathtt{.head} \mapsto \text{Premier élément de la liste } liste
+    \;\;\;\;\;\;\;\;\text{(défini ssi } liste \text{ n'est pas vide)}\\
+  liste\mathtt{.tail} \mapsto liste \text{ privée du premier élément}
+    \text{\hspace{9mm}(défini ssi } liste \text{ n'est pas vide)}\\
+  entier \;\mathtt{::}\; liste \mapsto \text{Ajout de l'élément } entier 
+    \text{ en tête de la liste } liste
+\end{array}\right.
+$$
+
+Écrivez les fonctions suivantes en Scala en utilisant ces primitives. Si votre
+solution ne s'exécute pas en temps linéaire, \textbf{vous serez pénalisé}.
+
+\Question %(\textonehalf pt)
+\texttt{longueur(li:List[Int]):Int} $\leadsto$ 
+renvoie le nombre d'éléments composant la liste.
+
+\Question %(\textonehalf pt)
+\texttt{est\_membre(v:Int, li:List[Int]):Bool} $\leadsto$ 
+indique si l'entier fait partie de la liste.
+
+\Question %(\textonehalf pt)
+\texttt{somme(li:List[Int]):Int} $\leadsto$ 
+renvoie la somme de tous les éléments de la liste.
+
+\Question %(\textonehalf pt)
+\texttt{croissante(li:List[Int]):Bool} $\leadsto$
+indique si la liste est triée en ordre croissant.
+
+\Question %(1pt)
+\texttt{retourne(li:List[Int]):List[Int]} $\leadsto$
+renvoie la liste lue en sens inverse.
+
+\end{document}
+
+
+%%% Local Variables:
+%%% coding: utf-8
