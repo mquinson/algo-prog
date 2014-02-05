@@ -8,6 +8,32 @@ CM1:
       justifier le scala, et on vire les machines de rudberg.
  * On peut améliorer encore la présentation en intro du SE 
     http://www.lore.ua.ac.be/Teaching/SE3BAC/slides2007/
+ * Nuance au discours "on cherche tjs l'algo de complexité minimal",
+   grâce au rapport d'activité 2013 de l'équipe Caramel:
+   - One of the main topics for our project is public-key
+     cryptography. After 20 years of hegemony, the classical
+     public-key algorithms (whose security is based on integer
+     factorization or discrete logarithm in finite fields) are
+     currently being overtaken by elliptic curves. The fundamental
+     reason for this is that the best-known algorithms for factoring
+     integers or for computing discrete logarithms in finite fields
+     have a subexponential complexity, whereas the best known attack
+     for elliptic-curve discrete logarithms has exponential
+     complexity. As a consequence, for a given security level 2^n, the
+     key sizes must grow linearly with n for elliptic curves, whereas
+     they grow like n^3 for RSA-like systems. As a consequence,
+     several governmental agencies, like the NSA or the BSI, now
+     recommend to use elliptic-curve cryptosystems for new products
+     that are not bound to RSA for backward compatibility.
+   - C'est une bonne illustration du lien entre complexité / temps de
+     calcul et taille des données (ici la taille de la clé de
+     chiffrement) 
+   - Trouver un problème pour lequel le meilleur algorithme connu est
+     super mauvais, c'est un gros succès dans ce contexte.
+   - Si on est en colère, on peut mentionner l'algorithme de Shor qui
+     permet de résoudre RSA en temps polynomial sur ordi quantique
+     (pour relativiser vis-à-vis de la machine)
+
 CM3 (tris récursifs et preuve) 
  * Cet amphi, c'est que du blabla. Je justifie les algos de tri, je
    justifie les preuves, je justife tout. Mais à part ca, je présente
