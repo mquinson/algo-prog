@@ -24,10 +24,11 @@ que l'on dispose d'un ordinateur capable de réaliser $10^9$ opérations par
 seconde. Dans le tableau (c), on calcule la plus grande instance de problème
 traitable dans le temps imparti.
 
-On rappelle que une nanoseconde (ns) vaut $10^{-9}$s et que une microseconde
-($\mu$s) vaut $10^{-6}$. De plus, $10^{x^y}=10^{x\times y}$ et $\sqrt{n}=n^{1/2}$.
+Rappels: 1~$\mu$s=$10^{-6}$s; 1~ns=$10^{-9}$~s; $10^{x^y}=10^{x\times y}$ et
+$\sqrt{n}=n^{1/2}$.
 
 \newcommand{\ms}{$\mu$s}
+\vspace{-.5\baselineskip}
 \begin{table}[h]
   \centering
   \subfigure[Nombre d'opérations.\label{tab:nbop}]{ 
@@ -64,6 +65,7 @@ On rappelle que une nanoseconde (ns) vaut $10^{-9}$s et que une microseconde
   13.7 milliards d'années).
 \end{Reponse}
 
+\vspace{-\baselineskip}
 \begin{table}[h]
   \centering
   \subfigure[Plus grande instance faisable à $10^9$ op/sec.]{
@@ -193,14 +195,14 @@ calcul en utilisant la notation $\Theta()$. \bigskip
 
 \vspace{-.2\baselineskip}\noindent\begin{minipage}{.65\linewidth}
 
-  \Question Étudiez le nombre d'additions réalisées par les
-  algorithmes suivants dans le meilleur cas, le pire cas, puis dans le
-  cas moyen en supposant que les tests ont une probabilité de
-  $\frac{1}{2}$ d'être vrai.
+  \Question Étudiez le nombre d'additions réalisées par les algorithmes suivants
+  dans le meilleur cas, le pire cas, et le cas moyen en supposant que les tests
+  ont une probabilité de $\frac{1}{2}$ d'être vrai.
 
   \Question Donnez une instance du code 2 de coût $t_{avg}$.
 
 \end{minipage}\hfill\begin{minipage}{.3\linewidth}
+\vspace{-.7\baselineskip}
 \begin{Verbatim}[label=code 1]
 pour i de 1 à n faire
    si T[i]>a alors
@@ -227,6 +229,7 @@ sinon x := x+b
   \end{description}
 \end{Reponse}
 
+\vspace{-.4\baselineskip}
 \Exercice \textbf{Un peu de calculabilité.}  
 
 \Question Démontrez que tous les algorithmes de tri comparatif sont dans
@@ -271,7 +274,7 @@ candidates.
 Si on sait que les valeurs sont comprises entre 0 et $max$ (avec $max$
 pas trop grand), on peut trier les valeurs en comptant tout d'abord le nombre
 de 0, le nombre de 1, le nombre de 2 ... le nombre de $max$ en entrée. Ensuite,
-il suffit de parcourir le tableau à nouveau en indiquant la bonne quantité de
+il faut parcourir le tableau à nouveau en indiquant la bonne quantité de
 chaque valeur.
 
 \Question Écrire cet algorithme. On utilisera un tableau annexe $count$ où
@@ -302,8 +305,8 @@ $count[i]$ indique le nombre de $i$ dans le tableau initial.
 
 \end{Reponse}
 
-\Question Discutez cette complexité par rapport à la borne théorique
-inférieure démontrée à l'exercice précédent. 
+\Question Discutez cette complexité par rapport au résultat démontré à
+l'exercice précédent.
 
 \begin{Reponse}
   Bon, la question est pas claire, mais j'arrive pas bien à le dire sans que
