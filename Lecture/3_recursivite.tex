@@ -536,7 +536,7 @@ $$
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}\frametitle{Example: a list type}
+\begin{frame}\frametitle{Example: Strings as (linked) lists}
 
   \begin{block}{Defined operations}
     \medskip
@@ -737,7 +737,7 @@ res3: Int = 10
         If you cannot see the forest out of trees, don't look at branches and
         leaves
       \end{itemize}
-    \item At the end, recursion is one thing that you can only learn through
+    \item At the end, recursion is something that you can only learn through
       experience 
     \end{itemize}
   \end{block}
@@ -965,9 +965,10 @@ def hanoi(n:Int, from:Int,to:Int,other:Int)=
       to fundamental tools 
     \end{itemize}
   \end{block}
-
+  
+  \vspace{-.5\baselineskip}
   [The Penguin Dictionary of Curious and Interesting Numbers, David Wells, 1997]
-  \medskip
+
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Classical Recursive Functions}
@@ -1102,7 +1103,7 @@ def fib(n:Int):Int =
   \item[]<+-> Hard to say: suite is not monotone
   \item<+-> \structure{\large Collatz's Conjecture}:
     $\forall n\in\mathbb{N}$, \textsc{syracuse}$(n)=1$
-  \item<+-> Checked on computer $\forall n<19\cdot2^{58}\approx5\cdot10^{48}$\\
+  \item<+-> Checked on computer $\forall n<5\cdot2^{60}\approx6\cdot10^{18}$\\
     {\small(but other conjectures were proved false for bigger values only)}
   \item<+-> This is an open problem since 1937 (some rewards available)
     \begin{boitequote}{Paul Erd\"{o}s (1913--1996)}
