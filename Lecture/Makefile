@@ -9,8 +9,7 @@ LATEXFILTER=/usr/share/texmf/scripts/latex-make/latexfilter.py |\
   grep -v 'Package hyperref Warning: Token not allowed in a PDFDocEncoded string,' 
 
 TARGET?=$(shell ls *.tex |grep -v -- -beamer.tex|grep -v -- -handout.tex|grep -v '^[0-9]'|grep -v 'UNUSED'|sed 's/\.tex$$//')
-DISTDIR?=/home/mquinson/public_html/Teaching/TOP/
-HACKDIR?=/home/mquinson/public_html/hacking
+DISTDIR?=/home/mquinson/wiki/Teaching/TOP/
 
 VPATH=/usr/share/texmf/tex/latex/esial/:fig/
 
@@ -22,7 +21,7 @@ include LaTeX.mk
 dist:publish
 publish: handout 
 	cp $(TARGET)-handout.pdf $(TARGET)-handout-8up.pdf $(DISTDIR)
-	$(MAKE) -C ~/public_html publish
+#	$(MAKE) -C ~/public_html publish
 	                
 prof: $(TARGET).tex
 	echo \\documentclass[10pt,trans,notes=show]{beamer} >  $(TARGET)-prof.tex
