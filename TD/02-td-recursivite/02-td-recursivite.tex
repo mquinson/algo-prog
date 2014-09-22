@@ -1,5 +1,5 @@
-%\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
-\documentclass[10pt]{article}\usepackage[nu]{esial}
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+%\documentclass[10pt]{article}\usepackage[nu]{esial}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -68,7 +68,7 @@ $$\left\{
   head\text{\textbf{$\!$:$\!$:}}\, tail& \text{Construit une liste constituée de head, suivi de la liste tail}\\
   list\mathbf{.head}& \text{Récupère le premier caractère de la liste}\\
   &\text{(pas défini si list est la chaîne vide)}\\
-  list\mathbf{.tail}& \text{Récupère la liste privée de son premier élément}
+  list\mathbf{.tail}& \text{Récupère la liste privée de son premier élément (idem)}
 \end{array}\right.
 $$
 
@@ -564,9 +564,11 @@ def nLasts(list:List[Char], n:Int):List[Char] = {
   Cette fonction est très importante. Si vous manquez de temps, faites sauter
   d'autres fonction pour parvenir à faire celle là car on en a très besoin dans
   le TP2. Là encore, il y a plusieurs solutions.
-  \begin{Verbatim}[label=retourne(ch) -- version bourinne]
-si ch = chvide alors chvide
-               sinon adj(dernier(ch), retourne1(saufdernier(ch)))
+  \begin{Verbatim}[label=version bourinne]
+def reverse(l:List[Char]):List[Char]={
+  if (l == Nil) Nil
+  else          last(l) :: reverse(butLast(l))
+}
   \end{Verbatim}
   \begin{description}
   \item[Complexité:] $O(n)$ appels, et $O(n)$ chaque à cause de saufdernier et
@@ -574,7 +576,7 @@ si ch = chvide alors chvide
   \end{description}
   
   \textbf{Comment leur faire trouver mieux:} Demandez leur de réfléchir à
-  comment ils inversent l'ordre d'une pile de cartes : on prend une pile
+  comment ils inversent l'ordre d'une pile de cartes, ou une pile d'assiettes: on prend une pile 
   supplémentaire, on passe le premier de la pile de départ sur l'autre, et on
   recommence avec la deuxieme de la pile de départ. Si ca aide pas, faut
   détailler un exemple:
@@ -585,19 +587,21 @@ si ch = chvide alors chvide
     $\emptyset$&CBA\\\hline
   \end{tabular}$\leadsto$ résulat = CBA
 
-  \begin{Verbatim}[label=retourne(ch) -- avec helper]
-retourne2(ch):
-  retourne2_helper(ch,chvide)
+  \begin{Verbatim}[label=avec helper]
+def retourne(l:List[Char]):List[Char] = {
 
-retourne2_helper(ch_todo,ch_done):
-  si ch_todo = chvide alors ch_done
-                      sinon retourne2_helper(suite(ch_todo),
-                                             adj(premier(ch_todo), ch_done))
+  def helper(todo:List[Char], done:List[Char]): List[Char] = {
+    if (todo==Nil) done
+    else           helper(todo.tail, todo.head :: done )
+  }
+
+  helper(l, Nil)
+}
   \end{Verbatim}
   Comme souvent avec les fonctions helpers, on construit dans un argument
   supplémentaire le résultat final. Donc, on prend le travail qu'on aurait fait
   pendant la remontée, et on le fait dans la descente sur cet
-  accumulateur. C'est important car ca change la fonction en récursive
+  accumulateur. C'est important car ça change la fonction en récursive
   terminale (même s'ils n'ont pas encore vu ce que c'est à ce moment du cours).
 
   Ce qui nous interresse ici, c'est que la complexité passe en $O(n)$. Il est
@@ -622,15 +626,11 @@ concat1(ch1,ch2):
                                 adj(dernier(ch1), ch2))
   \end{Verbatim}
 
-<<<<<<< HEAD:TD/02-td-recursivite/02-td-recursivite.tex
-  Pour aller plus vite, il faut laisser ch1 à l'envers le temps de travailler
-  au lieu de passer son temps à aller à la fin des chaines. On passe de
-=======
   Pour aller plus vite, il faut mettre ch1 à l'envers une bonne fois pour toute
   au lieu d'aller piocher le dernier à tout bout de champ. On passe de
->>>>>>> 782d82c154b08feb3830f98a7940e2cc8a5e24ce:TD/02-td-recursivite/02-td-recursivite.tex
   $O(n^2)$ à $O(n)$, tout de même. Encore une fois, un exemple donné avant les
   aide à trouver tous seuls.
+  \medskip
 
   \begin{tabular}{|l l l|}\hline
     ABC&DEF& en donnée\\
