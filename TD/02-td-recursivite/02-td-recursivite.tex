@@ -1,4 +1,5 @@
-\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+%\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+\documentclass[10pt]{article}\usepackage[nu]{esial}
 
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -11,31 +12,31 @@
 \begin{document}
 \maketitle
 
-\noindent\begin{minipage}{.57\linewidth}
+\noindent\begin{minipage}{.5\linewidth}
 \Exercice Code mystère.
 \Question Calculez les valeurs renvoyées par la fonction f pour n variant entre
 1 et 5. 
 \Question Quelle est la fonction mathématique vue en cours que f() calcule?
 \Question Quelle est la complexité algorithmique du calcul ? 
-\end{minipage}\hfill\begin{minipage}{.4\linewidth}
-\begin{Verbatim}
-def g(n:Int, a:Int, b:Int):Int ={
-  if (n == 0) {
-    return a;
-  } else {
-    return g(n-1,b,a+b);
+\end{minipage}\hfill\begin{minipage}{.49\linewidth}
+\begin{Verbatim}[numbers=right]
+def f(n:Int):Int = {
+  def lambda(n:Int, a:Int, b:Int):Int = {
+    if (n == 0) {
+      return a;
+    } else {
+      return lambda(n-1, b, a+b);
+    }
   }
-}
-def f(n:Int):Int ={
-  return g(n,0,1);
+  return lambda(n, 0, 1);
 }  
 \end{Verbatim}  
 \end{minipage}\smallskip
 
-Notez que tout le
-travail est fait par la fonction g, et la fonction f ne sert qu'à donner une
-valeur initiale aux arguments a et b, qui servent d'accumulateur. Il s'agit là
-d'une technique assez classique en récursivité.
+Notez que tout le travail est fait par la fonction interne lambda, et la
+fonction f ne sert qu'à donner une valeur initiale aux arguments a et b, qui
+servent d'accumulateur. Il s'agit là d'une technique assez classique en
+récursivité.
 
 \begin{Reponse}
   C'est fibonnacci, bien sûr. Et c'est bô car c'est du récursif avec une
@@ -53,17 +54,21 @@ d'une technique assez classique en récursivité.
   l'itératif'' et ``Cette approche est la plus efficace que je connaisse''
   (meme si je m'amuserais pas à avancer qu'elle est optimale, il est possible
   qu'une fonction en temps constant existe pour calculer fibo, après tout).
+
+  Il faut également noter qu'en Scala, on a tout à fait le droit de définir une
+  fonction à l'intérieur d'une autre fonction. Cela limite sa visibilité comme
+  il se doit, ce qui est pratique vu que cette lambda n'a aucun sens hors
+  contexte.
 \end{Reponse}
 
-\Exercice Soit le type \texttt{Chaine} muni des opérations suivantes :
+\Exercice Soit le type \texttt{List[Char]} muni des opérations suivantes :
 $$\left\{
-\begin{array}{l}
-  chvide:  \emptyset\mapsto Chaine\\
-  premier: Chaine\mapsto Caract\grave{e}re \;\;\text{(défini ssi la chaîne 
-    n'est pas vide)}\\
-  reste:   Chaine\mapsto Chaine \text{\hspace{11mm}(défini ssi la chaîne 
-    n'est pas vide)}\\
-  adj:     Chaine\times Caract\grave{e}re \mapsto Chaine
+\begin{array}{ll}
+  \mathbf{Nil}&\text{La liste vide}\\
+  head\text{\textbf{$\!$:$\!$:}}\, tail& \text{Construit une liste constituée de head, suivi de la liste tail}\\
+  list\mathbf{.head}& \text{Récupère le premier caractère de la liste}\\
+  &\text{(pas défini si list est la chaîne vide)}\\
+  list\mathbf{.tail}& \text{Récupère la liste privée de son premier élément}
 \end{array}\right.
 $$
 
@@ -71,21 +76,25 @@ $$
 nécessaires.
 
 \begin{Reponse}
-  \textbf{Comment lancer la séance:} ``les ptits malins qui savent
-  déjà tout, vous avez 20 questions devant vous, pas la peine de nous attendre,
-  on va prendre le temps de comprendre. Avancez. Indication: toutes les
-  questions admettent des réponses linéaires en temps, sauf 2. L'une est un peu
-  pire que O(n), l'autre est meilleure. Bonne chance''. Et ensuite, on prend
-  les vrais débutants par la main.
+  \textbf{Comment lancer la séance:} ``les ptits malins qui savent déjà tout,
+  vous avez 20 questions devant vous, pas la peine de nous attendre, on va
+  prendre le temps de comprendre. Avancez. Indication: toutes les questions
+  admettent des réponses linéaires en temps, sauf 2. L'une est un peu pire que
+  O(n), l'autre est meilleure. Bonne chance. En cas de doute, vous pourrez taper
+  ce code dans la PLM d'ici peu, car on est en train d'ajouter une leçon sur les
+  listes récursives''. Et ensuite, on prend les vrais débutants par la main.
 
-  \textbf{A propos des preuves}
-  Je suis désolé, vu que j'ai 2 séances cette semaine et pis plus rien pendant
-  un grand moment, et pleins de TD/TP entre temps, j'ai pas eu le temps de
-  parler de preuve de programme, encore. Du coup, il faut leur expliquer avec
-  les mains ce qu'on veut faire à propos de la terminaison. Pourquoi c'est
-  important et comment on le montre... Laissez tomber la correction, sauf pour
-  dire ``on voit bien'' et déplier des exemples quand le premier argument
-  suffit pas.
+  \textbf{À propos des preuves} On aborde la notion de preuve plus tard dans le
+  cours, et il s'agit donc de faire un peu avec les mains dans ce TD, pour
+  préparer le terrain au cours. Il faut absolument évoquer la preuve de
+  terminaison de chaque exemple, en expliquant qu'on cherche une suite
+  strictement monotone variant vers le cas de base, car c'est facile de faire du
+  récursif qui s'arrête pas. On peut parler un peu de preuve de correction s'il
+  faut, mais encore plus avec les mains. Je pense qu'en rester aux ``on voit
+  bien que'' et déplier des exemples suffira pour l'instant.
+
+  \textbf{À propos des codes fournis:} je pense qu'ils fonctionnent, mais je ne
+  les ai pas testé, en fait...
 
   \textbf{Ce qui est important de faire:}
   \begin{itemize}
@@ -134,17 +143,22 @@ nécessaires.
 \end{Reponse}
 
 %%%%%%%% longueur %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Type}[1]{\text{\texttt{#1}}}
 \begin{Question}
   $longueur: \left\{
     \begin{array}{l}
-      Chaine\mapsto \mathbb{N}\\
+      \Type{List[Char]}\mapsto \Type{Int}\\
       \text{retourne le nombre de lettres composant la chaîne}
     \end{array}\right.$
 \end{Question}
 \begin{Reponse}
   \begin{Verbatim}[label=longueur(ch)]
-si ch = chvide alors 0
-               sinon 1 + longueur(reste(ch))    
+def length(l:List[Char]):Int = {
+  if (l == Nil)
+    return 0
+  else 
+    return 1 + length(l.tail)
+}
   \end{Verbatim}
   \begin{description}
     \item
@@ -170,30 +184,73 @@ si ch = chvide alors 0
     récursifs. A chaque appel, on n'appelle que des fonctions de base, pas
     chères. Donc une étape est en O(1). Résultat: $O(n)\times O(1)=O(n)$
   \end{description}
+On peut l'écrire de façon plus jolie en Scala:
+
+\medskip\noindent
+\begin{minipage}{.48\linewidth}
+  \begin{Verbatim}[label=écriture fonctionnelle (sans return)]
+def length(l:List[Char]):Int = {
+  if (l == Nil)
+    0
+  else 
+    1 + length(l.tail)
+}
+  \end{Verbatim}  
+\end{minipage}\hfill%
+\begin{minipage}{.48\linewidth}
+  \begin{Verbatim}[numbers=right,label=avec un zoli filtrage]
+def length(l:List[Char]):Int = {
+  l match {
+    case a::b => 1 + length(b)
+    case _    => 0
+  }
+}
+  \end{Verbatim}  
+\end{minipage}
+
 \end{Reponse}
 
 %%%%%%%% est_membre %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{Question}
   $est\_membre: \left\{
     \begin{array}{l}
-      Chaine\times caract\grave{e}re\mapsto bool\acute{e}en\\
-      \text{retourne VRAI ssi le caractère fait partie de la chaîne}
+      \Type{List[Char]}\times \Type{Char}\mapsto \Type{Boolean}\\
+      \text{retourne \Type{true} ssi le caractère fait partie de la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=est\_membre(ch\quotesinglbase c)]
-si ch = chvide alors FAUX
-               sinon si premier(ch) = c alors VRAI
-                                        sinon est_membre(reste(ch),c)    
-  \end{Verbatim}
+\noindent
+  \begin{minipage}{.43\linewidth}
+  \begin{Verbatim}
+def isMember(l:List[Char], 
+             value:Char):Boolean= {
+  if (l==Nil) false
+  else if (l.head == value) true
+  else isMember(l.tail, value)
+}
+
+  \end{Verbatim}    
+  \end{minipage}
+  \begin{minipage}{.55\linewidth}
+  \begin{Verbatim}[numbers=right]
+def isMember(l:List[Char], v:Char):Boolean= {
+  l match {
+    case a::_ if a==v => true
+    case a::b         => isMember(b, v)
+    case _            => false
+  }
+}
+  \end{Verbatim}        
+  \end{minipage}
+
   \begin{description}
   \item[Est ce que cette fonction traite correctement le cas où le caractère
-    n'est pas dedans] Appliquez le meme algo à la recherche d'une peau rouge
-    dans un oignon. Je regarde la peau extérieure, elle est pas rouge, je
+    n'est pas dedans.] ~\\ Appliquez le meme algo à la recherche d'une peau
+    rouge dans un oignon. Je regarde la peau extérieure, elle est pas rouge, je
     l'enlève et recommence. Je recommence sur toutes les peaux (toutes jaunes)
     jusqu'à la toute dernière. Je l'enlève aussi car elle est jaune. Je me
-    retrouve avec l'oignon vide entre les mains, j'ai donc l'assurance
-    qu'aucune peau n'était rouge dans mon oignon.
+    retrouve avec l'oignon vide entre les mains, j'ai donc l'assurance qu'aucune
+    peau n'était rouge dans mon oignon.
   \item[Terminaison et Complexité:] comme avant. Simplement, chaine vide n'est
     pas le seul cas terminal, mais ca ne gène pas la terminaison. On pourrait
     chercher à faire une étude plus précise de la complexité avec meilleur des
@@ -215,8 +272,8 @@ si ch = chvide alors FAUX
 \begin{Question}
   $occurence: \left\{
     \begin{array}{l}
-      Chaine\times caract\grave{e}re\mapsto \mathbb{N}\\
-      \text{retourne le nombre d'occurences du caractère dans la chaine}
+      \Type{List[Char]}\times \Type{Char}\mapsto \Type{Int}\\
+      \text{retourne le nombre d'occurences du caractère dans la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
@@ -225,6 +282,30 @@ si ch = chvide alors 0
                sinon si premier(ch) = c alors 1 + occurence(reste(ch),c)
                                         sinon     occurence(reste(ch),c)    
   \end{Verbatim}
+
+\noindent
+  \begin{minipage}{.49\linewidth}
+  \begin{Verbatim}
+def occ(l:List[Char], value:Char):Int= {
+  if (l==Nil) 0
+  else if (l.head == value) 
+       1+occ(l.tail,value)
+  else   occ(l.tail, value)
+}
+
+  \end{Verbatim}    
+  \end{minipage}
+  \begin{minipage}{.49\linewidth}
+  \begin{Verbatim}[numbers=right]
+def occ(l:List[Char], v:Char):Int= {
+  l match {
+    case a::b if a==v => 1+occ(b, v)
+    case a::b         =>   occ(b, v)
+    case _            => 0
+  }
+}
+  \end{Verbatim}        
+  \end{minipage}
   \begin{description}
   \item[Terminaison et Complexité:] comme avant: $O(n)$. 
   \end{description}
@@ -234,8 +315,8 @@ si ch = chvide alors 0
 \begin{Question}
   $tous\_differents: \left\{
     \begin{array}{l}
-      Chaine\mapsto bool\acute{e}en\\
-      \text{retourne VRAI ssi tous les membres de la chaine sont différents}
+      \Type{List[Char]}\mapsto \Type{Boolean}\\
+      \text{retourne \Type{true} ssi tous les membres de la chaine sont différents}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
@@ -243,6 +324,13 @@ si ch = chvide alors 0
 si ch = chvide alors VRAI
                sinon si est_membre(suite(ch), premier(ch)) alors FAUX
                                                      sinon tous_differents(suite(ch))    
+  \end{Verbatim}
+  \begin{Verbatim}
+def allDifferent(l:List[Char]):Boolean = {
+  if (l == Nil)                      true
+  else if (isMember(l.tail, l.head)) false
+  else                               allDifferent(l.tail)
+}    
   \end{Verbatim}
   \begin{description}
   \item[Terminaison:] comme avant.
@@ -270,7 +358,7 @@ si ch = chvide alors VRAI
 \begin{Question}
   $supprime: \left\{
     \begin{array}{l}
-      Chaine\times caract\grave{e}re\mapsto Chaine\\
+      \Type{List[Char]}\times \Type{Char}\mapsto \Type{List[Char]}\\
       \text{retourne la chaine privée de la première occurence du caractère.}
     \end{array}\right.$  
 
@@ -282,6 +370,15 @@ si ch = chvide alors ch
                sinon si premier(ch) = c alors reste(ch)
                                         sinon adj(premier(ch), supprime(suite(ch),c))
   \end{Verbatim}
+  \begin{Verbatim}
+def remove(l:List[Char], v:Char):List[Char]={
+  l match {
+    case a::b if a==v =>    remove(b, v)
+    case a::b         => a::remove(b,v)
+    case _            => Nil
+  }
+}    
+  \end{Verbatim}
   \begin{description}
   \item[Terminaison et Complexité:] comme avant: $O(n)$. 
   \end{description}
@@ -291,18 +388,24 @@ si ch = chvide alors ch
 \begin{Question}
   $deuxieme: \left\{
     \begin{array}{l}
-      Chaine\mapsto caract\grave{e}re\\
+      \Type{List[Char]}\mapsto \Type{Char}\\
       \text{retourne le deuxième caractère de la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=deuxieme(ch)]
-PRECONDITION: ch != vide et suite(ch) != vide
-premier(suite(ch))
+  \begin{Verbatim}[]
+// PRECONDITION: list != Nil et ch.tail != Nil
+def second(list: List[Char]):Char = list.tail.head
   \end{Verbatim}
   \begin{description}
   \item[Terminaison:] C'est un appel direct, sans récursion. Mais c'est
-    l'occasion de réintroduire les préconditions.
+    l'occasion de parler des préconditions.  On ne vérifie pas explicitement si
+    la précondition est respectée dans le code, car on ne saurait pas trop
+    comment réagir si elle est violée. On laisse donc Scala se débrouiller, il
+    va lever une exception comme il se doit.
+
+    Oui, au passage, les accolades sont optionnelles en Scala quand on défini
+    une fonction.
   \item[Complexité:] O(1)
   \end{description}
 \end{Reponse}
@@ -311,15 +414,17 @@ premier(suite(ch))
 \begin{Question}
   $dernier: \left\{
     \begin{array}{l}
-      Chaine\mapsto caract\grave{e}re\\
+      \Type{List[Char]}\mapsto \Type{Char}\\
       \text{retourne le dernier caractère de la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=dernier(ch)]
-PRECONDITION: ch != vide
-si suite(ch) = vide alors premier(ch)
-                    sinon dernier(suite(ch))    
+  \begin{Verbatim}[]
+// PRECONDITION: list != Nil
+def last(list:List[Char]): Char = {
+  if (list.tail == Nil) list.head
+  else                  last(list.tail)
+}
   \end{Verbatim}
   \begin{description}
   \item[Terminaison et Complexité:] comme avant: $O(n)$. 
@@ -330,15 +435,17 @@ si suite(ch) = vide alors premier(ch)
 \begin{Question}
   $saufdernier: \left\{
     \begin{array}{l}
-      Chaine\mapsto Chaine\\
+      \Type{List[Char]}\mapsto \Type{List[Char]}\\
       \text{retourne la chaine privée de son dernier caractère}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=saufdernier(ch)]
-PRECONDITION: ch != chvide
-si suite(ch) = chvide alors chvide
-                      sinon adj(premier(ch), saufdernier(suite(ch)))    
+  \begin{Verbatim}
+// PRECONDITION: list != Nil
+def butLast(list: List[Char]): List[Char] = {
+  if (list.tail == Nil) Nil
+  else                  list.head :: butLast(list.tail)
+}
   \end{Verbatim}
   \begin{description}
   \item[Terminaison et Complexité:] comme avant: $O(n)$. 
@@ -349,15 +456,17 @@ si suite(ch) = chvide alors chvide
 \begin{Question}
   $nieme: \left\{
     \begin{array}{l}
-      Chaine\times\mathbb{N}\mapsto caract\grave{e}re\\
+      \Type{List[Char]}\times\Type{Int}\mapsto \Type{Char}\\
       \text{retourne le nieme caractère de la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=nieme(ch\quotesinglbase n)]
-PRECONDITION: ch != vide
-si n = 0 alors alors premier(ch)
-               sinon nieme(suite(ch), n-1)    
+  \begin{Verbatim}
+// PRECONDITION: list != Nil
+def nth(list: List[Char], rank: Int): Char = {
+  if (rank==0) list.head
+  else         nth(l.tail, rank-1)
+}
   \end{Verbatim}
   \begin{description}
   \item[Terminaison et Complexité:] comme avant: $O(n)$. 
@@ -368,15 +477,17 @@ si n = 0 alors alors premier(ch)
 \begin{Question}
   $npremiers: \left\{
     \begin{array}{l}
-      Chaine\times\mathbb{N}\mapsto Chaine\\
+      \Type{List[Char]}\times\Type{Int}\mapsto \Type{List[Char]}\\
       \text{retourne les n premiers caractères de la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=npremiers(ch\quotesinglbase n)]
-PRECONDITION: n>=longueur(ch)
-si n = 0 alors chvide
-         sinon adj(premier(ch), npremiers(n-1,suite(ch)))    
+  \begin{Verbatim}
+// PRECONDITION: n>=list.length
+def nFirsts(list: List[Char], amount:Int):List[Char] = {
+  if (amount == 0) Nil
+  else             l.head :: nFirsts(l.tail, amount-1)
+}
   \end{Verbatim}
   \begin{description}
   \item[Terminaison et Complexité:] comme avant: $O(n)$.
@@ -395,15 +506,17 @@ si n = 0 alors chvide
 \begin{Question}
   $nderniers: \left\{
     \begin{array}{l}
-      Chaine\times\mathbb{N}\mapsto Chaine\\
+      \Type{List[Char]}\times\Type{Int}\mapsto \Type{List[Char]}\\
       \text{retourne les n derniers caractères de la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
   Plusieurs variantes sont possibles:
-  \begin{Verbatim}[label=nderniers (ch\quotesinglbase n) -- version naive]
-ndernier(ch,n) = si lgr(ch)=n alors ch
-                 sinon ndernier(reste(ch), n)    
+  \begin{Verbatim}[label=version naive]
+def nLasts(list: List[Char], amount:Int):List[Char] = {
+  if (amount==list.length) list
+  else nLasts(list.tail, n-1)
+}    
   \end{Verbatim}
   \begin{description}
   \item[Complexité:] On a $O(n)$ appels récurssifs, mais chacun fait un appel à
@@ -411,21 +524,26 @@ ndernier(ch,n) = si lgr(ch)=n alors ch
     O(n)=O(n^2)$. 
   \end{description}
 
-  \begin{Verbatim}[label=nderniers (ch\quotesinglbase n) -- avec retourne]
-ndernier(ch,n) = retourne(npremiers(retourne(ch), n))
+  \begin{Verbatim}[label=avec retourne]
+def nLasts(l:List[Char], n:Int):List[Char] = reverse(nFirst(reverse(list),n))
   \end{Verbatim}
   \begin{description}
-  \item[Complexité:] On ajoute les complexités respectives de chaque appel. $C
-    = O(n) + O(n) + O(n) = O(n)$, (car $C_{retourne}=O(n)$) ce qui est
-    mieux. Mais retourne n'est pas encore défini. Alors on en fait une
-    troisième qui est l'occasion d'introduire les fonctions helpers.
+  \item[Complexité:] On ajoute les complexités respectives de chaque appel. $C =
+    O(n) + O(n) + O(n) = O(n)$, (car $C_{retourne}=O(n)$) ce qui est mieux. Mais
+    retourne n'est pas encore défini, ce qui donne l'impression de tricher un
+    peu. Alors on fait une troisième version, qui est surtout l'occasion
+    d'introduire les fonctions helpers.
   \end{description}
 
-  \begin{Verbatim}[label=nderniers (ch\quotesinglbase n) -- avec fonction d'aide]
-ndernier(ch,n) = supp_n_premiers(ch,lgr(ch)-n)
+  \begin{Verbatim}[label=avec fonction d'aide]
+def nLasts(list:List[Char], n:Int):List[Char] = {
+  butNFirsts(list, list.length-n) 
 
-supp_n_premiers(ch, k) =
-   si k=0 alors ch sinon supp_n_premiers(reste(ch), k-1)
+  def butNFirst(list:List[Char], n:Int):List[Char] = {
+    if (n==0) list
+    else      butNFirst(list.tail, n-1)
+  }
+}
   \end{Verbatim}
 
   L'idée est donc de calculer une bonne fois pour toute combien de caractères
@@ -438,7 +556,7 @@ supp_n_premiers(ch, k) =
 \begin{Question}
   $retourne: \left\{
     \begin{array}{l}
-      Chaine\mapsto Chaine\\
+      \Type{List[Char]}\mapsto \Type{List[Char]}\\
       \text{retourne la chaine lue en sens inverse}
     \end{array}\right.$  
 \end{Question}
@@ -492,7 +610,7 @@ retourne2_helper(ch_todo,ch_done):
 \begin{Question}
   $concat: \left\{
     \begin{array}{l}
-      Chaine\times Chaine\mapsto Chaine\\
+      \Type{List[Char]}\times \Type{List[Char]}\mapsto \Type{List[Char]}\\
       \text{retourne les deux chaines concaténées}
     \end{array}\right.$  
 \end{Question}
@@ -537,7 +655,7 @@ concat2(ch1,ch2):
 \begin{Question}
   $min\_ch: \left\{
     \begin{array}{l}
-      Chaine\mapsto caract\grave{e}re\\
+      \Type{List[Char]}\mapsto \Type{Char}\\
       \text{retourne le caractère le plus petit de la chaîne}
     \end{array}\right.$  
   
@@ -561,7 +679,7 @@ si suite(ch) = chvide alors premier(ch)
 \begin{Question}
   $croissante: \left\{
     \begin{array}{l}
-      Chaine\mapsto bool\acute{e}en\\
+      \Type{List[Char]}\mapsto bool\acute{e}en\\
       \text{retourne si la chaine est croissante (dans l'ordre lexicographique)}
     \end{array}\right.$  
 \end{Question}
@@ -586,7 +704,7 @@ finsi
 \begin{Question}
   $nnaturels: \left\{
     \begin{array}{l}
-      \mathbb{N}\mapsto Chaine\\
+      \Type{Int}\mapsto \Type{List[Char]}\\
       \text{retourne une chaine formée des n premiers entiers naturels}
     \end{array}\right.$  
   
@@ -623,7 +741,7 @@ nnaturels3_helper(n, todo):
 \begin{Question}
   $palindrome: \left\{
     \begin{array}{l}
-      Chaine\mapsto bool\acute{e}en\\
+      \Type{List[Char]}\mapsto bool\acute{e}en\\
       \text{retourne VRAI si la chaine est un palindrome}
     \end{array}\right.$  
 
@@ -658,7 +776,7 @@ finsi
 \begin{Question}
   $anagramme: \left\{
     \begin{array}{l}
-      Chaine\times Chaine\mapsto bool\acute{e}en\\
+      \Type{List[Char]}\times \Type{List[Char]}\mapsto bool\acute{e}en\\
       \text{retourne VRAI si les chaines sont des anagrammes l'une de l'autre}
     \end{array}\right.$  
 
@@ -684,7 +802,7 @@ finsi
 \begin{Question}
   $union: \left\{
     \begin{array}{l}
-      Chaine\times Chaine\mapsto Chaine\\
+      \Type{List[Char]}\times \Type{List[Char]}\mapsto \Type{List[Char]}\\
       \text{retourne une chaîne formée de toutes les lettres de ch1 et ch2,
         sans doublons}
     \end{array}\right.$    
@@ -713,7 +831,7 @@ finsi
 \begin{Question}
   $difference: \left\{
     \begin{array}{l}
-      Chaine\times Chaine\mapsto Chaine\\
+      \Type{List[Char]}\times \Type{List[Char]}\mapsto \Type{List[Char]}\\
       \text{retourne toutes les lettres de ch1 ne faisant
         pas partie de ch2}
     \end{array}\right.$    
