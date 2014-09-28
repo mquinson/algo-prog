@@ -682,7 +682,6 @@
         wanted postcondition?
     \end{itemize}
   \end{block}
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\WP}[1]{\textbf{WP}($#1$)}
@@ -724,13 +723,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Proving Recursive Functions}\sectionpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}{Idea of the correction of recursive function}
 
   \structure{$P(n)$}: Precondition at step $n$; \structure{$Q(n,r_n)$}:
   Postcondition at step $n$ with result $r_n$%\vspace{-\baselineskip}
 
   \bigskip
-  \centerline{\textbf{\alert{We want to show $\boldsymbol{P(n) \:\{TREC\}\: Q(n,r_n)}$}}}
+  \centerline{\textbf{\alert{We want to show \framebox{${P(n) \:\{TREC\}\: Q(n,r_n)}$}}}}
   \bigskip
 
   \centerline{%
@@ -764,9 +764,8 @@
     }
     \end{itemize}
   }
-
-
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{frame}{Proof of correctness (1/2)}
   
@@ -949,9 +948,9 @@
     \item Existence of an \alert{extrema} $x_0$ \alert{verifying the
         stopping condition}
     \end{itemize}
-  \item \structure{Remarque}: The \hyperlink{syracuse}{Syracuse suite} seems 
-    to terminate without this\\
-    So that's no necessary condition\bigskip 
+  \item \structure{Remarque}: that's no necessary condition\\
+    The \hyperlink{syracuse}{Syracuse suite} seems to terminate without
+    this\bigskip
 
   \uncover<2>{
   \item \structure{Example:} the factorial, of course
@@ -1020,6 +1019,5 @@
   \end{flushright}
 
 \end{frame}
-
 % LocalWords:  Hoare LocalWords postcondition
 %% coding: utf-8

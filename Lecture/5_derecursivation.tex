@@ -133,8 +133,8 @@
     \fbox{\begin{column}{.5\linewidth}\vspace{-.4\baselineskip}
         \begin{tabbing}%
           last(s):\\
-          ~~\textbf{if} empty(cdr(s)) \=\textbf{then} \=$r\leftarrow car(s)$\\
-          \>\textbf{else} \> $r\leftarrow last(cdr(s))$
+          ~~\textbf{if} empty(s.tail) \=\textbf{then} \=$r\leftarrow s.head$\\
+          \>\textbf{else} \> $r\leftarrow last(s.tail)$
         \end{tabbing}
     \end{column}}}
     \begin{column}{.001\linewidth}~\end{column}
@@ -161,11 +161,11 @@
         \begin{tabbing}%
           last'(s):\\
           ~~$l \leftarrow s$\\
-          ~~\textbf{until} $empty(cdr(l))$  \textbf{do}\\
+          ~~\textbf{until} $empty(l.tail)$  \textbf{do}\\
           ~~~~\textit{// T(u) does nothing }\\
-          ~~~~\=l=cdr(l)\\
+          ~~~~\=l$\leftarrow$l.tail\\
           ~~\textbf{end} \\
-          ~~$r\leftarrow car(l)$
+          ~~$r\leftarrow l.head$
         \end{tabbing}
     \end{column}}}
     \begin{column}{.001\linewidth}~\end{column}
@@ -183,8 +183,8 @@
         \fbox{\begin{minipage}{\linewidth}
             \begin{tabbing}%
               nth(s,i):\\
-              ~~\textbf{if} n=0 \=\textbf{then} \=$r\leftarrow car(s)$\\
-              \>\textbf{else} \> $r\leftarrow nth(cdr(s),i-1)$
+              ~~\textbf{if} n=0 \=\textbf{then} \=$r\leftarrow s.head$\\
+              \>\textbf{else} \> $r\leftarrow nth(s.tail,i-1)$
             \end{tabbing}
         \end{minipage}}
       
@@ -199,9 +199,9 @@
               nth'(s,i):\\
               ~~$l \leftarrow s$; $k\leftarrow i$\\
               ~~\textbf{until} k=0 \textbf{do}\\
-              ~~~~\=l=cdr(l); k=k-1\\
+              ~~~~\=l$\leftarrow$l.tail; k$\leftarrow$k-1\\
               ~~\textbf{end} \\
-              ~~$r\leftarrow car(l)$
+              ~~$r\leftarrow l.head$
             \end{tabbing}
           \end{minipage}}
       \end{column}}
@@ -215,8 +215,8 @@
             \begin{tabbing}%
               is\_member(s,c):\\
               ~~\textbf{if} empty(s) \textbf{then} \=$r\leftarrow FALSE$\\
-              ~~\textbf{if} car(s)=c \=\textbf{then} \= $r\leftarrow TRUE$\\
-              \>\textbf{else}\>$r\leftarrow is\_memb(cdr(s))$
+              ~~\textbf{if} s.head=c \=\textbf{then} \= $r\leftarrow TRUE$\\
+              \>\textbf{else}\>$r\leftarrow is\_memb(s.tail)$
             \end{tabbing}
         \end{minipage}}
       
@@ -225,13 +225,13 @@
       \end{column}
 
       \uncover<4->{
-      \begin{column}{.4\linewidth}
+      \begin{column}{.45\linewidth}
         \fbox{\begin{minipage}{\linewidth}
             \begin{tabbing}%
               is\=\_memb'(s,c):\\
               ~~$l \leftarrow s$\\
-              ~~\textbf{until} $empty(l)$ OR car(l)=c \textbf{do}\\
-              ~~~~\=l=cdr(l)\\
+              ~~\textbf{until} $empty(l)$ OR l.head=c \textbf{do}\\
+              ~~~~\=l$\leftarrow$l.tail\\
               ~~\textbf{end} \\
               ~~\textbf{if} empty(s) \textbf{then} \=$r\leftarrow FALSE$\\
               ~~$r\leftarrow TRUE$
@@ -286,17 +286,16 @@
 
   \begin{itemize}
   \item This is given by an immediate rewriting
-  \item Computers are good at this kind of game (ie compilers)
+  \item Computers are good at this kind of game (e.g., in compilers)
   \item Meta-programming troubling at first sight, but still fully mechanic
   \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Transformation to Tail Recursion}
 \begin{frame}{Non-Recursive form of Non-Tail functions}
-  \begin{block}{Previous approach is not often applicable}
+  \begin{block}{How to deal with non-tail functions?}
   \begin{itemize}
-  \item If the function you consider is non-tail, this method does not apply
-  \item Looking closer, that's because of those computations at recursive
+  \item Previous method don't work because of those computations at recursive
     climb:
   \item Where should the \structure{ongoing computation} be stored (they were stacked)?
     
@@ -304,14 +303,13 @@
     fact(1)=\alert{3\times 2\times} 1=\alert{3\times} 2=6$ 
   \end{itemize}
 \end{block}\vspace{-.7\baselineskip}
-\begin{block}{What's done is no more to be done}
+\begin{block}<2->{{\it what's done is no more to do}}
   \begin{itemize}
-  \item Do intermediate computations during descent, not waiting for climbing\\[2pt]
+  \item Computing during descent $\leadsto$ nothing left at climb $\leadsto$ Tail Recursion\\[2pt]
 
     $fact(3)=\fbox{\alert{3}}\times fact(2)=\alert{3\times 2}\times
     fact(1)=\fbox{\alert{6}}\times fact(1)=\fbox{\alert{6}}\times
-    1=\fbox{6}=6$\\[2pt]
-    There's nothing left to do during climbing $\Rightarrow$ Tail Recursion
+    1=\fbox{6}=6$\\[4pt]
 
   \item One extra variable is enough for the storage of ``ongoing'' computation
     \begin{itemize}
@@ -324,7 +322,7 @@
   \end{itemize}
 \end{block}\vspace{-.7\baselineskip}
 
-\begin{block}{\alert{Warning:} this does not always work!}
+\begin{block}<3->{\alert{Warning:} this does not always work!}
   \begin{itemize}
   \item Computations done out of order $\leadsto$ must be \alert{associative}
     and \alert{commutative}
@@ -340,7 +338,7 @@
     \fbox{\vbox{\vspace{-.8\baselineskip} %
         \begin{tabbing}%
           \textsc{fact}(n):\\
-          ~~\textbf{if} n = 0 \=\textbf{then} \=$r\leftarrow 1$ \\
+          ~~\textbf{if} n = 0 \=\textbf{then} \=$r\leftarrow$ \alert<2>{1} \\
           \> \textbf{else} \>$r\leftarrow n\times fact(n-1)$
         \end{tabbing}\vspace{-.8\baselineskip}%
       }
@@ -372,7 +370,7 @@
     \item<2-> Main function simply calls the lambda function
       \begin{itemize}
       \item Copy of the parameters carrying the recursion
-      \item Initialize accumulators to the identity element of their operation
+      \item Initialize accumulators with base case's value (often identity element)
       \end{itemize}
     \item<3-> Body of the lambda function:
       \begin{itemize}
@@ -707,7 +705,7 @@
     \end{itemize}
   \end{block}\vspace{-.6\baselineskip}
 
-  \begin{block}{This is Backtracking}
+  \begin{block}<4->{This is Backtracking}
     \begin{itemize}\vspace{-.4\baselineskip}
     \item Tentative choices + cut branches leading to invalid solutions (backtrack)
     \item Restrict study to valid solutions only
