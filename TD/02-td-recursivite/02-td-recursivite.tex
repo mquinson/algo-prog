@@ -540,7 +540,7 @@ def nLasts(list:List[Char], n:Int):List[Char] = {
   butNFirsts(list, list.length-n) 
 
   def butNFirst(list:List[Char], n:Int):List[Char] = {
-    if (n==0) list
+    if (n==0 || list==Nil) list
     else      butNFirst(list.tail, n-1)
   }
 }
