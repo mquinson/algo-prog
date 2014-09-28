@@ -483,7 +483,7 @@ def nth(list: List[Char], rank: Int): Char = {
 \end{Question}
 \begin{Reponse}
   \begin{Verbatim}
-// PRECONDITION: n>=list.length
+// PRECONDITION: n>=list.size
 def nFirsts(list: List[Char], amount:Int):List[Char] = {
   if (amount == 0) Nil
   else             l.head :: nFirsts(l.tail, amount-1)
@@ -514,7 +514,7 @@ def nFirsts(list: List[Char], amount:Int):List[Char] = {
   Plusieurs variantes sont possibles:
   \begin{Verbatim}[label=version naive]
 def nLasts(list: List[Char], amount:Int):List[Char] = {
-  if (amount==list.length) list
+  if (amount==list.size) list
   else nLasts(list.tail, n-1)
 }    
   \end{Verbatim}
@@ -537,10 +537,10 @@ def nLasts(l:List[Char], n:Int):List[Char] = reverse(nFirst(reverse(list),n))
 
   \begin{Verbatim}[label=avec fonction d'aide]
 def nLasts(list:List[Char], n:Int):List[Char] = {
-  butNFirsts(list, list.length-n) 
+  butNFirsts(list, list.size-n) 
 
   def butNFirst(list:List[Char], n:Int):List[Char] = {
-    if (n==0 || list==Nil) list
+    if (n==0 || list==Nil) list
     else      butNFirst(list.tail, n-1)
   }
 }
@@ -620,10 +620,10 @@ def retourne(l:List[Char]):List[Char] = {
 \end{Question}
 \begin{Reponse}
   \begin{Verbatim}[label=version brutale: $O(n^2)$]
-concat1(ch1,ch2):
-  si ch1 = chvide alors ch2
-                  sinon concat1(saufdernier(ch1),
-                                adj(dernier(ch1), ch2))
+def concat1(ch1:List[Char], ch2:List[Char]): List[Char] = {
+  if (ch1 == Nil) return ch2
+  return concat1(butLast(l), last(ch1)::ch2)
+}
   \end{Verbatim}
 
   Pour aller plus vite, il faut mettre ch1 à l'envers une bonne fois pour toute
@@ -641,13 +641,26 @@ concat1(ch1,ch2):
   \end{tabular}$\leadsto$ résultat = ABCDEF
 
   \begin{Verbatim}[label=version avec helper: $O(n)$]
-concat2_helper(ch1,ch2): (un peu mieux)
-  si ch1 = chvide alors ch2
-                  sinon concat2_helper(suite(ch1),
-                                       adj(premier(ch1),ch2))
-
-concat2(ch1,ch2):
-  concat2_helper(retourne(ch1),ch2)    
+def concat(ch1:List[Char], ch2:List[Char]):List[Char] = {
+  def helper(ch1:List[Char], ch2:List[Char]):List[Char] = {
+    if (ch1 == Nil) return ch2
+    else return helper(ch1.tail, ch1.head :: ch2)
+  }
+  helper(reverse(ch1), ch2)
+}
+  \end{Verbatim}
+  
+  On peut même se rendre compte que notre helper est exactement le
+  même que celui de reverse. Du coup, on peut réécrire ainsi:
+  
+  \begin{Verbatim}[label=version avec helper: $O(n)$]
+def concat(ch1:List[Char], ch2:List[Char]):List[Char] = {
+  def helper(ch1:List[Char], ch2:List[Char]):List[Char] = {
+    if (ch1 == Nil) return ch2
+    else return helper(ch1.tail, ch1.head :: ch2)
+  }
+  helper( helper(ch1, Nil), ch2)
+}
   \end{Verbatim}
 \end{Reponse}
 
@@ -666,8 +679,14 @@ concat2(ch1,ch2):
 \begin{Reponse}
   \begin{Verbatim}[label=min\_ch(ch)]
 PRECONDITION: ch != chvide
-si suite(ch) = chvide alors premier(ch)
-                      sinon min(premier(ch), min_ch(suite(ch)))
+def min(l:List[Char]): Char = {
+  def min2(l:List[Char], v:Char): Char = {
+    if (l==Nil) return v
+    if (l.head < v) return min2(l.tail, l.head)
+    return min2(l.tail, v)
+  }
+  return min2(l.tail, l.head)
+}
   \end{Verbatim}
 
   \begin{description}
@@ -685,15 +704,11 @@ si suite(ch) = chvide alors premier(ch)
 \end{Question}
 \begin{Reponse}
   \begin{Verbatim}[label=croissante(ch)]
-si ch=chvide ou suite(ch)=chvide alors
-  VRAI
-sinon
-  si premier(ch) < premier(suite(ch)) alors
-    croissante(suite(ch))
-  sinon
-    FAUX
-  finsi
-finsi
+def increasing(l:List[Int]): Boolean = {
+  if (l == Nil || l.tail == Nil) return true
+  if (l.head > l.tail.head)      return false
+  return increasing(l.tail)
+}
   \end{Verbatim}
   \begin{description}
   \item[Terminaison et Complexité:] comme avant: $O(n)$. 
