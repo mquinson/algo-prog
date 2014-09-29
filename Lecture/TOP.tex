@@ -95,50 +95,16 @@
 %\includeonly{0_presentation,1_algorithmic,2_simpleSorts}
 %\includeonly{3_recursivite}
 %\includeonly{4_proof,6_testing}
-%\includeonly{4_proof}
+\includeonly{4_proof,5_derecursivation}
 \renewenvironment{Coupe}{}{}
 
 \begin{document}
 
-\frame{\thispagestyle{empty}\titlepage
-\medskip\centerline{\includegraphics[width=3\baselineskip]{img/by-sa.pdf}}}
-
-\newcommand{\CClogo}[1]{\includegraphics[height=\baselineskip]{{#1}}}
-\begin{frame}{About this document}
-  \begin{block}{License of this document: 
-      \includegraphics[width=3\baselineskip]{img/by-sa.pdf}}\medskip
-    \begin{itemize}
-    \item[\CClogo{img/cc.pdf}] Licence Creative Commons version 3.0 France
-      (or later)
-    \item[\CClogo{img/by.pdf}] Attribution; ~~~
-      \CClogo{img/sa.pdf}~ Share alike
-    \item[] \url{http://creativecommons.org/licenses/by-sa/3.0/fr/}
-    \end{itemize}
-  \end{block}\vspace{-.3\baselineskip}
-
-  \begin{block}{Technical aspects}
-    \begin{itemize}
-    \item \structure{\LaTeX} document (class \structure{latex-beamer}), compiled
-      with
-      \structure{latex-make}
-    \item Figures: Some \structure{xfig}, some \structure{tikz}, some
-      \structure{inkscape}
-    \end{itemize}
-  \end{block}\vspace{-.3\baselineskip}
-
-  \begin{block}{URL: {\color{black}\normalsize\url{http://www.loria.fr/~quinson/Teaching/TOP/}}}
-     \begin{itemize}
-    \item Sheets, Practicals, exams, projects {\small(sources available to teachers that ask
-        me)}
-    \end{itemize}
-  \end{block}
-\end{frame}
-
+\include{0_title}
 \include{0_presentation}\include{1_algorithmic}\include{2_simpleSorts}
-%\include{3_recursivite}
-%\include{4_proof}
-%\include{5_derecursivation}
-
+\include{3_recursivite}
+\include{4_proof}
+\include{5_derecursivation}
 %\include{10_CC}
 
 
