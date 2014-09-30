@@ -35,7 +35,8 @@ handout.stamp: $(TARGET).tex
 	grep -v documentclass $(TARGET).tex        >>        $(TARGET)-handout.tex
 	$(MAKE) $(TARGET)-handout.pdf
 	rm -rf `ls $(TARGET)-handout.*|grep -v '^$(TARGET)-handout.pdf$$'`
-	beamer2handout $(TARGET)-handout.pdf 8up $(TARGET)-handout-8up.pdf	
+	beamer2handout $(TARGET)-handout.pdf 4up tmp.pdf
+	pdfjam --angle 90 --outfile $(TARGET)-handout.4up.pdf -- tmp.pdf
 	touch handout.stamp
 
 beamer: beamer.stamp
@@ -70,4 +71,4 @@ up: 4up 6up 16up 25up
 
 
 clean::
-	rm -f *.aux *.aux.orig TOP.toc TOP.nav TOP.snm 
+	rm -f *.aux *.aux.orig TOP.toc TOP.nav TOP.snm $(TARGET)-handout-*up.pdf
