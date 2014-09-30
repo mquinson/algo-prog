@@ -1430,9 +1430,9 @@ def quicksort(lst:List[Int]):List[Int] = \{
   val pivot = lst(lst.length / 2)      
 
   \structure{// split the list}
-  var lows: List[A] = Nil
-  var mids: List[A] = Nil
-  var highs: List[A] = Nil
+  var lows: List[Int] = Nil
+  var mids: List[Int] = Nil
+  var highs: List[Int] = Nil
   for (item <- lst) \{ \structure{// classify the items}
     if ( item == pivot)    \{ mids  = item :: mids \}
     else if (item < pivot) \{ lows  = item :: lows \}
