@@ -1455,6 +1455,7 @@ def quicksort(lst:List[Int]):List[Int] = \{
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}[fragile]{In-place Quick Sort}
+  \null\vspace{-2.3\baselineskip}
   \begin{columns}
     \begin{column}{.6\linewidth}
       \begin{block}{Big lines of the list reordering}
@@ -1474,21 +1475,25 @@ def quicksort(lst:List[Int]):List[Int] = \{
     \begin{column}{.4\linewidth}
       \includegraphics{fig/sort_qsort.fig}      
     \end{column}
-  \end{columns}
+  \end{columns}\vspace{-\baselineskip}
 
   \begin{center}
     \begin{boitecode}{}
-def partition(array:Array[Int], left:Int, right:Int, pivotIndex:Int) \{
-  val pivotValue = array(pivotIndex)
-  array.swap(pivotIndex, right) \structure{// Move pivot to end (swap() does not exist)}
-  val storeIndex = left
-  for (i <- left to right-1) \{
-    if (array(i) <= pivotValue) \{
-      array.swap(i, storeIndex)
-      storeIndex = storeIndex + 1
-  \} \}
-  array.swap(storeIndex, right) \structure{// Move pivot to its final place}
-  return storeIndex
+def quicksort(array:Array[Int]) \{
+  def lambda(array:Array[Int], left:Int, right:Int, pivotIndex:Int) \{
+    val pivotValue = array(pivotIndex)
+    array.swap(pivotIndex, right) \structure{// Move pivot to end (swap() does not exist)}
+    val storeIndex = left
+    for (i <- left to right-1) \{
+      if (array(i) <= pivotValue) \{
+        array.swap(i, storeIndex)
+        storeIndex = storeIndex + 1
+    \} \}
+    array.swap(storeIndex, right) \structure{// Move pivot to its final place}
+    lambda(array, left, pivotIndex, (pivotIndex-left)/2)
+    lambda(array, pivotIndex, right, (right-pivotIndex)/2)
+  \}
+  lambda(array, 0, array.length-1, array.length/2)
 \}
   \end{boitecode}
  \end{center}
