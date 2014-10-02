@@ -140,6 +140,22 @@ nécessaires. Notez que ces exercices sont aussi accessibles dans la PLM.
     concat). Ou alors dans lesquels une donnée précalculée est stockée (exemple
     de Nderniers).
   \end{itemize}
+
+  \textbf{Des idées de métaphores pour les aider à comprendre.} Les questions
+  posées sont souvent très théoriques, et les élèves ont du mal à raccrocher
+  cela à leur expérience. Pour leur permettre de le faire, je reformule souvent
+  la question en utilisant l'une de ces métaphores, alternativement et selon
+  leurs réactions (pour trouver celle qui leur convient):
+  \begin{itemize}
+  \item Une file de voitures en montagne. Je le détaille pour longueur() dans la
+    correction, mais ça marche bien pour estMembre() et beaucoup d'autres,
+    aussi.
+  \item Les peaux d'un oignon. Détaillé pour estMembre(), marche bien pour
+    quelques autres aussi.
+  \item Une pile d'assiettes. Je l'utilise en particulier pour retourne()
+  \item Si vous trouvez d'autres métaphores, je suis preneur pour les ajouter
+    ici.
+  \end{itemize}
 \end{Reponse}
 
 %%%%%%%% longueur %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -162,7 +178,7 @@ def length(l:List[Char]):Int = {
   \end{Verbatim}
   \begin{description}
     \item
-    \item[Idée pour trouver comment faire] Imaginez que vous voulez savoir
+    \item[Idée pour trouver comment faire:] Imaginez que vous voulez savoir
       combien de camions sont devant vous sur cette petite route de
       montagne. Vous les voyez pas tous.
       \begin{itemize}
@@ -173,18 +189,23 @@ def length(l:List[Char]):Int = {
       \item Le jour ou vous avez plus de camion devant vous, il vous en reste 0
         à doubler, et au total, il y en avait 1+1+1+1+...+1+0.
       \end{itemize}
-  \item[Terminaison:] La longueur est strictement décroissante et on s'arrête
-    quand la chaîne est vide.
-  \item[Correction:] On se contente de déplier les appels au tableau
-    aujourd'hui. Mais il faut le faire pour qu'ils comprennent, et il faut le
-    faire à chaque fois, pas que celui là. \textbf{Pas cette année, j'ai pas
-      présenté les preuves de prog encore. L'an prochain ca sera dans le bon
-      ordre.} 
-  \item[Complexité:] On regarde chaque lettre, on a donc O(n) appels
-    récursifs. A chaque appel, on n'appelle que des fonctions de base, pas
-    chères. Donc une étape est en O(1). Résultat: $O(n)\times O(1)=O(n)$
+    \item[Pour se persuader que cela fonctionne:] Il faut dessiner les piles
+      d'appels.
+
+      \includegraphics[width=\linewidth]{img/lgr.pdf}
+
+      On retrouve bien la descente récursive et la remontée récursive vues en
+      cours.
+
+    \item[Terminaison:] La longueur est strictement décroissante et on s'arrête
+      quand la chaîne est vide.
+    \item[Correction:] On se contente de déplier les appels au tableau
+      aujourd'hui. Mais il faut le faire pour qu'ils comprennent, et il faut le
+      faire à chaque fois, pas que celui là.
+    \item[Complexité:] On regarde chaque lettre, on a donc O(n) appels
+      récursifs. A chaque appel, on n'appelle que des fonctions de base, pas
+      chères. Donc une étape est en O(1). Résultat: $O(n)\times O(1)=O(n)$
   \end{description}
-On peut l'écrire de façon plus jolie en Scala:
 
 \medskip\noindent
 \begin{minipage}{.48\linewidth}
@@ -222,21 +243,21 @@ def length(l:List[Char]):Int = {
 \noindent
   \begin{minipage}{.43\linewidth}
   \begin{Verbatim}
-def isMember(l:List[Char], 
-             value:Char):Boolean= {
+def isMember(value:Char,
+             l:List[Char]):Boolean= {
   if (l==Nil) false
   else if (l.head == value) true
-  else isMember(l.tail, value)
+  else isMember(value, l.tail)
 }
 
   \end{Verbatim}    
   \end{minipage}
   \begin{minipage}{.55\linewidth}
   \begin{Verbatim}[numbers=right]
-def isMember(l:List[Char], v:Char):Boolean= {
+def isMember(v:Char, l:List[Char]):Boolean= {
   l match {
     case a::_ if a==v => true
-    case a::b         => isMember(b, v)
+    case a::b         => isMember(v, b)
     case _            => false
   }
 }
@@ -272,35 +293,28 @@ def isMember(l:List[Char], v:Char):Boolean= {
 \begin{Question}
   $occurence: \left\{
     \begin{array}{l}
-      \Type{List[Char]}\times \Type{Char}\mapsto \Type{Int}\\
+      \Type{Char}\times \Type{List[Char]}\mapsto \Type{Int}\\
       \text{retourne le nombre d'occurences du caractère dans la chaîne}
     \end{array}\right.$  
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=occurences(ch\quotesinglbase c)]
-si ch = chvide alors 0
-               sinon si premier(ch) = c alors 1 + occurence(reste(ch),c)
-                                        sinon     occurence(reste(ch),c)    
-  \end{Verbatim}
-
-\noindent
   \begin{minipage}{.49\linewidth}
   \begin{Verbatim}
-def occ(l:List[Char], value:Char):Int= {
+def occ(value:Char, l:List[Char]):Int= {
   if (l==Nil) 0
   else if (l.head == value) 
-       1+occ(l.tail,value)
-  else   occ(l.tail, value)
+       1+occ(value, l.tail)
+  else   occ(value, l.tail)
 }
 
   \end{Verbatim}    
   \end{minipage}
   \begin{minipage}{.49\linewidth}
   \begin{Verbatim}[numbers=right]
-def occ(l:List[Char], v:Char):Int= {
+def occ(v:Char, l:List[Char]):Int= {
   l match {
-    case a::b if a==v => 1+occ(b, v)
-    case a::b         =>   occ(b, v)
+    case a::b if a==v => 1+occ(v, b)
+    case a::b         =>   occ(v, b)
     case _            => 0
   }
 }
@@ -328,7 +342,7 @@ si ch = chvide alors VRAI
   \begin{Verbatim}
 def allDifferent(l:List[Char]):Boolean = {
   if (l == Nil)                      true
-  else if (isMember(l.tail, l.head)) false
+  else if (isMember(l.head, l.tail)) false
   else                               allDifferent(l.tail)
 }    
   \end{Verbatim}
@@ -346,7 +360,7 @@ def allDifferent(l:List[Char]):Boolean = {
 
     Étant donné qu'il existe des algos de tris en $O(n\times log(n))$, on a
     $$C = C_{pretraitement}+C_{fonction recursive}= O(n\times log(n)) + O(n) =
-    O(n\times log(n))$$. Ce qui est bien mieux que $O(n^2)$ quand n est grand.
+    O(n\times log(n))$$ Ce qui est bien mieux que $O(n^2)$ quand n est grand.
 
     Notons cependant que la complexité dans le meilleur des cas passe de $O(1)$
     (quand la chaîne commence par 'aa', l'algo $O(n^2)$ répond immédiatement) à
@@ -358,23 +372,18 @@ def allDifferent(l:List[Char]):Boolean = {
 \begin{Question}
   $supprime: \left\{
     \begin{array}{l}
-      \Type{List[Char]}\times \Type{Char}\mapsto \Type{List[Char]}\\
-      \text{retourne la chaine privée de la première occurence du caractère.}
+      \Type{Char}\times\Type{List[Char]} \mapsto \Type{List[Char]}\\
+      \text{retourne la chaine privée de toutes les occurences du caractère.}
     \end{array}\right.$  
 
   Si le caractère ne fait pas partie de la chaîne, celle-ci est inchangée.
 \end{Question}
 \begin{Reponse}
-  \begin{Verbatim}[label=supprime(ch\quotesinglbase c)]
-si ch = chvide alors ch
-               sinon si premier(ch) = c alors reste(ch)
-                                        sinon adj(premier(ch), supprime(suite(ch),c))
-  \end{Verbatim}
   \begin{Verbatim}
-def remove(l:List[Char], v:Char):List[Char]={
+def remove(v:Char, l:List[Char]):List[Char]={
   l match {
-    case a::b if a==v =>    remove(b, v)
-    case a::b         => a::remove(b,v)
+    case a::b if a==v =>    remove(v, b)
+    case a::b         => a::remove(v, b)
     case _            => Nil
   }
 }    
@@ -402,7 +411,10 @@ def second(list: List[Char]):Char = list.tail.head
     l'occasion de parler des préconditions.  On ne vérifie pas explicitement si
     la précondition est respectée dans le code, car on ne saurait pas trop
     comment réagir si elle est violée. On laisse donc Scala se débrouiller, il
-    va lever une exception comme il se doit.
+    va lever une exception comme il se doit. 
+
+    Il faut bien insister sur cette histoire de précondition, c'est la raison
+    d'être de cette question.
 
     Oui, au passage, les accolades sont optionnelles en Scala quand on défini
     une fonction.
