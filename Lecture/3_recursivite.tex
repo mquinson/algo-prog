@@ -1475,7 +1475,7 @@ def quicksort(lst:List[Int]):List[Int] = \{
     \begin{column}{.4\linewidth}
       \includegraphics{fig/sort_qsort.fig}      
     \end{column}
-  \end{columns}\vspace{-\baselineskip}
+  \end{columns}\vspace{-.8\baselineskip}
 
   \begin{center}
     \begin{boitecode}{}
@@ -1493,8 +1493,7 @@ def quicksort(array:Array[Int]) \{
     lambda(array, left, pivotIndex, (pivotIndex-left)/2)
     lambda(array, pivotIndex, right, (right-pivotIndex)/2)
   \}
-  lambda(array, 0, array.length-1, array.length/2)
-\}
+  lambda(array, 0, array.length-1, array.length/2) \}
   \end{boitecode}
  \end{center}
 \end{frame}
