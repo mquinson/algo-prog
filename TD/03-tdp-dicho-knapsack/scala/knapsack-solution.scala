@@ -1,11 +1,11 @@
-/** Problème du sac à dos */
+/** Probleme du sac a dos */
 
-object knapsack { // KILLLINE
+object knapsack extends App { // KILLLINE
 
 // Diverses fonctions d'aide
 ////////////////////////////
 
-/** Calcule le gain d'un sac à dos donné */
+/** Calcule le gain d'un sac a dos donne' */
 def valeurTotale(objets:Array[Boolean], poids:Array[Int]):Int = {
   var total = 0
   for (i <- 0 to objets.length -1)
@@ -16,12 +16,12 @@ def valeurTotale(objets:Array[Boolean], poids:Array[Int]):Int = {
 
 /** Affiche si les objets sont pris ou non dans une solution partielle (en cours de construction)
  *
- * Le second argument est la taille déja construite.
+ * Le second argument est la taille deja construite.
  */
 def affiche(objets:Array[Boolean], objetMax:Int) {
 	      
-  // on utilise un min pour se protéger du cas (fréquent) où cette
-  // fonction est appellée avec un second argument supérieur à la
+  // on utilise un min pour se proteger du cas (frequent) ou cette
+  // fonction est appellee avec un second argument superieur a la
   // taille du tableau.
   for (i <- 0 to math.min(objetMax, objets.length-1))
     if (objets(i))
@@ -41,17 +41,17 @@ def dupplique(src:Array[Boolean], dst:Array[Boolean]) {
     dst(i) = src(i)
 }
 
-/** indique dans le paramètre que l'objet spécifié est maintenant pris
-    (cette fonction est juste là pour se simplifier la vie) */
+/** indique dans le parametre que l'objet specifie est maintenant pris
+    (cette fonction est juste la pour se simplifier la vie) */
 def mettreDansSac(objets:Array[Boolean], obj:Int) {
     if (objets(obj)) 
-        println("L'objet "+obj+" est déjà pris; ignore la requête.");
+        println("L'objet "+obj+" est deja pris; ignore la requete.");
     objets(obj) = true
 }
-/** indique dans le paramètre que l'objet spécifié est maintenant posé */
+/** indique dans le parametre que l'objet specifie est maintenant pose' */
 def retireDuSac(objets:Array[Boolean], obj:Int) {
     if (!objets(obj)) 
-        println("L'objet "+obj+" est déjà posé; ignore la requête.");
+        println("L'objet "+obj+" est deja pose'; ignore la requete.");
      objets(obj) = false
 }
 
@@ -62,37 +62,37 @@ def retireDuSac(objets:Array[Boolean], obj:Int) {
 def cherche(poids:Array[Int] , capacite:Int) {
 
   // on va beaucoup utiliser cette valeur, alors on fait un alias 
-  // pour simplifier les écritures suivantes
+  // pour simplifier les ecritures suivantes
   val len = poids.length
   
-  // Affiche l'instance du problème
+  // Affiche l'instance du probleme
   print("Poids des objets: ")
   for (i <- 0 to poids.length-1) 
     print(" "+poids(i)+" ")
   println("; Capacite: "+capacite)
   
-  // variable locale pour sauvegarder la meilleure solution connue à tout moment
+  // variable locale pour sauvegarder la meilleure solution connue a tout moment
   var meilleure:Array[Boolean] = Array.fill(len)(false)
 
-  // BEGINKILL TODO: Placez ici l'appel récursif, avec les valeurs initiales des paramètres
-  // Initialise l'appel récursif
+  // BEGINKILL TODO: Placez ici l'appel recursif, avec les valeurs initiales des parametres
+  // Initialise l'appel recursif
   chercheRec(0,  // On commence le remplissage au rang 0
-             Array.fill(len)(false) // Cette écriture crée un tableau
+             Array.fill(len)(false) // Cette ecriture cree un tableau
                                     // dans lequel la valeur 'false'
-                                    //est répétée 'len' fois.
-  ) // fin des paramètres de chercheRec. La récursion est lancée.
+                                    //est repetee 'len' fois.
+  ) // fin des parametres de chercheRec. La recursion est lancee.
   // ENDKILL
 
-  // Affiche la meilleure solution trouvée
+  // Affiche la meilleure solution trouvee
   println
-  print("Meilleure solution trouvée:")
+  print("Meilleure solution trouvee:")
   for (i <- 0 to meilleure.length-1)
     print(" "+poids(i)+":"+(if (meilleure(i)) "O" else "N")+";")
-  println(" Valeur:"+valeurTotale(meilleure,poids)+" (la capacité était "+capacite+")")
+  println(" Valeur:"+valeurTotale(meilleure,poids)+" (la capacite etait "+capacite+")")
   
   
-  // BEGINKILL TODO: Definissez ici la fonction récursive à proprement parler
-  // Défini l'appel récursif
+  // BEGINKILL TODO: Definissez ici la fonction recursive a proprement parler
+  // Defini l'appel recursif
   def chercheRec(profondeur:Int, courante:Array[Boolean]) {
 
     val valeur = valeurTotale(courante,poids)
@@ -115,15 +115,15 @@ def cherche(poids:Array[Int] , capacite:Int) {
       println("(Cas terminal)");
       return;
     } else {       
-      System.out.println("(Cas général)");
+      System.out.println("(Cas general)");
     }
 						           
 					
-    /* Prend l'objet et récurse */
+    /* Prend l'objet et recurse */
     mettreDansSac(courante,profondeur);
     chercheRec(profondeur+1, courante);
 	
-    /* Pose l'objet et récurse */
+    /* Pose l'objet et recurse */
     retireDuSac(courante, profondeur);
     chercheRec(profondeur+1, courante);
 				
@@ -135,10 +135,10 @@ def cherche(poids:Array[Int] , capacite:Int) {
 
 // Le code de test, qui appelle la fonction publique
 ////////////////////////////////////////////////////
-/* KILLLINE */def main(args:Array[String]) { 
+/* KILLLINE */override def main(args:Array[String]) { 
 /* KILLLINE */  if (args.length == 0) {
 /* KILLLINE */    println("Usage: knapsack <capacite> <obj1> <obj2> ... <objN>")
-/* KILLLINE */    println("Arguments par défaut: 10 5 3 2")
+/* KILLLINE */    println("Arguments par defaut: 10 5 3 2")
 cherche(Array(5,4,3,2), 10)
 /* KILLLINE */    
 /* KILLLINE */  } else {  
