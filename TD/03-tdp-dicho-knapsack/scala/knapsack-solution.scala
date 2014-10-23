@@ -1,6 +1,6 @@
 /** Probleme du sac a dos */
 
-object knapsack extends App { // KILLLINE
+object knapsack extends App { 
 
 // Diverses fonctions d'aide
 ////////////////////////////
@@ -149,5 +149,5 @@ cherche(Array(5,4,3,2), 10)
 /* KILLLINE */    cherche(objets, capa)  
 /* KILLLINE */  }
 /* KILLLINE */}
-/* KILLLINE */
-/* KILLLINE */}
+
+}
