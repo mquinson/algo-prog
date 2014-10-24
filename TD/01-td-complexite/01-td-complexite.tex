@@ -6,7 +6,7 @@
 \newcommand{\trou}[1]{\ifcorrection{\colorbox{gris}{#1}}{}}
 
 \usepackage[utf8]{inputenc}
-\usepackage{subfigure}
+\usepackage{subfigure,amstext}
 \graphicspath{{fig/}}
 
 \begin{document}
@@ -74,7 +74,7 @@ $\sqrt{n}=n^{1/2}$.
       ~~~~\textbf{1 an}~~~~\\\hline
       
       n&\trou{$10^9$}&\trou{$10^{12}$}&\trou{$10^{16}$}\\\hline
-      $n^2$&\trou{$\sqrt{10^9}=3\cdot 10^4$}&\trou{$10^6$}&\trou{$10^8$}\\\hline
+      $n^2$&$3\cdot 10^4$&\trou{$10^6$}&\trou{$10^8$}\\\hline
       $n^3$&\trou{$\sqrt[3]{10^9}=10^3$}&\trou{$10^4$}&\trou{$2\cdot 10^5$}\\\hline
       $2^n$&\trou{$log(10^9)=29$}&\trou{39}&\trou{53}\\\hline
       $\sqrt{n}$&\trou{$\left(10^9\right)^2=10^{18}$}&\trou{$10^{24}$}&\trou{$10^{32}$}\\\hline
@@ -82,17 +82,26 @@ $\sqrt{n}=n^{1/2}$.
       $\log (n)$&\trou{$10^{30\,000\,000}$}&\trou{$\infty$}&\trou{$\infty$}\\\hline
     \end{tabular}
   }
-\end{table}
+  \subfigure{
+    \begin{tabular}{p{.35\linewidth}}
+      Par exemple, pour déterminer la plus grande instance qu'un algorithme de
+      complexité $n^2$ peut calculer en une seconde, il faut calculer: 
+
+      \medskip
+
+      ~~~$\max\{n\text{ tel que } n^2<10^9\}$
+
+      $=\max\{n\text{ tel que } n<\sqrt{10^9}\}$
+
+      $=\sqrt{10^9}$
+
+      $\approx 3\cdot 10^4$
+
+    \end{tabular}
+  }
+\end{table}%
 
 \begin{Reponse}
-  1s=$10^9$ opérations. Donc l'algo n fait $10^9$ opérations,
-  $n^2\leadsto\sqrt(10^9)$, $2^n\leadsto\log_2(10^9)$ , $\log n\leadsto
-  2^{10^9}$
-
-  1h, c'est idem $\times$ 3600. En gros, on calcule le nb d'op sur la première
-  ligne, et après on extrait des racines carrés, des racines cubiques, des logs
-  et des exp.
-
   $2^{(10^9)} = (2^{100})^{10^7} \approx (10^{30})^{10^7} = 10^{300,000,000}$
   
   A comparer au nombre estimé de particules dans l'univers : $10^{80}${\ldots} 
@@ -199,7 +208,7 @@ calcul en utilisant la notation $\Theta()$. \bigskip
   dans le meilleur cas, le pire cas, et le cas moyen en supposant que les tests
   ont une probabilité de $\frac{1}{2}$ d'être vrai.
 
-  \Question Donnez une instance du code 2 de coût $t_{avg}$.
+  \Question Donnez une instance de chaque code de coût $t_{avg}$.
 
 \end{minipage}\hfill\begin{minipage}{.3\linewidth}
 \vspace{-.7\baselineskip}
@@ -220,12 +229,16 @@ sinon x := x+b
 
 \begin{Reponse}
   \begin{description}
-  \item[Question 4] ~
+  \item[Question 1] ~
     \begin{enumerate}
     \item[code 1:] 0 au mieux, n au pire, n/2 en moyenne. 
     \item[code 2:] 1 au mieux, n au pire. Donc, en moyenne, on a aussi n/2
     \end{enumerate}
-  \item[Question 5] Y'en a pas, bien sûr. Dieu que je suis machiavélique.
+  \item[Question 2] ~
+    \begin{enumerate}
+    \item[code 1:] Par exemple $a = 42$ et T=Array(1,2,3,1000,1000,1000)
+    \item[code 2:] Y'en a pas, bien sûr. Dieu que je suis machiavélique.
+    \end{enumerate}
   \end{description}
 \end{Reponse}
 
@@ -250,7 +263,7 @@ candidates.
   \end{itemize}
 
   Combien de permutations sont possibles? $n!$ bien sûr. On cherche donc la
-  bonne permutation parmis $n!$ existantes.
+  bonne permutation parmi $n!$ existantes.
 
   Les algos comparatifs basent leur décision sur des comparaisons (si,
   si). Donc, à chaque étape, ils gagnent une information booléenne. Donc, en 3
@@ -282,13 +295,14 @@ $count[i]$ indique le nombre de $i$ dans le tableau initial.
 
 \begin{Reponse}
   \begin{Verbatim}[gobble=4]
-    for (i=0;i<length;i++)
-      count[ tab[i] ]++;
+    for (i <- 0 to tab.length-1)
+      count( tab(i) ) += 1
     j=0
-    for (u=0;u<max;u++)
-      for (v=0;v<count[u];v++) 
-        tab[j] = u
-        j++ 
+    for (u <- 0 to max -1)
+      for (v -> 1 to count(u)) {
+        tab(j) = u
+        j += 1 
+      }
   \end{Verbatim}
 \end{Reponse}
 
