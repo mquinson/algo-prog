@@ -70,7 +70,7 @@ def cherche(capa:Array[Int], cible:Int):Boolean = {
                         }
                     } 
                     if (trouvé(copy, cible)) {
-                        println("Trouvé en "+rang+" coups");
+                        println("Trouvé en "+(rang+1)+" coups");
                         return true;
                     }
                     // 
@@ -94,9 +94,9 @@ def cherche(capa:Array[Int], cible:Int):Boolean = {
 }
 // END CHERCHE
 
-//cherche(Array(5,7), 4); // L'exemple de l'énoncé
+cherche(Array(5,7), 4); // L'exemple de l'énoncé
 
-cherche(Array(100,24,25), 42)
+//cherche(Array(100,24,25), 42)
 // java.lang.OutOfMemoryError: GC overhead limit exceeded
 
-cherche(Array(34, 55, 89, 144), 1); // L'instance d'Émmanuel
+//cherche(Array(34, 55, 89, 144), 1); // L'instance d'Émmanuel
