@@ -246,97 +246,136 @@ ainsi que toutes les obligations de preuves engendrées lors du calcul de
 \end{minipage}
 
 \begin{Reponse}
-  On note $Q\equiv a=f_n$.  
+  On note $Q\equiv a=f_n$, et l'objectif de l'exercice est de calculer
 
-  On applique la règle 3 pour la séquence l1 d'une part, et tout le reste
-  d'autre part:\\
-  \centerline{\WP{FIB,Q}=\WP{l1,\WP{reste,Q}}}
+  $$WP(L1-L9, Q)\equiv ??$$
 
-  Puisque l1 est une affectation, on applique la règle 2, et on vire gentiment
-  le WP englobant.\\
-  \centerline{\WP{FIB,Q}=\WP{reste,Q} [i:=1]}
+  Allégorie explicative: Q est un endroit du monde des idées, et le code est une
+  trajectoire. Le but de l'exo est de calculer de où on peut partir pour que
+  cette trajectoire nous amène à l'objectif Q.
 
-  En recommençant 3 fois, on trouve:\\
-  \centerline{\WP{FIB,Q}=\WP{while,Q} [i:=1;a:=1;b:=1]}
+  On commence par couper cette expression en remontant le calcul du WP de proche
+  en proche en commençant par la fin de l'algo. Ici, le premier bloc qu'on
+  décroche est toute la boucle while.
   
-  Il faut maintenant chercher l'invariant et le variant de la boucle. Le
-  variant est $n-i$, de façon à varier entre z=n et 0($<z$)
-  L'invariant est $I\equiv 0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}$
+  $$WP(L1-L9, Q)\equiv WP(L1-L3, WP(L4-L9,Q))$$
 
-  Donc, en appliquant la règle 5, on a:
-  \WP{FIB,Q}=I [i:=1;a:=1;b:=1], plus les obligations de preuve suivantes:
+  Il faut donc calculer \framebox{$WP(L4-L9,Q)$}, qui est la précondition de la
+  boucle. On commence par cherche l'invariant de la boucle. Voici des
+  \textbf{indices pour trouver l'invariant}:
+
+  \begin{itemize}
+  \item Il doit y avoir assez d'infos dans l'invariant pour parvenir à démontrer
+    la post-condition quand on sort de la boucle. Cf. obligation de preuve 2:
+    $(E=\mathtt{false}\wedge I) \Rightarrow Q$ \\
+    On a donc intérêt à mettre Q en changeant les $n$ par l'indice de boucle si
+    c'est vrai. On vérifie au passage que le code va bien (1) rendre vraies ces
+    conditions quand on se présente à la boucle (2) maintenir ces conditions
+    dans la boucle
+  \item On a intérêt à mettre toutes les infos qu'on sait vrai. On a jamais trop
+    d'infos dans l'invariant. En particulier, il faut parler des bornes sur
+    l'indice de boucle.
+  \end{itemize}
+
+  Ici, on a \framebox{$I\equiv (0\leq i\leq n)\wedge a=f_i \wedge b=f_{i-1}$}
+
+  Pour \textbf{trouver le variant}, c'est juste la formalisation de ce qu'on
+  disait pour la terminaison des algos recursifs: il y a une grandeur qui
+  commence positive, et qui décroit strictement vers 0. C'est ça qu'on appelle
+  le variant. Ici, on a \framebox{V=n-i}
+
+  On est presque prêts à appliquer la règle 5 pour affirmer que 
+
+  $$WP(L4-L9,Q)\equiv I \text{ et donc que } WP(L1-L9,Q)\equiv WP(L1-L3, I)$$
+
+  On a ``juste'' 3 obligations de preuves:
   \begin{enumerate}
-  \item $i<n \wedge I \wedge n-i=z\Rightarrow \mathbf{WP}(loopBody, I\wedge n-i<z)$
+  \item $(i<n) \wedge I \wedge (n-i=z)\Rightarrow \mathbf{WP}(L5-L8, I\wedge n-i<z)$
   \item $I\Rightarrow n-i\geq0$
-  \item $(i\geq n \wedge I)\Rightarrow Q$
+  \item $(i\geq n) \wedge I\Rightarrow Q$
   \end{enumerate}
 
-  Pour le premier, on a que des affectations dedans, donc ca se réécrit
-  facilement. Pour les deux autres, remplacer I par sa valeur aide beaucoup:
-  \begin{enumerate}
-  \item $i<n \wedge I \wedge n-i=z\Rightarrow (I\wedge n-i<z) [i:=i+1,a:=a+b,b:=a]$
-  \item $0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}\Rightarrow n-i\geq0$
-  \item $(i\geq n \wedge 0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1})\Rightarrow a=f_i$
-  \end{enumerate}
+  \paragraph{Obligation 2:} 
+  Après avoir changé I par sa définition, il faut montrer que:
 
-  L'obligation de preuve 2 est triviale puisqu'on a bien $0\leq i\leq
-  n\Rightarrow n-i\geq0$ (on peut oublier 2 éléments à gauche de $\Rightarrow$,
-  ce qui était $I$ suffit à prouver ce qui est à droite.
+  $$(0\leq i\leq n)\wedge (a=f_i) \wedge (b=f_{i-1})\Rightarrow (n-i\geq0)$$
 
-  Pareil pour l'obligation de preuve 3: on ne garde que l'élément au milieu des
-  $\wedge$, et on a ce qu'il fallait démontrer.
+  On peut oublier les bouts à gauche qui parlent de $a$ et $b$, le premier bout
+  $(0\leq i\leq n)$ suffit à montrer la partie droite de l'implication. CQFD.
 
-  Pour la première, il faut également remplacer I par sa valeur, puis remplacer
-  les résultats d'affectation.
-%  On note $a'$ le a après affectation, et $a$ celui avant (pour s'y retrouver).
+  \paragraph{Obligation 3:} 
+  Après avoir changé I et Q par leurs définitions, il faut montrer que:
 
-   $i<n  \wedge n-i=z \wedge I\Rightarrow (I\wedge n-i<z)
-    [i:=i+1,a:=a+b,b:=a]$
+  $$(i\geq n) \wedge (0\leq i\leq n) \wedge (a=f_i) \wedge (b=f_{i-1})\Rightarrow (a=f_n)$$
 
-  \noindent On remplace I par sa valeur
+  Les deux premiers bouts imposent que $i=n$, ce qui, ajouté à $a=f_i$ montre bien que $a=f_n$. CQFD.
 
-   $(i<n)  \wedge (n-i=z) \wedge (0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1})$\\
-   ~~~~~~~~$\Rightarrow (0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}\wedge n-i<z)
-    [i:=i+1,a:=a+b,b:=a]$
+  \paragraph{Obligation 1:} On est chaud, on se lance sur le gros bout.
 
-  \noindent On fait les réécritures imposées par les trucs entre crochets. Sans
-  réfléchir comme un cherche/remplace.
-   $(i<n)  \wedge (n-i=z) \wedge (0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1})
-   \Rightarrow (0\leq i+1\leq n\wedge a=f_{i-1}+f_{i-2} \wedge
-   b=f_{i-1}\wedge n-(i+1)<z)$
+  $$(i<n) \wedge (0\leq i\leq n) \wedge (a=f_i) \wedge (b=f_{i-1}) \wedge (n-i=z)$$
+  $$ \Rightarrow$$
+  $$ WP\left(L5-L9, (0\leq i\leq n) \wedge (a=f_i) \wedge (b=f_{i-1}) \wedge (n-i<z)\right)$$
 
-   $a$ prend cette valeur, car il est l'ancien $a$ plus l'ancien $b$. L'ancien
-   $a$ est $f_{i-1}$ (vu que $i$ a été mis à jour), et l'ancien $b$ est
-   $f_{(i-1)-1}$ pour la même raison. le nouveau $b$ est l'ancien $a$
+  J'applique la règle 3 pour couper la ligne 8, puis la règle 2 pour appliquer
+  la réécriture de l'affectation de variable où $b$ prend la vieille version de
+  $a$, c'est à dire $f_i$.
 
-   \noindent On simplifie l'écriture de part et d'autre du $\Rightarrow$ (drt:
-   $f_i=f_{i-1}+f_{i-2}$; gch, range les éléments sur $i$)\\
-   $(n-i=z) \wedge (0\leq i< n)\wedge (a=f_i) \wedge (b=f_{i-1})
+  $$ \text{(membre gauche de l'implication)} \Rightarrow WP\left(L5-L7, (0\leq i\leq n) \wedge (a=f_i) \wedge (b=f_i) \wedge (n-i<z)\right)$$
+
+  Encore une fois les règles 3 puis 2 pour l'affectation de $a$ à $f_i+f_{i-1}$,
+  c'est à dire \framebox{$a=f_{i+1}$} en appliquant la définition mathématique de fibo.
+
+  $$ \text{(membre gauche de l'implication)} \Rightarrow WP(L5-L6, (0\leq i\leq n) \wedge (a=f_{i+1}) \wedge (b=f_i) \wedge (n-i<z)$$ 
+
+  On ignore la ligne 6 qui parle d'une variable temporaire, et on incrémente
+  $i$. On écrit $i+1$ partout où la variable $i$ apparait. Attention, on ne
+  change pas les $i$ dans $f_i$, puisque c'est pas la variable (libre) $i$, mais
+  une autre variable nomée $f_i$ Vous ne voudriez pas remplacer la variable
+  $min$ en la variable $mi-1n$, si?
+
+  Mais \textbf{attention} pour que $f_i$ continue de désigner la même grandeur
+  (par exemple $f_4$) tandis que la valeur de $i$ s'incrémente (de 4 à 5), il
+  faut remplacer l'écriture $f_i$ par $f_{i-1}$. Oui, c'est pas évident...
+
+  $$ \text{(membre gauche de l'implication)} \Rightarrow (0\leq i+1\leq n) \wedge (a=f_i) \wedge (b=f_{i-1}) \wedge (n-i-1<z)$$ 
+
+  On a fini de calculer le membre droit. On range les éléments sur $i$ à gauche
+  et on doit donc démontrer:
+
+   $$(n-i=z) \wedge (0\leq i< n)\wedge (a=f_i) \wedge (b=f_{i-1})
    \Rightarrow (0\leq i+1\leq n)\wedge (a=f_i) \wedge
-   (b=f_{i-1})\wedge (n-(i+1)<z)$
+   (b=f_{i-1})\wedge (n-i-1<z)$$
 
-   On a quatre éléments dans la partie droite de cette première obligation de
-   preuve:
+   Considérons séparément tous les bouts du membre droit pour voir s'ils sont vrais:
+
    \begin{itemize}
    \item $0\leq i+1\leq n$: on a ça trivialement depuis le $(0\leq i< n)$
      présent à gauche.
    \item $a=f_i$: présent à l'identique à gauche
    \item $b=f_{i-1}$: présent à l'identique à gauche
-   \item $n-(i+1)<z$: À gauche, on a $n-i=z$ donc trivialement $n-i-1<z$
+   \item $n-i-1<z$: À gauche, on a $n-i=z$ donc trivialement.
    \end{itemize}
 
-   \medskip
-   Et voila, on a démontré les 3 obligations de preuves. Il ne reste plus qu'à
-   démontrer $P\Rightarrow WP(FIB,Q)$, càd $P\Rightarrow I [i:=1;a:=1;b:=1]$
-   càd $P\Rightarrow 0\leq i\leq n\wedge a=f_i \wedge b=f_{i-1}
-   [i:=1;a:=1;b:=1]$ càd $P\Rightarrow 0\leq 1\leq n\wedge 1=f_1 \wedge 1=f_0$
+   \bigskip %
+   Et voila, \textbf{on a démontré les 3 obligations de preuves}. On peut
+   affirmer ce qui suit et continuer.
 
-   En virant les éléments trivialement vrais, on trouve qu'il faut démontrer: $P\Rightarrow 1\leq n$
+  $$WP(L1-L9,Q)\equiv WP(L1-L3, I)\equiv WP(L1-L3, (0\leq i\leq n)\wedge a=f_i \wedge b=f_{i-1}) )$$
 
-   Mais quelle est donc la proposition P qui fait en sorte que l'expression
-   ci-dessus soit vraie ? Ben $n>0$ marche très bien, hein. Et voila, par magie
-   de la logique, on vient de montrer que notre fonction calcule bien fibonacci(n)
-   dans sa variable $a$ sous la précondition que $n>0$
+  On applique les règles 3 puis 2 pour séparer puis traiter les lignes
+  d'initialisation. Ce sont des réécritures \framebox{$i \rightarrow 1$} et
+  \framebox{$a \rightarrow 1$} et \framebox{$b \rightarrow 1$}
+
+  $$WP(L1-L9,Q)\equiv (0\leq 1\leq n)\wedge (1=f_1) \wedge (1=f_0)$$
+
+  Les deux derniers bouts de la précondition sont vrais par définition
+  mathématique de fibo, il ne reste donc que \framebox{$P\equiv n>0$}
+
+  Voilà, tout va bien. On peut même relacher un peu la contrainte et constater
+  que l'algo fonctionne encore pour une condition un peu plus forte, quand
+  $n\geq 0$ Pour cela, on constate que dans ce cas, la boucle ne s'exécute pas
+  et on ne fait que les initialisations, ce qui est suffisant pour atteindre le
+  résultat.
 \end{Reponse}
 
 \ifcorrection{\newpage}{\medskip}
