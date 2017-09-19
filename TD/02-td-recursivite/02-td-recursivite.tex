@@ -526,8 +526,8 @@ def nFirsts(list: List[Char], amount:Int):List[Char] = {
   Plusieurs variantes sont possibles:
   \begin{Verbatim}[label=version naive]
 def nLasts(list: List[Char], amount:Int):List[Char] = {
-  if (amount==list.size) list
-  else nLasts(list.tail, n-1)
+  if (amount >= list.size) list
+  else nLasts(list.tail, amount-1)
 }    
   \end{Verbatim}
   \begin{description}
